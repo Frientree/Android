@@ -3,8 +3,8 @@ package com.d101.frientree.di
 import com.d101.data.api.AuthService
 import com.d101.data.utils.AuthAuthenticator
 import com.d101.data.utils.AuthInterceptor
-import com.d101.data.utils.DateInterceptor
 import com.d101.domain.utils.TokenManager
+import com.d101.frientree.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +18,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    private val loggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        if (BuildConfig.DEBUG) {
+            setLevel(HttpLoggingInterceptor.Level.BODY)
+        } else {
+            setLevel(HttpLoggingInterceptor.Level.NONE)
+        }
+    }
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -36,15 +44,11 @@ object NetworkModule {
     @FrientreeClient
     fun provideFrientreeClient(
         authInterceptor: AuthInterceptor,
-        dateInterceptor: DateInterceptor,
         authAuthenticator: AuthAuthenticator,
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         builder.apply {
             addInterceptor(authInterceptor)
-            addInterceptor(dateInterceptor)
             authenticator(authAuthenticator)
             addInterceptor(loggingInterceptor)
         }
@@ -58,8 +62,6 @@ object NetworkModule {
         authInterceptor: AuthInterceptor,
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         builder.apply {
             addInterceptor(authInterceptor)
             addInterceptor(loggingInterceptor)
@@ -70,10 +72,8 @@ object NetworkModule {
     @Singleton
     @Provides
     @SocialLoginClient
-    fun provideSocialLoginClient6(): OkHttpClient {
+    fun provideSocialLoginClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         builder.apply {
             addInterceptor(loggingInterceptor)
         }
@@ -90,10 +90,6 @@ object NetworkModule {
     @Provides
     fun providesAuthorizationInterceptor(tokenManager: TokenManager): AuthInterceptor =
         AuthInterceptor(tokenManager)
-
-    @Singleton
-    @Provides
-    fun provideDateInterceptor() = DateInterceptor()
 
     @Singleton
     @Provides
