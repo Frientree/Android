@@ -344,7 +344,7 @@ class CalendarViewModel @Inject constructor(
         val todayDate = LocalDate.now()
         val juiceCreatableStatus: JuiceCreatableStatus = when {
             fruitListForWeek.size < 4 -> JuiceCreatableStatus.NotEnoughFruits
-            weekDate.second.isAfter(todayDate) -> JuiceCreatableStatus.MoreTimeNeeded
+            weekDate.second >= todayDate -> JuiceCreatableStatus.MoreTimeNeeded
             else -> JuiceCreatableStatus.JuiceCreatable
         }
 
