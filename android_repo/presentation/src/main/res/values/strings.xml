@@ -113,5 +113,8 @@
     <string name="dialog_ok">확인</string>
     <string name="leaf_report">신고하기</string>
     <string name="today_statistics">오늘 나와 같은 감정을 지닌 사람이 %s명 있어요!</string>
+    <string name="app_blocked">나무가 자고 있어요. 잠시 후 다시 와주세요!</string>
+    <string name="update_guide">업데이트가 있어요! \n 더 좋아진 프렌트리를 만나러 가볼까요?</string>
+    <string name="go_to_update">업데이트하러 가기</string>
 
 </resources>

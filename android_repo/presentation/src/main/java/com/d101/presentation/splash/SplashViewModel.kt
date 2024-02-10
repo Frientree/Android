@@ -30,7 +30,6 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             delay(1000L)
             checkAppVersion()
-            checkSignInStatus()
         }
     }
 
@@ -48,18 +47,20 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private suspend fun checkSignInStatus() {
-        getUserInfoUseCase().collect {
-            when (it) {
-                is Result.Success -> {
-                    if (it.data.isBackgroundMusicEnabled) {
-                        onSetBackGroundMusic(it.data.backgroundMusicName)
+    fun checkSignInStatus() {
+        viewModelScope.launch {
+            getUserInfoUseCase().collect {
+                when (it) {
+                    is Result.Success -> {
+                        if (it.data.isBackgroundMusicEnabled) {
+                            onSetBackGroundMusic(it.data.backgroundMusicName)
+                        }
+                        onSignInSuccess()
                     }
-                    onSignInSuccess()
-                }
 
-                is Result.Failure -> {
-                    onSignInFailed()
+                    is Result.Failure -> {
+                        onSignInFailed()
+                    }
                 }
             }
         }

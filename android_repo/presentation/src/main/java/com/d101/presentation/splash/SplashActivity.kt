@@ -1,5 +1,6 @@
 package com.d101.presentation.splash
 
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.d101.presentation.BuildConfig
 import com.d101.presentation.R
+import com.d101.presentation.databinding.DialogUpdateBinding
 import com.d101.presentation.main.MainActivity
 import com.d101.presentation.music.BackgroundMusicService
 import com.d101.presentation.music.BackgroundMusicService.Companion.MUSIC_NAME
@@ -45,16 +47,26 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkAppStatus(event: SplashViewEvent.CheckAppStatus) {
         if (!event.appAvailable) {
-            showToast("App is not available")
+            showToast(getString(R.string.app_blocked))
             ActivityCompat.finishAffinity(this)
             return
         }
         if (needToUpdate(event.minVersion)) {
-            showToast("최신 버전으로 업데이트가 필요합니다.")
+            showUpdateDialog(event)
+            return
+        }
+
+        viewModel.checkSignInStatus()
+    }
+
+    private fun showUpdateDialog(event: SplashViewEvent.CheckAppStatus) {
+        val dialog = createFullScreenDialog()
+        val dialogBinding = DialogUpdateBinding.inflate(layoutInflater)
+        dialogBinding.updateButtonTextView.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(event.storeUrl))
                 startActivity(intent)
-            } catch (anfe: ActivityNotFoundException) {
+            } catch (e: ActivityNotFoundException) {
                 val intent = Intent(
                     Intent.ACTION_VIEW,
                     Uri.parse(
@@ -63,8 +75,18 @@ class SplashActivity : AppCompatActivity() {
                 )
                 startActivity(intent)
             }
+        }
+
+        dialog.setOnDismissListener {
             ActivityCompat.finishAffinity(this)
-            return
+        }
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
+    }
+
+    private fun createFullScreenDialog(): Dialog {
+        return Dialog(this, R.style.Base_FTR_FullScreenDialog).apply {
+            window?.setBackgroundDrawableResource(R.drawable.btn_white_green_36dp)
         }
     }
 
