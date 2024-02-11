@@ -29,9 +29,9 @@ class BackgroundMusicService : Service() {
 
     private val musicReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "BACKGROUND") {
+            if (intent?.action == "PAUSE") {
                 mediaPlayer?.pause()
-            } else if (intent?.action == "FOREGROUND") {
+            } else if (intent?.action == "PLAY") {
                 mediaPlayer?.start()
             }
         }
@@ -41,8 +41,8 @@ class BackgroundMusicService : Service() {
         super.onCreate()
         initMusicList()
         val filter = IntentFilter().apply {
-            addAction("FOREGROUND")
-            addAction("BACKGROUND")
+            addAction("PAUSE")
+            addAction("PLAY")
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(
             musicReceiver,
