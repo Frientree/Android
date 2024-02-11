@@ -1,6 +1,7 @@
 package com.d101.presentation.calendar.event
 
 import com.d101.domain.model.Fruit
+import com.d101.domain.model.Juice
 import java.time.LocalDate
 
 sealed class CalendarViewEvent {
@@ -23,4 +24,6 @@ sealed class CalendarViewEvent {
     data class OnShowFruitDetailDialog(val fruit: Fruit) : CalendarViewEvent()
 
     data class OnShowToast(val message: String) : CalendarViewEvent()
+
+    data class OnShowJuiceDetailDialog(val juice: Juice) : CalendarViewEvent()
 }

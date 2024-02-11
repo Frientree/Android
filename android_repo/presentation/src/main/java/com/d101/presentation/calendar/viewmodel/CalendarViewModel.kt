@@ -168,6 +168,7 @@ class CalendarViewModel @Inject constructor(
             when (val result = makeJuiceUseCase(weekDate)) {
                 is Result.Success -> {
                     setJuiceOfWeek(result.data)
+                    _eventFlow.emit(CalendarViewEvent.OnShowJuiceDetailDialog(result.data))
                 }
 
                 is Result.Failure -> {

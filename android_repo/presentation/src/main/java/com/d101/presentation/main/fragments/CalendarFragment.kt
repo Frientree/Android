@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.d101.domain.model.Fruit
 import com.d101.domain.model.FruitResources
+import com.d101.domain.model.Juice
 import com.d101.domain.utils.FruitEmotion
 import com.d101.presentation.R
 import com.d101.presentation.calendar.adapter.FruitInCalendarListAdapter
@@ -26,6 +27,7 @@ import com.d101.presentation.calendar.state.TodayFruitCreationStatus
 import com.d101.presentation.calendar.viewmodel.CalendarViewModel
 import com.d101.presentation.collection.CollectionActivity
 import com.d101.presentation.databinding.DialogFruitDetailBinding
+import com.d101.presentation.databinding.DialogJuiceDetailBinding
 import com.d101.presentation.databinding.DialogJuiceShakeBinding
 import com.d101.presentation.databinding.FragmentCalendarBinding
 import com.d101.presentation.mapper.CalendarMapper.toFruitInCalendar
@@ -126,6 +128,10 @@ class CalendarFragment : Fragment() {
                     is CalendarViewEvent.OnShowToast -> {
                         showToast(event.message)
                     }
+
+                    is CalendarViewEvent.OnShowJuiceDetailDialog -> showJuiceDetailDialog(
+                        event.juice,
+                    )
                 }
             }
         }
@@ -229,6 +235,18 @@ class CalendarFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun showJuiceDetailDialog(juice: Juice) {
+        dialog = createFullScreenDialog()
+        val dialogBinding = DialogJuiceDetailBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        Glide.with(dialogBinding.root).load(juice.juiceImageUrl).into(
+            dialogBinding.juiceImageImageView,
+        )
+        dialogBinding.juiceNameTextView.text = juice.juiceName
+        dialogBinding.juiceDescriptionTextView.text = juice.juiceDescription
+        dialog.show()
     }
 
     private fun showFruitDetailDialog(fruit: Fruit) {
