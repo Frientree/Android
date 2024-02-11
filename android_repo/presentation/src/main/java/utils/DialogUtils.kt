@@ -17,4 +17,12 @@ object DialogUtils {
         dialog?.setContentView(viewBinding.root)
         dialog?.show()
     }
+
+    fun setOnDismissListener(listener: () -> Unit) {
+        dialog?.setOnDismissListener { listener() }
+    }
+
+    fun setOnCancelListener(listener: () -> Unit) {
+        dialog?.setOnCancelListener { listener() }
+    }
 }
