@@ -17,6 +17,7 @@
         <TextView
             android:id="@+id/juice_name_text_view"
             style="@style/Base.FTR.TextView.DialogMain"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
             android:text="@string/juice_name_example" />
@@ -40,8 +41,9 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="60dp"
             android:layout_marginBottom="24dp"
+            android:textSize="12sp"
             android:autoSizeTextType="uniform"
-            android:maxLines="3"
+            android:maxLines="5"
             android:minLines="3" />
 
     </LinearLayout>
