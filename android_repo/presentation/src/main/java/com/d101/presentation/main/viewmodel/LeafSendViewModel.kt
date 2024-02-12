@@ -41,7 +41,7 @@ class LeafSendViewModel @Inject constructor(
         viewModelScope.launch {
             manageUserStatusUseCase.getUserStatus().collect {
                 setLeafTitle()
-                if (it.userLeafStatus.not()) {
+                if (it.userLeafStatus == 0) {
                     _uiState.update { currentState ->
                         LeafSendViewState.AlreadySendState(
                             currentState.leafSendTitle,
