@@ -1,5 +1,6 @@
 package com.d101.presentation.main.fragments
 
+import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,13 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d101.presentation.R
+import com.d101.presentation.databinding.DialogTutorialBinding
 import com.d101.presentation.databinding.FragmentMainBinding
 import com.d101.presentation.main.event.TreeFragmentEvent
 import com.d101.presentation.main.fragments.dialogs.BeforeFruitCreateBaseFragment
 import com.d101.presentation.main.fragments.dialogs.FruitDialogInterface
 import com.d101.presentation.main.fragments.dialogs.TodayFruitFragment
 import com.d101.presentation.main.state.TreeMessageState
+import com.d101.presentation.main.tutorial.TutorialAdapter
 import com.d101.presentation.main.viewmodel.MainFragmentViewModel
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -53,6 +57,10 @@ class MainFragment : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.mainViewModel = viewModel
+
+        binding.tutorialTextview.setOnClickListener {
+            viewModel.onTutorialButtonClicked()
+        }
 
         binding.createFruitButton.setOnClickListener {
             viewModel.onButtonClick()
@@ -100,6 +108,8 @@ class MainFragment : Fragment() {
                     is TreeFragmentEvent.ChangeTreeMessage -> {
                         typingAnimation(it.message)
                     }
+
+                    TreeFragmentEvent.ShowTutorialEvent -> showTutorialDialog()
                 }
             }
         }
@@ -107,6 +117,24 @@ class MainFragment : Fragment() {
 
     private fun showToast(message: String) {
         CustomToast.createAndShow(requireContext(), message)
+    }
+
+    private fun showTutorialDialog() {
+        val dialog = createFullScreenDialog()
+        val dialogBinding = DialogTutorialBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialogBinding.tutorialViewpager.adapter = TutorialAdapter(requireActivity())
+        TabLayoutMediator(
+            dialogBinding.indicatorTabLayout,
+            dialogBinding.tutorialViewpager,
+        ) { _, _ -> }.attach()
+        dialog.show()
+    }
+
+    private fun createFullScreenDialog(): Dialog {
+        return Dialog(requireContext(), R.style.Base_FTR_FullScreenDialog).apply {
+            window?.setBackgroundDrawableResource(R.drawable.bg_white_radius_30dp)
+        }
     }
 
     private fun typingAnimation(message: String) {

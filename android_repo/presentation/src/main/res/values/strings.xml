@@ -116,5 +116,10 @@
     <string name="app_blocked">나무가 자고 있어요. 잠시 후 다시 와주세요!</string>
     <string name="update_guide">업데이트가 있어요! \n 더 좋아진 프렌트리를 만나러 가볼까요?</string>
     <string name="go_to_update">업데이트하러 가기</string>
+    <string name="tree_message_guide">프렌트리를 터치하면 다른 메시지를 받아볼 수 있어요!</string>
+    <string name="emotional_dumping_guide">프렌트리를 길게 터치하면 감정 토로하기 기능을 사용할 수 있어요!</string>
+    <string name="emotional_dumping">감정 토로하기</string>
+    <string name="receive_tree_message">트리 메시지 받기</string>
+    <string name="main_guide">메인 가이드</string>
 
 </resources>

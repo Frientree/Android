@@ -11,4 +11,6 @@ sealed class TreeFragmentEvent {
     data class ChangeTreeMessage(
         val message: String,
     ) : TreeFragmentEvent()
+
+    data object ShowTutorialEvent : TreeFragmentEvent()
 }

@@ -161,4 +161,8 @@ class MainFragmentViewModel @Inject constructor(
             }
         }
     }
+
+    fun onTutorialButtonClicked() {
+        emitEvent(TreeFragmentEvent.ShowTutorialEvent)
+    }
 }

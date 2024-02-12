@@ -77,6 +77,20 @@
             app:layout_constraintTop_toBottomOf="@id/tree_speech_textview" />
 
         <TextView
+            android:id="@+id/tutorial_textview"
+            style="@style/Base.FTR.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:padding="4dp"
+            android:text="@string/main_guide"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/tree_speech_textview"
+            app:layout_constraintEnd_toEndOf="@id/tree_speech_textview"
+            app:layout_constraintTop_toBottomOf="@id/tree_name_textview"
+            app:drawableLeftCompat="@drawable/outline_info_24" />
+
+        <TextView
             android:id="@+id/fruit_status_textview"
             style="@style/Base.FTR.Text"
             android:layout_width="match_parent"
