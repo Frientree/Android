@@ -67,6 +67,7 @@ class LeafMessageToSendFragment : Fragment() {
         binding.leafCategoryChipGroup.visibility = View.GONE
         binding.leafTextLayout.visibility = View.GONE
         binding.leafSendButton.visibility = View.GONE
+        binding.leftLeavesCountTextView.visibility = View.GONE
         binding.alreadySendTextView.visibility = View.VISIBLE
         binding.leafLayout.setBackgroundResource(R.color.main_green)
     }
