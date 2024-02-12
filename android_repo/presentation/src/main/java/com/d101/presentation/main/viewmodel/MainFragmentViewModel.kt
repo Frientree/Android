@@ -150,6 +150,25 @@ class MainFragmentViewModel @Inject constructor(
         }
     }
 
+    fun onLongClickEmotionTrashMode() {
+        when (_uiState.value) {
+            is TreeFragmentViewState.EmotionTrashMode -> {
+                // 모드 끄기
+                getUserStatus()
+            }
+            else -> {
+                // 감쓰 모드로
+                _uiState.update { currentState ->
+                    TreeFragmentViewState.EmotionTrashMode(
+                        todayDate = currentState.todayDate,
+                        treeName = currentState.treeName,
+                        treeMessage = currentState.treeMessage,
+                    )
+                }
+            }
+        }
+    }
+
     fun onButtonClick() {
         when (_uiState.value) {
             is TreeFragmentViewState.FruitCreated -> {
@@ -158,6 +177,10 @@ class MainFragmentViewModel @Inject constructor(
 
             is TreeFragmentViewState.FruitNotCreated -> {
                 emitEvent(TreeFragmentEvent.MakeFruitEvent)
+            }
+
+            is TreeFragmentViewState.EmotionTrashMode -> {
+                emitEvent(TreeFragmentEvent.EmotionTrashEvent)
             }
         }
     }

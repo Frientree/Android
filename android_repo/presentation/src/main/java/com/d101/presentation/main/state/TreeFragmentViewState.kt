@@ -22,4 +22,12 @@ sealed class TreeFragmentViewState {
         override val fruitStatusText: String = "오늘의 감정을 기록해보세요!",
         override val buttonText: String = "오늘의 열매 생성하기",
     ) : TreeFragmentViewState()
+
+    data class EmotionTrashMode(
+        override val todayDate: String,
+        override val treeName: String,
+        override val treeMessage: String,
+        override val fruitStatusText: String = "힘든 일이 있으신가요?",
+        override val buttonText: String = "감정 쓰레기통",
+    ) : TreeFragmentViewState()
 }

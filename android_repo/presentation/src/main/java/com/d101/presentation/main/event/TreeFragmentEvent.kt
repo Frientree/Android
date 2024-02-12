@@ -4,6 +4,8 @@ sealed class TreeFragmentEvent {
     data object MakeFruitEvent : TreeFragmentEvent()
     data object CheckTodayFruitEvent : TreeFragmentEvent()
 
+    data object EmotionTrashEvent : TreeFragmentEvent()
+
     data class ShowErrorEvent(
         val message: String,
     ) : TreeFragmentEvent()

@@ -17,6 +17,7 @@ import com.d101.presentation.main.event.TreeFragmentEvent
 import com.d101.presentation.main.fragments.dialogs.BeforeFruitCreateBaseFragment
 import com.d101.presentation.main.fragments.dialogs.FruitDialogInterface
 import com.d101.presentation.main.fragments.dialogs.TodayFruitFragment
+import com.d101.presentation.main.state.TreeFragmentViewState
 import com.d101.presentation.main.state.TreeMessageState
 import com.d101.presentation.main.viewmodel.MainFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,6 +63,11 @@ class MainFragment : Fragment() {
             viewModel.onGetTreeMessage()
         }
 
+        binding.mainTreeImagebutton.setOnLongClickListener {
+            viewModel.onLongClickEmotionTrashMode()
+            true
+        }
+
         viewLifecycleOwner.repeatOnStarted {
             viewModel.messageState.collect {
                 when (it) {
@@ -71,6 +77,20 @@ class MainFragment : Fragment() {
 
                     is TreeMessageState.NoAccessMessage -> {
                         binding.mainTreeImagebutton.isEnabled = false
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.repeatOnStarted {
+            viewModel.uiState.collect {
+                when (it) {
+                    is TreeFragmentViewState.EmotionTrashMode -> {
+                        binding.mainFragment.setBackgroundColor(Color.BLACK)
+                    }
+
+                    else -> {
+                        binding.mainFragment.setBackgroundResource(R.color.background_white)
                     }
                 }
             }
@@ -99,6 +119,9 @@ class MainFragment : Fragment() {
 
                     is TreeFragmentEvent.ChangeTreeMessage -> {
                         typingAnimation(it.message)
+                    }
+
+                    is TreeFragmentEvent.EmotionTrashEvent -> {
                     }
                 }
             }

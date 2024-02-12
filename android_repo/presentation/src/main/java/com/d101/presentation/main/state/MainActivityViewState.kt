@@ -1,8 +1,8 @@
 package com.d101.presentation.main.state
 
 sealed class MainActivityViewState {
-    object TreeView : MainActivityViewState()
-    object CalendarView : MainActivityViewState()
+    data object TreeView : MainActivityViewState()
+    data object CalendarView : MainActivityViewState()
 
-    object MyPageView : MainActivityViewState()
+    data object MyPageView : MainActivityViewState()
 }
