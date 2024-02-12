@@ -26,10 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_night"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/lottie_night"
-            android:visibility="gone"/>
+            app:lottie_rawRes="@raw/lottie_stars" />
 
         <TextView
             android:id="@+id/today_date_textview"

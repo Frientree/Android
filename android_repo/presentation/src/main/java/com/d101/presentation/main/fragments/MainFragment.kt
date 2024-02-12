@@ -16,6 +16,7 @@ import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentMainBinding
 import com.d101.presentation.main.event.TreeFragmentEvent
 import com.d101.presentation.main.fragments.dialogs.BeforeFruitCreateBaseFragment
+import com.d101.presentation.main.fragments.dialogs.EmotionDumpingFragment
 import com.d101.presentation.main.fragments.dialogs.FruitDialogInterface
 import com.d101.presentation.main.fragments.dialogs.TodayFruitFragment
 import com.d101.presentation.main.state.TreeFragmentViewState
@@ -140,6 +141,11 @@ class MainFragment : Fragment() {
                     }
 
                     is TreeFragmentEvent.EmotionTrashEvent -> {
+                        dialog = EmotionDumpingFragment()
+                        dialog.dialog?.window?.setBackgroundDrawable(
+                            ColorDrawable(Color.TRANSPARENT),
+                        )
+                        dialog.show(childFragmentManager, "")
                     }
                 }
             }

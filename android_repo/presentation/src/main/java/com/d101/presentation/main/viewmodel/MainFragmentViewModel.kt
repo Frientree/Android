@@ -136,13 +136,11 @@ class MainFragmentViewModel @Inject constructor(
                         TreeFragmentViewState.FruitCreated(
                             treeName = userStatus.treeName,
                             todayDate = initTodayDate(localDate),
-                            treeMessage = currentState.treeMessage,
                         )
                     } else {
                         TreeFragmentViewState.FruitNotCreated(
                             treeName = userStatus.treeName,
                             todayDate = initTodayDate(localDate),
-                            treeMessage = currentState.treeMessage,
                         )
                     }
                 }
@@ -163,7 +161,6 @@ class MainFragmentViewModel @Inject constructor(
                     TreeFragmentViewState.EmotionTrashMode(
                         todayDate = currentState.todayDate,
                         treeName = currentState.treeName,
-                        treeMessage = currentState.treeMessage,
                     )
                 }
             }

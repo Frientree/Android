@@ -116,5 +116,9 @@
     <string name="app_blocked">나무가 자고 있어요. 잠시 후 다시 와주세요!</string>
     <string name="update_guide">업데이트가 있어요! \n 더 좋아진 프렌트리를 만나러 가볼까요?</string>
     <string name="go_to_update">업데이트하러 가기</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="black_hole">블랙홀 속으로 마음껏 털어놓으세요</string>
+    <string name="black_hole_finish">후련해요!</string>
 
 </resources>
