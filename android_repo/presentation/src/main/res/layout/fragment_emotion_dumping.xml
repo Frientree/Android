@@ -21,13 +21,21 @@
                 android:background="@drawable/bg_night_black_hole">
 
                 <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/boom_lottie_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    app:lottie_rawRes="@raw/lottie_boom"
+                    />
+
+                <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/black_hole_lottie_view"
                     android:layout_width="180dp"
                     android:layout_height="180dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/black_hole_text_view"
+                    app:layout_constraintBottom_toBottomOf="@id/black_hole_button"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/lottie_black"
@@ -36,7 +44,8 @@
                     android:id="@+id/black_hole_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@id/black_hole_button"
+                    android:layout_marginBottom="12dp"
+                    app:layout_constraintBottom_toTopOf="@id/black_hole_button"
                     app:layout_constraintTop_toBottomOf="@id/black_hole_lottie_view"
                     android:textAppearance="@style/Base.FTR.Text"
                     android:textColor="@color/background_white"
