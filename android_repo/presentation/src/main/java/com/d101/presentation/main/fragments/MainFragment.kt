@@ -1,5 +1,6 @@
 package com.d101.presentation.main.fragments
 
+import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -86,11 +87,28 @@ class MainFragment : Fragment() {
             viewModel.uiState.collect {
                 when (it) {
                     is TreeFragmentViewState.EmotionTrashMode -> {
-                        binding.mainFragment.setBackgroundColor(Color.BLACK)
+                        val fadeIn = ObjectAnimator.ofFloat(
+                            binding.nightLottieView,
+                            "alpha",
+                            0f,
+                            1f,
+                        )
+                        fadeIn.duration = 500
+                        fadeIn.start()
+                        binding.nightLottieView.visibility = View.VISIBLE
+                        binding.nightLottieView.playAnimation()
                     }
 
                     else -> {
-                        binding.mainFragment.setBackgroundResource(R.color.background_white)
+                        val fadeOut = ObjectAnimator.ofFloat(
+                            binding.nightLottieView,
+                            "alpha",
+                            1f,
+                            0f,
+                        )
+                        fadeOut.duration = 500
+                        fadeOut.start()
+                        binding.nightLottieView.pauseAnimation()
                     }
                 }
             }

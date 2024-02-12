@@ -156,6 +156,7 @@ class MainFragmentViewModel @Inject constructor(
                 // 모드 끄기
                 getUserStatus()
             }
+
             else -> {
                 // 감쓰 모드로
                 _uiState.update { currentState ->

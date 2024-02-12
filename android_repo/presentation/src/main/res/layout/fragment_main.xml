@@ -21,6 +21,16 @@
         android:layout_height="match_parent"
         android:background="@color/background_white">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/night_lottie_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_night"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_night"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/today_date_textview"
             style="@style/Base.FTR.MainTitle"
