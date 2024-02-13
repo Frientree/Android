@@ -297,6 +297,7 @@ class CalendarFragment : Fragment() {
                         progressBar.progress = progressBar.max
                         shakeSensor.stop()
                         viewModel.onCompleteJuiceShake()
+                        dialog.dismiss()
                     }
                 }
             },
