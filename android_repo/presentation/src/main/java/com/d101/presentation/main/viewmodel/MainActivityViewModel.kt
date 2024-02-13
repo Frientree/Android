@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.d101.domain.model.Result
 import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.model.status.GetUserStatusErrorStatus
+import com.d101.domain.usecase.mypage.SetAlarmStatusUseCase
 import com.d101.domain.usecase.usermanagement.ManageUserStatusUseCase
 import com.d101.domain.usecase.usermanagement.UpdateFcmTokenUseCase
 import com.d101.presentation.main.event.MainActivityEvent
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val updateFcmTokenUseCase: UpdateFcmTokenUseCase,
     private val manageUserStatusUseCase: ManageUserStatusUseCase,
+    private val setAlarmStatusUseCase: SetAlarmStatusUseCase,
 ) : ViewModel() {
 
     private val _currentViewState: MutableStateFlow<MainActivityViewState> =
@@ -44,6 +46,7 @@ class MainActivityViewModel @Inject constructor(
             emitEvent(event)
         }
     }
+
     fun changeViewState(state: MainActivityViewState) {
         _currentViewState.update { state }
     }
@@ -57,6 +60,26 @@ class MainActivityViewModel @Inject constructor(
             updateFcmTokenUseCase(token)
         }
     }
+
+    fun setUserAlarmStatus(status: Boolean) {
+        viewModelScope.launch {
+            when (val result = setAlarmStatusUseCase(status)) {
+                is Result.Success -> {}
+                is Result.Failure -> {
+                    when (result.errorStatus) {
+                        is ErrorStatus.NetworkError -> {
+                            emitEvent(MainActivityEvent.ShowErrorEvent("네트워크 에러가 발생했습니다."))
+                        }
+
+                        else -> {
+                            emitEvent(MainActivityEvent.ShowErrorEvent("알 수 없는 에러가 발생했습니다."))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun updateUserStatus() {
         viewModelScope.launch {
             when (val result = manageUserStatusUseCase.updateUserStatus()) {
