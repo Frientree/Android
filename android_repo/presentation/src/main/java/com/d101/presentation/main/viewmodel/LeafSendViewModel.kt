@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d101.domain.model.LeafViews
 import com.d101.domain.model.Result
-import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.model.status.LeafErrorStatus
 import com.d101.domain.usecase.main.SendMyLeafUseCase
 import com.d101.domain.usecase.usermanagement.ManageUserStatusUseCase
 import com.d101.presentation.main.event.LeafSendViewEvent
 import com.d101.presentation.main.state.LeafSendViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,53 +41,60 @@ class LeafSendViewModel @Inject constructor(
         viewModelScope.launch {
             manageUserStatusUseCase.getUserStatus().collect {
                 setLeafViewState(it.userLeafStatus)
+                if (it.userLeafStatus == 0) {
+                    _uiState.update { currentState ->
+                        LeafSendViewState.AlreadySendState(
+                            leafSendTitle = currentState.leafSendTitle,
+                        )
+                    }
+                }
             }
         }
         emitEvent(LeafSendViewEvent.FirstPage)
     }
 
-    private fun setLeafViewState(leftLeavesCount: Int) {
-        viewModelScope.launch {
-            when (val result = sendLeafUseCase.getMyLeafViews()) {
-                is Result.Success -> {
-                    when (result.data) {
-                        LeafViews.ZERO_VIEW.count -> {
-                            _uiState.update {
-                                LeafSendViewState.ZeroViewLeafSendViewState(
-                                    leftLeavesCount = leftLeavesCount
-                                )
-                            }
+    private suspend fun setLeafViewState(leftLeavesCount: Int) {
+        when (val result = sendLeafUseCase.getMyLeafViews()) {
+            is Result.Success -> {
+                when (result.data) {
+                    LeafViews.ZERO_VIEW.count -> {
+                        _uiState.update {
+                            LeafSendViewState.ZeroViewLeafSendViewState(
+                                leftLeavesCount = leftLeavesCount,
+                            )
                         }
+                    }
 
-                        LeafViews.NO_SEND.count -> {
-                            _uiState.update {
-                                LeafSendViewState.NoSendLeafSendViewState(
-                                    leftLeavesCount = leftLeavesCount
-                                )
-                            }
+                    LeafViews.NO_SEND.count -> {
+                        _uiState.update {
+                            LeafSendViewState.NoSendLeafSendViewState(
+                                leftLeavesCount = leftLeavesCount,
+                            )
                         }
+                    }
 
-                        else -> {
-                            _uiState.update {
-                                LeafSendViewState.SomeViewLeafSateSendView(
-                                    "당신의 이파리가 일주일간 ${result.data}명에게 힘이 되었어요!",
-                                    leftLeavesCount = leftLeavesCount
-                                )
-                            }
+                    else -> {
+                        _uiState.update {
+                            LeafSendViewState.SomeViewLeafSateSendView(
+                                "당신의 이파리가 일주일간 ${result.data}명에게 힘이 되었어요!",
+                                leftLeavesCount = leftLeavesCount,
+                            )
                         }
                     }
                 }
+            }
 
-                is Result.Failure -> {
-                    when (result.errorStatus) {
-                        LeafErrorStatus.NoSendLeaf -> {
-                            _uiState.update { LeafSendViewState.NoSendLeafSendViewState(
-                                leftLeavesCount = leftLeavesCount
-                            ) }
+            is Result.Failure -> {
+                when (result.errorStatus) {
+                    LeafErrorStatus.NoSendLeaf -> {
+                        _uiState.update {
+                            LeafSendViewState.NoSendLeafSendViewState(
+                                leftLeavesCount = leftLeavesCount,
+                            )
                         }
+                    }
 
-                        else -> {
-                        }
+                    else -> {
                     }
                 }
             }
@@ -107,7 +114,7 @@ class LeafSendViewModel @Inject constructor(
     private val _blowing = MutableEventFlow<Int>(0)
     val blowing = _blowing.asEventFlow()
     fun onBlowing() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             for (i in 1..30) {
                 delay(50)
                 _blowing.emit(1)
@@ -117,20 +124,14 @@ class LeafSendViewModel @Inject constructor(
 
     fun onReadyToSend() {
         viewModelScope.launch {
-            when (val result = sendLeafUseCase.sendLeaf(checkedChipId, inputText.value)) {
+            when (sendLeafUseCase.sendLeaf(checkedChipId, inputText.value)) {
                 is Result.Success -> {
                     manageUserStatusUseCase.updateUserStatus()
                     emitEvent(LeafSendViewEvent.ReadyToSend)
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        ErrorStatus.BadRequest -> {
-                        }
-
-                        else -> {
-                        }
-                    }
+                    emitEvent(LeafSendViewEvent.ShowErrorToast("이파리를 보내지 못했어요. 다시 시도해주세요."))
                 }
             }
         }

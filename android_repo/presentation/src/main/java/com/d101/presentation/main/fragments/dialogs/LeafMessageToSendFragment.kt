@@ -57,7 +57,12 @@ class LeafMessageToSendFragment : Fragment() {
             viewModel.uiState.collect { state ->
                 when (state) {
                     is LeafSendViewState.AlreadySendState -> setVisibility()
-                    else -> {}
+                    else -> {
+                        binding.leftLeavesCountTextView.text = String.format(
+                            getString(R.string.number_of_leaves_left),
+                            state.leftLeavesCount,
+                        )
+                    }
                 }
             }
         }
@@ -65,7 +70,7 @@ class LeafMessageToSendFragment : Fragment() {
 
     private fun setVisibility() {
         binding.leafCategoryChipGroup.visibility = View.GONE
-        binding.leafTextLayout.visibility = View.GONE
+        binding.leafTextView.visibility = View.GONE
         binding.leafSendButton.visibility = View.GONE
         binding.leftLeavesCountTextView.visibility = View.GONE
         binding.alreadySendTextView.visibility = View.VISIBLE
