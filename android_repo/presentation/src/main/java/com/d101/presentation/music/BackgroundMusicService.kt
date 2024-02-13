@@ -30,9 +30,13 @@ class BackgroundMusicService : Service() {
     private val musicReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == "PAUSE") {
-                mediaPlayer?.pause()
+                if (mediaPlayer?.isPlaying == true) {
+                    mediaPlayer?.pause()
+                }
             } else if (intent?.action == "PLAY") {
-                mediaPlayer?.start()
+                if (mediaPlayer?.isPlaying == false) {
+                    mediaPlayer?.start()
+                }
             }
         }
     }
