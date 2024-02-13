@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity() {
                 if (shouldShowRequestPermissionRationale(permission)) {
                     showToast("권한을 허용해야 알림 기능을 이용할 수 있습니다.")
                 } else {
-                    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = Uri.fromParts("package", packageName, null)
                     }
                     startActivity(intent)
