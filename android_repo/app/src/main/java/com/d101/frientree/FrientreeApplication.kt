@@ -26,7 +26,7 @@ class FrientreeApplication : Application() {
             override fun onActivityStarted(p0: Activity) {
                 if (++activityReferences == 1 && !isActivityChangingConfigurations) {
                     LocalBroadcastManager.getInstance(this@FrientreeApplication).sendBroadcast(
-                        Intent("FOREGROUND"),
+                        Intent("PLAY"),
                     )
                 }
             }
@@ -35,7 +35,7 @@ class FrientreeApplication : Application() {
                 isActivityChangingConfigurations = activity.isChangingConfigurations
                 if (--activityReferences == 0 && !isActivityChangingConfigurations) {
                     LocalBroadcastManager.getInstance(this@FrientreeApplication).sendBroadcast(
-                        Intent("BACKGROUND"),
+                        Intent("PAUSE"),
                     )
                 }
             }
