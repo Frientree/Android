@@ -149,7 +149,7 @@ class MainFragmentViewModel @Inject constructor(
     }
 
     fun onLongClickEmotionTrashMode() {
-        when (_uiState.value) {
+        when (uiState.value) {
             is TreeFragmentViewState.EmotionTrashMode -> {
                 // 모드 끄기
                 getUserStatus()
@@ -168,7 +168,7 @@ class MainFragmentViewModel @Inject constructor(
     }
 
     fun onButtonClick() {
-        when (_uiState.value) {
+        when (uiState.value) {
             is TreeFragmentViewState.FruitCreated -> {
                 getTodayFruit()
             }

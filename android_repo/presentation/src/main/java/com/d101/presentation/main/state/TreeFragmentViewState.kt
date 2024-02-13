@@ -28,6 +28,6 @@ sealed class TreeFragmentViewState {
         override val treeName: String,
         override val treeMessage: String = "여기서 마음껏 이야기해봐!",
         override val fruitStatusText: String = "힘든 일이 있으신가요?",
-        override val buttonText: String = "감정 쓰레기통",
+        override val buttonText: String = "감정 토로하기",
     ) : TreeFragmentViewState()
 }

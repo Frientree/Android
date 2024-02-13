@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -96,6 +97,13 @@ class MainFragment : Fragment() {
                         )
                         fadeIn.duration = 500
                         fadeIn.start()
+                        binding.createFruitButton
+                            .setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.btn_boom),
+                                null,
+                                null,
+                                null,
+                            )
                         binding.nightLottieView.visibility = View.VISIBLE
                         binding.nightLottieView.playAnimation()
                     }
@@ -109,6 +117,13 @@ class MainFragment : Fragment() {
                         )
                         fadeOut.duration = 500
                         fadeOut.start()
+                        binding.createFruitButton
+                            .setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.btn_apple),
+                                null,
+                                null,
+                                null,
+                            )
                         binding.nightLottieView.pauseAnimation()
                     }
                 }
