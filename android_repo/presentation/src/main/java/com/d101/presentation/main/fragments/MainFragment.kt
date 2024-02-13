@@ -2,6 +2,7 @@ package com.d101.presentation.main.fragments
 
 import android.animation.ObjectAnimator
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.d101.presentation.R
 import com.d101.presentation.databinding.DialogTutorialBinding
 import com.d101.presentation.databinding.FragmentMainBinding
@@ -98,6 +100,8 @@ class MainFragment : Fragment() {
             viewModel.uiState.collect {
                 when (it) {
                     is TreeFragmentViewState.EmotionTrashMode -> {
+                        LocalBroadcastManager.getInstance(requireContext())
+                            .sendBroadcast(Intent("PAUSE"))
                         val fadeIn = ObjectAnimator.ofFloat(
                             binding.nightLottieView,
                             "alpha",
@@ -118,6 +122,8 @@ class MainFragment : Fragment() {
                     }
 
                     else -> {
+                        LocalBroadcastManager.getInstance(requireContext())
+                            .sendBroadcast(Intent("PLAY"))
                         val fadeOut = ObjectAnimator.ofFloat(
                             binding.nightLottieView,
                             "alpha",
@@ -173,6 +179,7 @@ class MainFragment : Fragment() {
                         )
                         dialog.show(childFragmentManager, "")
                     }
+
                     is TreeFragmentEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
@@ -222,6 +229,14 @@ class MainFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (viewModel.uiState.value is TreeFragmentViewState.EmotionTrashMode) {
+            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(
+                Intent("PLAY"),
+            )
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         messageTypingJob?.cancel()
