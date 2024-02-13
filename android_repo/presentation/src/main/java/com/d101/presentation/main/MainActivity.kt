@@ -115,6 +115,7 @@ class MainActivity : AppCompatActivity() {
                             dialog.show(supportFragmentManager, "")
                         }
                     }
+
                     is MainActivityEvent.ShowLeafReceiveDialog -> {
                         if (LeafDialogInterface.dialogShowState.not()) {
                             dialog = LeafReceiveBaseFragment()
@@ -177,16 +178,19 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.POST_NOTIFICATIONS,
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            permissionCheckBottomSheetDialog = PermissionCheckBottomSheetDialog(
-                cancelDialog = { neverAskAgain ->
-                    viewModel.setUserAlarmStatus(false)
-                    viewModel.setNotificationNeverAsk(neverAskAgain)
-                    permissionCheckBottomSheetDialog?.dismiss()
-                },
-                permissionConfirm = {
-                    requestNotificationPermission()
-                },
-            ).apply { show(supportFragmentManager, "permissionCheckBottomSheetDialog") }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                permissionCheckBottomSheetDialog = PermissionCheckBottomSheetDialog(
+                    cancelDialog = { neverAskAgain ->
+                        viewModel.setUserAlarmStatus(false)
+                        viewModel.setNotificationNeverAsk(neverAskAgain)
+                        permissionCheckBottomSheetDialog?.dismiss()
+                    },
+                    permissionConfirm = {
+                        requestNotificationPermission()
+                        permissionCheckBottomSheetDialog?.dismiss()
+                    },
+                ).apply { show(supportFragmentManager, "permissionCheckBottomSheetDialog") }
+            }
         }
     }
 
@@ -207,7 +211,7 @@ class MainActivity : AppCompatActivity() {
                 if (shouldShowRequestPermissionRationale(permission)) {
                     showToast("권한을 허용해야 알림 기능을 이용할 수 있습니다.")
                 } else {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
                         data = Uri.fromParts("package", packageName, null)
                     }
                     startActivity(intent)

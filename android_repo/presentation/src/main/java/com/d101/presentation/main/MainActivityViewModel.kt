@@ -41,7 +41,6 @@ class MainActivityViewModel @Inject constructor(
     val eventFlow = _eventFlow.asEventFlow()
 
     init {
-        updateUserStatus()
         viewModelScope.launch {
             val userInfo = getUserInfoUseCase().first()
             if (userInfo is Result.Success) {
@@ -52,6 +51,7 @@ class MainActivityViewModel @Inject constructor(
                 emitEvent(MainActivityEvent.ShowErrorEvent("사용자 정보를 가져오는 데 실패했습니다."))
             }
         }
+        updateUserStatus()
     }
 
     private fun emitEvent(event: MainActivityEvent) {
