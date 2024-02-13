@@ -1,5 +1,6 @@
 package com.d101.presentation.main.fragments
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
@@ -33,7 +34,6 @@ import com.d101.presentation.databinding.FragmentCalendarBinding
 import com.d101.presentation.mapper.CalendarMapper.toFruitInCalendar
 import dagger.hilt.android.AndroidEntryPoint
 import utils.CustomToast
-import utils.DialogUtils
 import utils.ShakeEventListener
 import utils.ShakeSensorModule
 import utils.darkenColor
@@ -44,6 +44,8 @@ class CalendarFragment : Fragment() {
     private val viewModel: CalendarViewModel by viewModels()
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var dialog: Dialog
 
     private lateinit var shakeSensor: ShakeSensorModule
     private lateinit var fruitListAdapter: FruitListAdapter
@@ -242,16 +244,19 @@ class CalendarFragment : Fragment() {
     }
 
     private fun showJuiceDetailDialog(juice: Juice) {
+        createFullScreenDialog()
         val dialogBinding = DialogJuiceDetailBinding.inflate(layoutInflater)
         Glide.with(dialogBinding.root).load(juice.juiceImageUrl).into(
             dialogBinding.juiceImageImageView,
         )
         dialogBinding.juiceNameTextView.text = juice.juiceName
         dialogBinding.juiceDescriptionTextView.text = juice.juiceDescription
-        DialogUtils.createAndShowDialog(requireActivity(), dialogBinding)
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
     }
 
     private fun showFruitDetailDialog(fruit: Fruit) {
+        createFullScreenDialog()
         val dialogBinding = DialogFruitDetailBinding.inflate(layoutInflater)
         Glide.with(dialogBinding.root).load(fruit.imageUrl).into(dialogBinding.fruitImageView)
         dialogBinding.fruitNameTextView.text = fruit.name
@@ -271,10 +276,12 @@ class CalendarFragment : Fragment() {
                     .load(fruitResources.fallingImage)
                     .into(dialogBinding.fruitDetailBackgroundImageView)
             }
-        DialogUtils.createAndShowDialog(requireActivity(), dialogBinding)
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
     }
 
     private fun showShakeJuiceDialog() {
+        createFullScreenDialog()
         val dialogBinding = DialogJuiceShakeBinding.inflate(layoutInflater)
         val progressBar =
             dialogBinding.shakeProgressBarLinearProgressIndicator
@@ -294,9 +301,16 @@ class CalendarFragment : Fragment() {
                 }
             },
         )
-        DialogUtils.createAndShowDialog(requireActivity(), dialogBinding)
-        DialogUtils.setOnDismissListener { shakeSensor.stop() }
+        dialog.setContentView(dialogBinding.root)
+        dialog.setOnDismissListener { shakeSensor.stop() }
+        dialog.show()
         shakeSensor.start()
+    }
+
+    private fun createFullScreenDialog() {
+        dialog = Dialog(requireActivity(), R.style.Base_FTR_FullScreenDialog).apply {
+            window?.setBackgroundDrawableResource(R.drawable.bg_white_radius_30dp)
+        }
     }
 
     private fun countFruits(fruits: List<Fruit>): List<Pair<LittleFruitImageUrl, Int>> {

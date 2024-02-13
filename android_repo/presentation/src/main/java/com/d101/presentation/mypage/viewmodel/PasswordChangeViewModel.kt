@@ -11,6 +11,7 @@ import com.d101.presentation.R
 import com.d101.presentation.mypage.event.PasswordChangeEvent
 import com.d101.presentation.mypage.state.PasswordChangeState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -74,7 +75,7 @@ class PasswordChangeViewModel @Inject constructor(
     }
 
     fun changePassword() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             when (
                 val result = changePasswordUseCase(
                     uiState.value.currentPassword,

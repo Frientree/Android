@@ -25,6 +25,7 @@ class CollectionAdapter(private val collectionClickListener: ((JuiceForCollectio
                 binding.juiceImageImageView.colorFilter = null
             } else {
                 binding.juiceNameTextView.text = "???"
+                binding.collectionItemLinearLayout.setOnClickListener(null)
                 binding.juiceImageImageView.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
             }
         }
