@@ -82,9 +82,7 @@ class MyPageViewModel @Inject constructor(
                         ),
                     )
 
-                    else -> {
-                        _eventFlow.emit(MyPageViewEvent.OnShowToast("네트워크 에러"))
-                    }
+                    else -> {}
                 }
             }
         }
@@ -198,9 +196,7 @@ class MyPageViewModel @Inject constructor(
                                 ),
                             )
 
-                            else -> {
-                                _eventFlow.emit(MyPageViewEvent.OnShowToast(errorStatus.message))
-                            }
+                            else -> {}
                         }
                     }
                 }
@@ -272,9 +268,7 @@ class MyPageViewModel @Inject constructor(
                             ),
                         )
 
-                        else -> {
-                            emitEvent(MyPageViewEvent.OnShowToast("네트워크 에러"))
-                        }
+                        else -> {}
                     }
                 }
             }

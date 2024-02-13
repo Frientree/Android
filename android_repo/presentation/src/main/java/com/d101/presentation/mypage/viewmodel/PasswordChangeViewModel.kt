@@ -102,7 +102,7 @@ class PasswordChangeViewModel @Inject constructor(
                             PasswordChangeEvent.OnServerMaintenance(errorStatus.message),
                         )
                         ErrorStatus.NetworkError() -> onShowToast(errorStatus.message)
-                        else -> onShowToast(errorStatus.message)
+                        else -> {}
                     }
                 }
             }

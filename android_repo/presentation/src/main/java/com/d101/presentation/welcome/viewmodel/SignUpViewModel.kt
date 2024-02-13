@@ -188,7 +188,9 @@ class SignUpViewModel @Inject constructor(
                             ),
                         )
 
-                        else -> SignUpEvent.SignUpFailure("네트워크 연결 실패")
+                        ErrorStatus.NetworkError() -> onSignUpFailure(result.errorStatus.message)
+
+                        else -> onSignUpFailure(result.errorStatus.message)
                     }
                 }
             }
@@ -236,7 +238,7 @@ class SignUpViewModel @Inject constructor(
                         )
 
                         ErrorStatus.NetworkError() -> onSignUpFailure(errorStatus.message)
-                        else -> onSignUpFailure(errorStatus.message)
+                        else -> onSignUpFailure(result.errorStatus.message)
                     }
                 }
             }
@@ -350,7 +352,7 @@ class SignUpViewModel @Inject constructor(
                             ),
                         )
 
-                        else -> onSignUpFailure(errorStatus.message)
+                        else -> onSignUpFailure(result.errorStatus.message)
                     }
                 }
             }

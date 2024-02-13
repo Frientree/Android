@@ -227,7 +227,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="48dp"
-            android:background="@drawable/btn_white_green_36dp"
+            android:background="@drawable/bg_button_selector"
             android:onClick="@{() -> myPageViewModel.onTapTermsButton()}"
             android:text="@string/terms"
             android:textSize="16sp" />
@@ -297,7 +297,9 @@
             android:layout_width="wrap_content"
             android:layout_height="180dp"
             android:layout_marginTop="24dp"
-            android:src="@drawable/img_sub_tree" />
+            android:src="@drawable/img_sub_tree"
+            android:layout_gravity="center"
+            />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

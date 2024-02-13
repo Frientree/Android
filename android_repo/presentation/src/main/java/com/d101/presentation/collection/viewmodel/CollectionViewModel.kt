@@ -49,11 +49,7 @@ class CollectionViewModel @Inject constructor(
                             _eventFlow.emit(CollectionViewEvent.OnShowToast(errorStatus.message))
                         }
 
-                        else -> {
-                            _eventFlow.emit(
-                                CollectionViewEvent.OnShowToast(result.errorStatus.message),
-                            )
-                        }
+                        else -> {}
                     }
                 }
             }

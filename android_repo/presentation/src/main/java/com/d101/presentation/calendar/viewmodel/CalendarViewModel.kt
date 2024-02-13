@@ -202,9 +202,7 @@ class CalendarViewModel @Inject constructor(
                             _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
                         }
 
-                        else -> {
-                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
-                        }
+                        else -> {}
                     }
                 }
             }
@@ -230,9 +228,7 @@ class CalendarViewModel @Inject constructor(
                             _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
                         }
 
-                        else -> {
-                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
-                        }
+                        else -> {}
                     }
                 }
             }
@@ -298,9 +294,7 @@ class CalendarViewModel @Inject constructor(
                             _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
                         }
 
-                        else -> {
-                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
-                        }
+                        else -> {}
                     }
                 }
             }

@@ -34,7 +34,6 @@ class FruitDBTest {
     @Test
     fun insertAndRetrieveFruits() {
         val fruit = FruitEntity(
-            1,
             20240127,
             "Apple",
             "Description",

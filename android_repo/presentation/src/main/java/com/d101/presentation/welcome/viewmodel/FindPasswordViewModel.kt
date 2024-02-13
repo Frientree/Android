@@ -57,7 +57,7 @@ class FindPasswordViewModel @Inject constructor(
 
                     PasswordFindErrorStatus.UserNotFound() -> onShowToast(errorStatus.message)
                     ErrorStatus.NetworkError() -> onShowToast(errorStatus.message)
-                    else -> onShowToast(errorStatus.message)
+                    else -> {}
                 }
             }
         }

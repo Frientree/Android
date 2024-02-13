@@ -89,12 +89,7 @@ class FruitCreateViewModel @Inject constructor(
                             ),
                         )
 
-                        else -> {
-                            emitEvent(
-                                CreateFruitDialogViewEvent
-                                    .ShowErrorToastEvent(errorStatus.message),
-                            )
-                        }
+                        else -> {}
                     }
                 }
             }
@@ -151,12 +146,7 @@ class FruitCreateViewModel @Inject constructor(
                             ),
                         )
 
-                        else -> {
-                            emitEvent(
-                                CreateFruitDialogViewEvent
-                                    .ShowErrorToastEvent("예기치 못한 에러가 발생했습니다."),
-                            )
-                        }
+                        else -> {}
                     }
                 }
             }

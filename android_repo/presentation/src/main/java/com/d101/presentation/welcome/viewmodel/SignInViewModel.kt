@@ -43,7 +43,7 @@ class SignInViewModel @Inject constructor(
                         ErrorStatus.NetworkError() -> onSignInFailed(errorStatus.message)
                         SignInErrorStatus.UserNotFound() -> onSignInFailed(errorStatus.message)
                         SignInErrorStatus.WrongPassword() -> onSignInFailed(errorStatus.message)
-                        else -> onSignInFailed(errorStatus.message)
+                        else -> onSignInFailed("로그인에 실패했습니다.")
                     }
                 }
             }
@@ -110,7 +110,7 @@ class SignInViewModel @Inject constructor(
                         SignInViewEvent.OnServerMaintaining(errorStatus.message),
                     )
                     ErrorStatus.NetworkError() -> onSignInFailed(errorStatus.message)
-                    else -> onSignInFailed(errorStatus.message)
+                    else -> onSignInFailed("로그인에 실패했습니다.")
                 }
             }
         }

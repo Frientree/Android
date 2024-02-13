@@ -89,9 +89,7 @@ class MainFragmentViewModel @Inject constructor(
                                 TreeFragmentEvent.OnServerMaintaining(errorStatus.message),
                             )
 
-                            else -> {
-                                emitEvent(TreeFragmentEvent.ShowErrorEvent(errorStatus.message))
-                            }
+                            else -> {}
                         }
                     }
                 }
@@ -124,9 +122,7 @@ class MainFragmentViewModel @Inject constructor(
                             ),
                         )
 
-                        else -> {
-                            emitEvent(TreeFragmentEvent.ShowErrorEvent(errorStatus.message))
-                        }
+                        else -> {}
                     }
                 }
             }

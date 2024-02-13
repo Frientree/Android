@@ -57,9 +57,7 @@ class LeafReceiveViewModel @Inject constructor(
                             emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
 
-                        else -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
-                        }
+                        else -> {}
                     }
                 }
             }
@@ -87,9 +85,7 @@ class LeafReceiveViewModel @Inject constructor(
                             LeafReceiveEvent.ShowErrorToast(errorStatus.message),
                         )
 
-                        else -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
-                        }
+                        else -> {}
                     }
                 }
             }

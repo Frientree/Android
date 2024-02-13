@@ -94,9 +94,7 @@ class MainActivityViewModel @Inject constructor(
                             emitEvent(MainActivityEvent.ShowErrorEvent("네트워크 에러가 발생했습니다."))
                         }
 
-                        else -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("알 수 없는 에러가 발생했습니다."))
-                        }
+                        else -> {}
                     }
                 }
             }
@@ -122,9 +120,7 @@ class MainActivityViewModel @Inject constructor(
                             emitEvent(MainActivityEvent.ShowErrorEvent(errorStatus.message))
                         }
 
-                        else -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent(errorStatus.message))
-                        }
+                        else -> {}
                     }
                 }
             }

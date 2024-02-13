@@ -17,7 +17,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -28,8 +27,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.DialogFragment
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.DialogFragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -184,13 +183,11 @@ class MainActivity : AppCompatActivity() {
         ) {
             permissionCheckBottomSheetDialog = PermissionCheckBottomSheetDialog(
                 cancelDialog = { neverAskAgain ->
-                    Log.d("확인", "permissionConfirm: 거부 버튼 클릭")
                     viewModel.setUserAlarmStatus(false)
                     viewModel.setNotificationNeverAsk(neverAskAgain)
                     permissionCheckBottomSheetDialog?.dismiss()
                 },
                 permissionConfirm = {
-                    Log.d("확인", "permissionConfirm: 버튼클릭")
                     requestNotificationPermission()
                 },
             ).apply { show(supportFragmentManager, "permissionCheckBottomSheetDialog") }
@@ -233,14 +230,14 @@ class MainActivity : AppCompatActivity() {
                         System.currentTimeMillis() - lastBackPressedTime < BACK_PRESS_INTERVAL
                     ) {
                         isEnabled = false
-                        onBackPressed()
+                        onBackPressedDispatcher.onBackPressed()
                     } else {
                         showToast("뒤로 버튼을 한 번 더 누르면 종료됩니다.")
                         lastBackPressedTime = System.currentTimeMillis()
                     }
                 } else {
                     isEnabled = false
-                    onBackPressed()
+                    onBackPressedDispatcher.onBackPressed()
                 }
             }
         }

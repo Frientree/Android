@@ -53,7 +53,7 @@ class SplashViewModel @Inject constructor(
                         SplashViewEvent.OnShowToast(errorStatus.message),
                     )
 
-                    else -> emitEvent(SplashViewEvent.OnShowToast(errorStatus.message))
+                    else -> {}
                 }
             }
         }

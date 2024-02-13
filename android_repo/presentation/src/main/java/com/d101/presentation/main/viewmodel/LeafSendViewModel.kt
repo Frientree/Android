@@ -103,9 +103,7 @@ class LeafSendViewModel @Inject constructor(
                         LeafSendViewEvent.ShowErrorToast(errorStatus.message),
                     )
 
-                    else -> {
-                        emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))
-                    }
+                    else -> {}
                 }
             }
         }
@@ -150,9 +148,7 @@ class LeafSendViewModel @Inject constructor(
                             LeafSendViewEvent.ShowErrorToast(errorStatus.message),
                         )
 
-                        else -> {
-                            emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))
-                        }
+                        else -> {}
                     }
                 }
             }
