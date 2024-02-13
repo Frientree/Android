@@ -37,7 +37,6 @@ class SplashViewModel @Inject constructor(
         when (val result = getAppStatusUseCase()) {
             is Result.Success -> emitEvent(
                 SplashViewEvent.CheckAppStatus(
-                    result.data.appAvailable,
                     result.data.minVersion,
                     result.data.storeUrl,
                 ),

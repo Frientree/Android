@@ -14,7 +14,7 @@ class AppStatusRepositoryImpl @Inject constructor(
         return when (val result = appStatusDatasource.getAppStatus()) {
             is Result.Success -> {
                 Result.Success(
-                    AppStatus(result.data.appAvailable, result.data.minVersion, result.data.url),
+                    AppStatus(result.data.minVersion, result.data.url),
                 )
             }
 

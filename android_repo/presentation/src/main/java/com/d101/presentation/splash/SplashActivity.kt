@@ -46,11 +46,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkAppStatus(event: SplashViewEvent.CheckAppStatus) {
-        if (!event.appAvailable) {
-            showToast(getString(R.string.app_blocked))
-            ActivityCompat.finishAffinity(this)
-            return
-        }
         if (needToUpdate(event.minVersion)) {
             showUpdateDialog(event)
             return
@@ -98,8 +93,8 @@ class SplashActivity : AppCompatActivity() {
             .map { it.toInt() }
 
         if (appMajor < minMajor) return true
-        if (appMinor < minMinor) return true
-        if (appPatch < minPatch) return true
+        if (appMajor == minMajor && appMinor < minMinor) return true
+        if (appMajor == minMajor && appMinor == minMinor && appPatch < minPatch) return true
         return false
     }
 
