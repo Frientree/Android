@@ -1,5 +1,6 @@
 package com.d101.presentation.main.fragments
 
+import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -17,8 +19,10 @@ import com.d101.presentation.databinding.DialogTutorialBinding
 import com.d101.presentation.databinding.FragmentMainBinding
 import com.d101.presentation.main.event.TreeFragmentEvent
 import com.d101.presentation.main.fragments.dialogs.BeforeFruitCreateBaseFragment
+import com.d101.presentation.main.fragments.dialogs.EmotionDumpingFragment
 import com.d101.presentation.main.fragments.dialogs.FruitDialogInterface
 import com.d101.presentation.main.fragments.dialogs.TodayFruitFragment
+import com.d101.presentation.main.state.TreeFragmentViewState
 import com.d101.presentation.main.state.TreeMessageState
 import com.d101.presentation.main.tutorial.TutorialAdapter
 import com.d101.presentation.main.viewmodel.MainFragmentViewModel
@@ -70,6 +74,11 @@ class MainFragment : Fragment() {
             viewModel.onGetTreeMessage()
         }
 
+        binding.mainTreeImagebutton.setOnLongClickListener {
+            viewModel.onLongClickEmotionTrashMode()
+            true
+        }
+
         viewLifecycleOwner.repeatOnStarted {
             viewModel.messageState.collect {
                 when (it) {
@@ -79,6 +88,51 @@ class MainFragment : Fragment() {
 
                     is TreeMessageState.NoAccessMessage -> {
                         binding.mainTreeImagebutton.isEnabled = false
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.repeatOnStarted {
+            viewModel.uiState.collect {
+                when (it) {
+                    is TreeFragmentViewState.EmotionTrashMode -> {
+                        val fadeIn = ObjectAnimator.ofFloat(
+                            binding.nightLottieView,
+                            "alpha",
+                            0f,
+                            1f,
+                        )
+                        fadeIn.duration = 500
+                        fadeIn.start()
+                        binding.createFruitButton
+                            .setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.btn_boom),
+                                null,
+                                null,
+                                null,
+                            )
+                        binding.nightLottieView.visibility = View.VISIBLE
+                        binding.nightLottieView.playAnimation()
+                    }
+
+                    else -> {
+                        val fadeOut = ObjectAnimator.ofFloat(
+                            binding.nightLottieView,
+                            "alpha",
+                            1f,
+                            0f,
+                        )
+                        fadeOut.duration = 500
+                        fadeOut.start()
+                        binding.createFruitButton
+                            .setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.btn_apple),
+                                null,
+                                null,
+                                null,
+                            )
+                        binding.nightLottieView.pauseAnimation()
                     }
                 }
             }
@@ -110,6 +164,14 @@ class MainFragment : Fragment() {
                     }
 
                     TreeFragmentEvent.ShowTutorialEvent -> showTutorialDialog()
+
+                    is TreeFragmentEvent.EmotionTrashEvent -> {
+                        dialog = EmotionDumpingFragment()
+                        dialog.dialog?.window?.setBackgroundDrawable(
+                            ColorDrawable(Color.TRANSPARENT),
+                        )
+                        dialog.show(childFragmentManager, "")
+                    }
                 }
             }
         }

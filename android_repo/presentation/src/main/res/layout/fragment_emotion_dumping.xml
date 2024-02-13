@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="400dp"
+        tools:context=".main.fragments.dialogs.EmotionDumpingFragment">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="40dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="360dp"
+                android:layout_height="400dp"
+                android:background="@drawable/bg_night_black_hole">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/boom_lottie_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    app:lottie_speed="0.8"
+                    app:lottie_rawRes="@raw/lottie_boom"
+                    />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/black_hole_lottie_view"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/black_hole_button"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/lottie_black"
+                    />
+                <TextView
+                    android:id="@+id/black_hole_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:layout_constraintBottom_toTopOf="@id/black_hole_button"
+                    app:layout_constraintTop_toBottomOf="@id/black_hole_lottie_view"
+                    android:textAppearance="@style/Base.FTR.Text"
+                    android:textColor="@color/background_white"
+                    android:gravity="center"
+                    android:text="@string/black_hole"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/black_hole_button"
+                    style="@style/Base.FTR.MainButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/black_hole_finish"
+                    android:textSize="12sp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingBottom="12dp"
+                    android:paddingTop="8dp"
+                    android:background="@drawable/btn_dark_green_dark_green_36dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+    </LinearLayout>
+</layout>

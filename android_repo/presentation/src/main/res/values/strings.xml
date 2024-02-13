@@ -120,5 +120,7 @@
     <string name="emotional_dumping">감정 토로하기</string>
     <string name="receive_tree_message">트리 메시지 받기</string>
     <string name="main_guide">메인 가이드</string>
+    <string name="black_hole">블랙홀 속으로 마음껏 털어놓으세요</string>
+    <string name="black_hole_finish">후련해요!</string>
 
 </resources>
