@@ -81,6 +81,7 @@ class LeafReceiveBaseFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        LeafDialogInterface.dialogShowState = false
         _binding = null
     }
 }

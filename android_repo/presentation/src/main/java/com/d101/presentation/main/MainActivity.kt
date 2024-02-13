@@ -21,6 +21,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.DialogFragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -39,6 +40,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import utils.CustomToast
 import utils.repeatOnStarted
 
@@ -53,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tokenReceiver: BroadcastReceiver
 
     private var lastBackPressedTime = 0L
+    private lateinit var dialog: DialogFragment
 
     var musicService: BackgroundMusicService? = null
     private var isBound = false
@@ -89,10 +92,26 @@ class MainActivity : AppCompatActivity() {
         setOnBackPressed()
 
         repeatOnStarted {
-            viewModel.eventFlow.collect { event ->
+            viewModel.eventFlow.collectLatest { event ->
                 when (event) {
                     is MainActivityEvent.ShowErrorEvent -> {
                         showToast(event.message)
+                    }
+                    is MainActivityEvent.ShowLeafSendDialog -> {
+                        if (LeafDialogInterface.dialogShowState.not()) {
+                            dialog = LeafMessageBaseFragment()
+                            LeafDialogInterface.dialog = dialog
+                            LeafDialogInterface.dialogShowState = true
+                            dialog.show(supportFragmentManager, "")
+                        }
+                    }
+                    is MainActivityEvent.ShowLeafReceiveDialog -> {
+                        if (LeafDialogInterface.dialogShowState.not()) {
+                            dialog = LeafReceiveBaseFragment()
+                            LeafDialogInterface.dialog = dialog
+                            LeafDialogInterface.dialogShowState = true
+                            dialog.show(supportFragmentManager, "")
+                        }
                     }
                 }
             }
@@ -190,14 +209,10 @@ class MainActivity : AppCompatActivity() {
             controlLeafButton()
         }
         binding.writeLeafButton.setOnClickListener {
-            val dialog = LeafMessageBaseFragment()
-            LeafDialogInterface.dialog = dialog
-            dialog.show(supportFragmentManager, "")
+            viewModel.showLeafSendDialog()
         }
         binding.readLeafButton.setOnClickListener {
-            val dialog = LeafReceiveBaseFragment()
-            LeafDialogInterface.dialog = dialog
-            dialog.show(supportFragmentManager, "")
+            viewModel.showLeafReceiveDialog()
         }
     }
 

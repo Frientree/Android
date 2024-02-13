@@ -41,9 +41,10 @@ class MainActivityViewModel @Inject constructor(
 
     private fun emitEvent(event: MainActivityEvent) {
         viewModelScope.launch {
-            emitEvent(event)
+            _eventFlow.emit(event)
         }
     }
+
     fun changeViewState(state: MainActivityViewState) {
         _currentViewState.update { state }
     }
@@ -52,11 +53,20 @@ class MainActivityViewModel @Inject constructor(
         _visibility.update { add }
     }
 
+    fun showLeafSendDialog() {
+        emitEvent(MainActivityEvent.ShowLeafSendDialog)
+    }
+
+    fun showLeafReceiveDialog() {
+        emitEvent(MainActivityEvent.ShowLeafReceiveDialog)
+    }
+
     fun uploadToken(token: String) {
         viewModelScope.launch {
             updateFcmTokenUseCase(token)
         }
     }
+
     private fun updateUserStatus() {
         viewModelScope.launch {
             when (val result = manageUserStatusUseCase.updateUserStatus()) {
