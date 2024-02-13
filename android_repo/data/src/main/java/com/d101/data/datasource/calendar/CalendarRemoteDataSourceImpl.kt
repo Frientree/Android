@@ -24,9 +24,9 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
             onSuccess = { Result.Success(it) },
             onFailure = { e ->
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             },
         )
@@ -37,9 +37,9 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
         onSuccess = { Result.Success(it) },
         onFailure = { e ->
             if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
+                Result.Failure(ErrorStatus.NetworkError())
             } else {
-                Result.Failure(ErrorStatus.UnknownError)
+                Result.Failure(ErrorStatus.UnknownError())
             }
         },
     )
@@ -54,13 +54,16 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
             if (e is FrientreeHttpError) {
                 when (e.code) {
                     404 -> Result.Failure(JuiceErrorStatus.JuiceNotFound())
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    503 -> Result.Failure(
+                        ErrorStatus.ServerMaintenance("서버 점검중입니다. 잠시 후 다시 시도해주세요"),
+                    )
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -73,14 +76,15 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    404 -> Result.Failure(FruitErrorStatus.FruitNotFound)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    404 -> Result.Failure(FruitErrorStatus.FruitNotFound())
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },

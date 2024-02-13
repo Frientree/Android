@@ -86,7 +86,7 @@ class UserRepositoryImpl @Inject constructor(
             userDataStore.updateData { UserPreferences.getDefaultInstance() }
             Result.Success(Unit)
         } catch (e: Exception) {
-            Result.Failure(ErrorStatus.UnknownError)
+            Result.Failure(ErrorStatus.UnknownError())
         }
     }
 
@@ -191,7 +191,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         }.fold(
             onSuccess = { Result.Success(Unit) },
-            onFailure = { Result.Failure(ErrorStatus.UnknownError) },
+            onFailure = { Result.Failure(ErrorStatus.UnknownError()) },
         )
 
     override suspend fun changeBackgroundMusic(musicName: String): Result<Unit> = runCatching {
@@ -202,7 +202,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }.fold(
         onSuccess = { Result.Success(Unit) },
-        onFailure = { Result.Failure(ErrorStatus.UnknownError) },
+        onFailure = { Result.Failure(ErrorStatus.UnknownError()) },
     )
 
     override suspend fun signOut(): Result<Unit> {

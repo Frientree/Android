@@ -1,6 +1,7 @@
 package com.d101.data.datasource.terms
 
 import com.d101.data.api.TermsService
+import com.d101.data.error.FrientreeHttpError
 import com.d101.data.model.terms.response.TermsResponse
 import com.d101.domain.model.Result
 import com.d101.domain.model.status.ErrorStatus
@@ -15,10 +16,17 @@ class TermsDataSourceImpl @Inject constructor(
     }.fold(
         onSuccess = { Result.Success(it) },
         onFailure = { e ->
-            if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
+            if (e is FrientreeHttpError) {
+                when (e.code) {
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
+                }
             } else {
-                Result.Failure(ErrorStatus.UnknownError)
+                if (e is IOException) {
+                    Result.Failure(ErrorStatus.NetworkError())
+                } else {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
     )

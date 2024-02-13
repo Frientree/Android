@@ -12,4 +12,6 @@ sealed class CollectionViewEvent {
     data object Init : CollectionViewEvent()
 
     data class OnShowJuiceDetailDialog(val juice: JuiceForCollection) : CollectionViewEvent()
+
+    data class OnServerMaintaining(val message: String) : CollectionViewEvent()
 }

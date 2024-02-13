@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -91,16 +92,22 @@ class TermsAgreeFragment : Fragment() {
                     is TermsAgreeEvent.OnClickConfirmButton -> navigateToSignUp()
 
                     is TermsAgreeEvent.OnShowToast -> showToast(event.message)
+                    is TermsAgreeEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
+    }
+
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
     }
 
     private fun navigateToSignUp() =
         findNavController().navigate(R.id.action_termsAgreeFragment_to_signUpFragment)
 
     private fun showToast(message: String) =
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
 
     override fun onDestroyView() {
         super.onDestroyView()

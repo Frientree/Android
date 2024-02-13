@@ -47,15 +47,16 @@ class UserDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    401 -> Result.Failure(SignInErrorStatus.WrongPassword)
-                    404 -> Result.Failure(SignInErrorStatus.UserNotFound)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    401 -> Result.Failure(SignInErrorStatus.WrongPassword())
+                    404 -> Result.Failure(SignInErrorStatus.UserNotFound())
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -70,14 +71,15 @@ class UserDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    401 -> Result.Failure(GetUserErrorStatus.UserNotFound)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    401 -> Result.Failure(GetUserErrorStatus.UserNotFound())
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -93,14 +95,15 @@ class UserDataSourceImpl @Inject constructor(
             onFailure = { e ->
                 if (e is FrientreeHttpError) {
                     when (e.code) {
-                        400 -> Result.Failure(ErrorStatus.BadRequest)
-                        else -> Result.Failure(ErrorStatus.UnknownError)
+                        400 -> Result.Failure(ErrorStatus.BadRequest())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
                     }
                 } else {
                     if (e is IOException) {
-                        Result.Failure(ErrorStatus.NetworkError)
+                        Result.Failure(ErrorStatus.NetworkError())
                     } else {
-                        Result.Failure(ErrorStatus.UnknownError)
+                        Result.Failure(ErrorStatus.UnknownError())
                     }
                 }
             },
@@ -116,15 +119,16 @@ class UserDataSourceImpl @Inject constructor(
             onFailure = { e ->
                 if (e is FrientreeHttpError) {
                     when (e.code) {
-                        400 -> Result.Failure(ErrorStatus.BadRequest)
-                        409 -> Result.Failure(AuthCodeCreationErrorStatus.EmailDuplicate)
-                        else -> Result.Failure(ErrorStatus.UnknownError)
+                        400 -> Result.Failure(ErrorStatus.BadRequest())
+                        409 -> Result.Failure(AuthCodeCreationErrorStatus.EmailDuplicate())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
                     }
                 } else {
                     if (e is IOException) {
-                        Result.Failure(ErrorStatus.NetworkError)
+                        Result.Failure(ErrorStatus.NetworkError())
                     } else {
-                        Result.Failure(ErrorStatus.UnknownError)
+                        Result.Failure(ErrorStatus.UnknownError())
                     }
                 }
             },
@@ -140,15 +144,16 @@ class UserDataSourceImpl @Inject constructor(
             onFailure = { e ->
                 if (e is FrientreeHttpError) {
                     when (e.code) {
-                        400 -> Result.Failure(ErrorStatus.BadRequest)
-                        409 -> Result.Failure(AuthCodeCreationErrorStatus.EmailDuplicate)
-                        else -> Result.Failure(ErrorStatus.UnknownError)
+                        400 -> Result.Failure(ErrorStatus.BadRequest())
+                        409 -> Result.Failure(AuthCodeCreationErrorStatus.EmailDuplicate())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
                     }
                 } else {
                     if (e is IOException) {
-                        Result.Failure(ErrorStatus.NetworkError)
+                        Result.Failure(ErrorStatus.NetworkError())
                     } else {
-                        Result.Failure(ErrorStatus.UnknownError)
+                        Result.Failure(ErrorStatus.UnknownError())
                     }
                 }
             },
@@ -167,14 +172,15 @@ class UserDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    400 -> Result.Failure(ErrorStatus.BadRequest)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    400 -> Result.Failure(ErrorStatus.BadRequest())
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -189,13 +195,13 @@ class UserDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -210,13 +216,13 @@ class UserDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -231,15 +237,16 @@ class UserDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    401 -> Result.Failure(GetUserStatusErrorStatus.Fail)
-                    404 -> Result.Failure(GetUserStatusErrorStatus.UserNotFound)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    401 -> Result.Failure(GetUserStatusErrorStatus.Fail())
+                    404 -> Result.Failure(GetUserStatusErrorStatus.UserNotFound())
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -254,14 +261,15 @@ class UserDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    404 -> Result.Failure(PasswordFindErrorStatus.UserNotFound)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    404 -> Result.Failure(PasswordFindErrorStatus.UserNotFound())
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -277,15 +285,16 @@ class UserDataSourceImpl @Inject constructor(
             onFailure = { e ->
                 if (e is FrientreeHttpError) {
                     when (e.code) {
-                        400 -> Result.Failure(ErrorStatus.BadRequest)
-                        422 -> Result.Failure(PassWordChangeErrorStatus.PasswordPatternMismatch)
-                        else -> Result.Failure(ErrorStatus.UnknownError)
+                        400 -> Result.Failure(ErrorStatus.BadRequest())
+                        422 -> Result.Failure(PassWordChangeErrorStatus.PasswordPatternMismatch())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
                     }
                 } else {
                     if (e is IOException) {
-                        Result.Failure(ErrorStatus.NetworkError)
+                        Result.Failure(ErrorStatus.NetworkError())
                     } else {
-                        Result.Failure(ErrorStatus.UnknownError)
+                        Result.Failure(ErrorStatus.UnknownError())
                     }
                 }
             },
@@ -299,10 +308,17 @@ class UserDataSourceImpl @Inject constructor(
             Result.Success(it)
         },
         onFailure = { e ->
-            if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
+            if (e is FrientreeHttpError) {
+                when (e.code) {
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
+                }
             } else {
-                Result.Failure(ErrorStatus.UnknownError)
+                if (e is IOException) {
+                    Result.Failure(ErrorStatus.NetworkError())
+                } else {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
     )
@@ -313,7 +329,11 @@ class UserDataSourceImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.Success(Unit)
             } else {
-                Result.Failure(ErrorStatus.UnknownError)
+                if (response.code() == 503) {
+                    Result.Failure(ErrorStatus.ServerMaintenance())
+                } else {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         }
     }
@@ -335,13 +355,13 @@ class UserDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -354,10 +374,17 @@ class UserDataSourceImpl @Inject constructor(
             Result.Success(it)
         },
         onFailure = { e ->
-            if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
+            if (e is FrientreeHttpError) {
+                when (e.code) {
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
+                }
             } else {
-                Result.Failure(ErrorStatus.UnknownError)
+                if (e is IOException) {
+                    Result.Failure(ErrorStatus.NetworkError())
+                } else {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
     )

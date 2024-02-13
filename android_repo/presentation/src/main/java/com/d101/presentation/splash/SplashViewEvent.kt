@@ -9,6 +9,8 @@ sealed class SplashViewEvent {
         val minVersion: String,
         val storeUrl: String,
     ) : SplashViewEvent()
-    data object OnFailCheckAppStatus : SplashViewEvent()
+    data class OnServerMaintaining(val message: String) : SplashViewEvent()
     data class SetBackGroundMusic(val musicName: String) : SplashViewEvent()
+
+    data class OnShowToast(val message: String) : SplashViewEvent()
 }

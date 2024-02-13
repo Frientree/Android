@@ -6,6 +6,7 @@ import com.d101.domain.model.Fruit
 import com.d101.domain.model.FruitsOfMonth
 import com.d101.domain.model.Juice
 import com.d101.domain.model.Result
+import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.model.status.JuiceErrorStatus
 import com.d101.domain.usecase.calendar.GetFruitsOfMonthUseCase
 import com.d101.domain.usecase.calendar.GetFruitsOfWeekUseCase
@@ -173,6 +174,12 @@ class CalendarViewModel @Inject constructor(
 
                 is Result.Failure -> {
                     when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> _eventFlow.emit(
+                            CalendarViewEvent.OnServerMaintaining(
+                                errorStatus.message,
+                            ),
+                        )
+
                         is JuiceErrorStatus.UnAuthorized -> _eventFlow.emit(
                             CalendarViewEvent.OnShowToast(
                                 errorStatus.message,
@@ -208,7 +215,17 @@ class CalendarViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    _eventFlow.emit(CalendarViewEvent.OnShowToast("네트워크 연결 실패"))
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            _eventFlow.emit(
+                                CalendarViewEvent.OnServerMaintaining(errorStatus.message),
+                            )
+                        }
+
+                        else -> {
+                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
+                        }
+                    }
                 }
             }
         }
@@ -238,7 +255,14 @@ class CalendarViewModel @Inject constructor(
         val today = LocalDate.now()
         when (val result = getTodayStatisticUseCase(today.toString())) {
             is Result.Success -> setTodayStatistics(result.data.ratio)
-            is Result.Failure -> {}
+            is Result.Failure -> {
+                when (val errorStatus = result.errorStatus) {
+                    is ErrorStatus.ServerMaintenance -> {
+                        _eventFlow.emit(CalendarViewEvent.OnServerMaintaining(errorStatus.message))
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -250,7 +274,17 @@ class CalendarViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    _eventFlow.emit(CalendarViewEvent.OnShowToast("네트워크 연결 실패"))
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            _eventFlow.emit(
+                                CalendarViewEvent.OnServerMaintaining(errorStatus.message),
+                            )
+                        }
+
+                        else -> {
+                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
+                        }
+                    }
                 }
             }
         }
@@ -264,10 +298,15 @@ class CalendarViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
+                    when (val errorStatus = result.errorStatus) {
                         JuiceErrorStatus.JuiceNotFound() -> setJuiceAbsentState()
+                        is ErrorStatus.ServerMaintenance -> {
+                            _eventFlow.emit(
+                                CalendarViewEvent.OnServerMaintaining(errorStatus.message),
+                            )
+                        }
                         else -> {
-                            _eventFlow.emit(CalendarViewEvent.OnShowToast("네트워크 연결 실패"))
+                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
                         }
                     }
                 }

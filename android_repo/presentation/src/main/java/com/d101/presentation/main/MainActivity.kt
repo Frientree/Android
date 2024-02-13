@@ -12,6 +12,7 @@ import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -21,6 +22,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -45,9 +47,7 @@ import utils.repeatOnStarted
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var canLaunchMenu: Boolean = true
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+    private lateinit var binding: ActivityMainBinding
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var navController: NavController
     private lateinit var tokenReceiver: BroadcastReceiver
@@ -79,8 +79,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initNavigationView()
         initTokenReceiver()
 
@@ -94,6 +94,8 @@ class MainActivity : AppCompatActivity() {
                     is MainActivityEvent.ShowErrorEvent -> {
                         showToast(event.message)
                     }
+
+                    is MainActivityEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
@@ -267,6 +269,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(this)
+    }
+
     private fun controlLeafButton() {
         if (canLaunchMenu) {
             startLeafAnimation()
@@ -383,6 +390,7 @@ class MainActivity : AppCompatActivity() {
         Intent(this, BackgroundMusicService::class.java).also { intent ->
             this.bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
+        Log.d("확인", "메인시작")
     }
 
     override fun onStop() {

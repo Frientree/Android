@@ -62,7 +62,11 @@ class MainActivityViewModel @Inject constructor(
             when (val result = manageUserStatusUseCase.updateUserStatus()) {
                 is Result.Success -> {}
                 is Result.Failure -> {
-                    when (result.errorStatus) {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            emitEvent(MainActivityEvent.OnServerMaintaining(errorStatus.message))
+                        }
+
                         is GetUserStatusErrorStatus.Fail,
                         -> {
                             emitEvent(MainActivityEvent.ShowErrorEvent("사용자 정보를 업데이트 하는 데 실패했습니다."))

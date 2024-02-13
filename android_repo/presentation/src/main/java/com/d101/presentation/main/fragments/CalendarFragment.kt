@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -97,7 +98,7 @@ class CalendarFragment : Fragment() {
                     }
 
                     is CalendarViewEvent.OnTapCollectionButton -> {
-                        val intent = Intent(requireContext(), CollectionActivity::class.java)
+                        val intent = Intent(requireActivity(), CollectionActivity::class.java)
                         startActivity(intent)
                     }
 
@@ -129,13 +130,20 @@ class CalendarFragment : Fragment() {
                     is CalendarViewEvent.OnShowJuiceDetailDialog -> showJuiceDetailDialog(
                         event.juice,
                     )
+
+                    is CalendarViewEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
     }
 
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
+    }
+
     private fun showToast(message: String) =
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
 
     private fun subscribeViewState() {
         viewLifecycleOwner.repeatOnStarted {
@@ -240,7 +248,7 @@ class CalendarFragment : Fragment() {
         )
         dialogBinding.juiceNameTextView.text = juice.juiceName
         dialogBinding.juiceDescriptionTextView.text = juice.juiceDescription
-        DialogUtils.createAndShowDialog(requireContext(), dialogBinding)
+        DialogUtils.createAndShowDialog(requireActivity(), dialogBinding)
     }
 
     private fun showFruitDetailDialog(fruit: Fruit) {
@@ -258,12 +266,12 @@ class CalendarFragment : Fragment() {
                 dialogBinding.fruitDescriptionCardView.strokeColor =
                     backgroundColor.darkenColor()
 
-                Glide.with(requireContext())
+                Glide.with(requireActivity())
                     .asGif()
                     .load(fruitResources.fallingImage)
                     .into(dialogBinding.fruitDetailBackgroundImageView)
             }
-        DialogUtils.createAndShowDialog(requireContext(), dialogBinding)
+        DialogUtils.createAndShowDialog(requireActivity(), dialogBinding)
     }
 
     private fun showShakeJuiceDialog() {
@@ -271,7 +279,7 @@ class CalendarFragment : Fragment() {
         val progressBar =
             dialogBinding.shakeProgressBarLinearProgressIndicator
         shakeSensor = ShakeSensorModule(
-            requireContext(),
+            requireActivity(),
             object : ShakeEventListener {
                 override fun onShakeSensed() {
                     if (progressBar.progress < progressBar.max) {
@@ -286,7 +294,7 @@ class CalendarFragment : Fragment() {
                 }
             },
         )
-        DialogUtils.createAndShowDialog(requireContext(), dialogBinding)
+        DialogUtils.createAndShowDialog(requireActivity(), dialogBinding)
         DialogUtils.setOnDismissListener { shakeSensor.stop() }
         shakeSensor.start()
     }

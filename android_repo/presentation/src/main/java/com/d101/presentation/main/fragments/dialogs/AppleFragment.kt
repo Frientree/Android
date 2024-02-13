@@ -56,7 +56,7 @@ class AppleFragment : Fragment() {
             binding.fruitDescriptionCardView.strokeColor =
                 backgroundColor.darkenColor()
 
-            Glide.with(requireContext())
+            Glide.with(requireActivity())
                 .asGif()
                 .load(fruitResources.fallingImage)
                 .into(binding.fruitDetailBackgroundImageView)
@@ -100,7 +100,7 @@ class AppleFragment : Fragment() {
     }
 
     private fun showToast(message: String) =
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -19,12 +19,13 @@ class TreeRemoteDataSourceImpl @Inject constructor(
             when (error) {
                 is FrientreeHttpError -> {
                     when (error.code) {
-                        404 -> Result.Failure(TreeErrorStatus.MessageNotFound)
-                        else -> Result.Failure(ErrorStatus.UnknownError)
+                        404 -> Result.Failure(TreeErrorStatus.MessageNotFound())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
                     }
                 }
-                is IOException -> Result.Failure(ErrorStatus.NetworkError)
-                else -> { Result.Failure(ErrorStatus.UnknownError) }
+                is IOException -> Result.Failure(ErrorStatus.NetworkError())
+                else -> { Result.Failure(ErrorStatus.UnknownError()) }
             }
         },
     )

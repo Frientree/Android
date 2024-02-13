@@ -7,4 +7,6 @@ sealed class LeafSendViewEvent {
     data class ShowErrorToast(
         val message: String,
     ) : LeafSendViewEvent()
+
+    data class OnServerMaintaining(val message: String) : LeafSendViewEvent()
 }

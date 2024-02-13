@@ -7,4 +7,6 @@ sealed class SignInViewEvent {
     data object FindPasswordClicked : SignInViewEvent()
     data object SignInSuccess : SignInViewEvent()
     data class SignInFailed(val message: String) : SignInViewEvent()
+
+    data class OnServerMaintaining(val message: String) : SignInViewEvent()
 }

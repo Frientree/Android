@@ -47,12 +47,16 @@ class LeafReceiveViewModel @Inject constructor(
                     emitEvent(LeafReceiveEvent.ReadyToReceive)
                 }
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        ErrorStatus.NetworkError -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast("네트워크 에러입니다."))
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> emitEvent(
+                            LeafReceiveEvent.OnServerMaintaining(errorStatus.message),
+                        )
+
+                        ErrorStatus.NetworkError() -> {
+                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
                         else -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast("알 수없는 오류가 발생했습니다."))
+                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
                     }
                 }
@@ -67,15 +71,15 @@ class LeafReceiveViewModel @Inject constructor(
                     emitEvent(LeafReceiveEvent.ReportLeafComplete)
                 }
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        LeafErrorStatus.LeafNotFound -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast("해당 이파리를 찾을 수 없습니다."))
+                    when (val errorStatus = result.errorStatus) {
+                        LeafErrorStatus.LeafNotFound() -> {
+                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
-                        LeafErrorStatus.ServerError -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast("해당 이파리를 찾을 수 없습니다."))
+                        LeafErrorStatus.ServerError() -> {
+                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
                         else -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast("네트워크 에러입니다."))
+                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
                     }
                 }

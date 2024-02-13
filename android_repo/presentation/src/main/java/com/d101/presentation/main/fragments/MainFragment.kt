@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -85,8 +86,8 @@ class MainFragment : Fragment() {
         }
 
         viewLifecycleOwner.repeatOnStarted {
-            viewModel.eventFlow.collect {
-                when (it) {
+            viewModel.eventFlow.collect { event ->
+                when (event) {
                     is TreeFragmentEvent.MakeFruitEvent -> {
                         dialog = BeforeFruitCreateBaseFragment()
                         FruitDialogInterface.dialog = dialog
@@ -102,21 +103,27 @@ class MainFragment : Fragment() {
                     }
 
                     is TreeFragmentEvent.ShowErrorEvent -> {
-                        showToast(it.message)
+                        showToast(event.message)
                     }
 
                     is TreeFragmentEvent.ChangeTreeMessage -> {
-                        typingAnimation(it.message)
+                        typingAnimation(event.message)
                     }
 
                     TreeFragmentEvent.ShowTutorialEvent -> showTutorialDialog()
+                    is TreeFragmentEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
     }
 
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
+    }
+
     private fun showToast(message: String) {
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
     }
 
     private fun showTutorialDialog() {
@@ -132,7 +139,7 @@ class MainFragment : Fragment() {
     }
 
     private fun createFullScreenDialog(): Dialog {
-        return Dialog(requireContext(), R.style.Base_FTR_FullScreenDialog).apply {
+        return Dialog(requireActivity(), R.style.Base_FTR_FullScreenDialog).apply {
             window?.setBackgroundDrawableResource(R.drawable.bg_white_radius_30dp)
         }
     }

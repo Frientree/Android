@@ -13,4 +13,6 @@ sealed class TreeFragmentEvent {
     ) : TreeFragmentEvent()
 
     data object ShowTutorialEvent : TreeFragmentEvent()
+
+    data class OnServerMaintaining(val message: String) : TreeFragmentEvent()
 }

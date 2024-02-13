@@ -3,6 +3,7 @@ package com.d101.presentation.collection.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d101.domain.model.JuiceForCollection
+import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.usecase.collection.GetCollectionUseCase
 import com.d101.presentation.collection.event.CollectionViewEvent
 import com.d101.presentation.collection.state.CollectionViewState
@@ -36,7 +37,21 @@ class CollectionViewModel @Inject constructor(
                     setJuiceCollection(result.data)
                 }
 
-                is com.d101.domain.model.Result.Failure -> {}
+                is com.d101.domain.model.Result.Failure -> {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            _eventFlow.emit(
+                                CollectionViewEvent.OnServerMaintaining(errorStatus.message),
+                            )
+                        }
+
+                        else -> {
+                            _eventFlow.emit(
+                                CollectionViewEvent.OnShowToast(result.errorStatus.message),
+                            )
+                        }
+                    }
+                }
             }
         }
     }

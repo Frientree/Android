@@ -111,7 +111,7 @@ class SelectInputTypeFragment : Fragment() {
     }
 
     private fun showToast(message: String) =
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
 
     override fun onDestroyView() {
         super.onDestroyView()

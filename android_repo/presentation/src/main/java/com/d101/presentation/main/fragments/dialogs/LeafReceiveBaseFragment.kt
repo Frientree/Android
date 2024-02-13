@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.d101.presentation.databinding.FragmentLeafReceiveBaseBinding
 import com.d101.presentation.main.event.LeafReceiveEvent
 import com.d101.presentation.main.viewmodel.LeafReceiveViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import utils.CustomToast
 import utils.repeatOnStarted
 
 @AndroidEntryPoint
@@ -68,9 +70,20 @@ class LeafReceiveBaseFragment : DialogFragment() {
                         Toast.makeText(activity, event.message, Toast.LENGTH_SHORT).show()
                         LeafDialogInterface.dialog.dismiss()
                     }
+
+                    is LeafReceiveEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
+    }
+
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
+    }
+
+    private fun showToast(message: String) {
+        CustomToast.createAndShow(requireActivity(), message)
     }
 
     private fun navigateToTargetFragment(fragment: Fragment) {

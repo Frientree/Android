@@ -10,4 +10,6 @@ sealed class LeafReceiveEvent {
     data class ShowErrorToast(
         val message: String,
     ) : LeafReceiveEvent()
+
+    data class OnServerMaintaining(val message: String) : LeafReceiveEvent()
 }

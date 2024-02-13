@@ -2,6 +2,7 @@ package com.d101.presentation.welcome
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -26,5 +27,10 @@ class WelcomeActivity : AppCompatActivity() {
         }
 
         return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("확인", "웰컴다이")
     }
 }

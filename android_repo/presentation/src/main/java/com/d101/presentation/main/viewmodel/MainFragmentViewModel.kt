@@ -105,13 +105,16 @@ class MainFragmentViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> emitEvent(
+                            TreeFragmentEvent.OnServerMaintaining(errorStatus.message),
+                        )
                         is FruitErrorStatus.LocalGetError -> {
-                            emitEvent(TreeFragmentEvent.ShowErrorEvent("열매를 불러오는 데 실패했습니다."))
+                            emitEvent(TreeFragmentEvent.ShowErrorEvent(errorStatus.message))
                         }
 
                         else -> {
-                            emitEvent(TreeFragmentEvent.ShowErrorEvent("예기치 못한 오류가 발생했습니다."))
+                            emitEvent(TreeFragmentEvent.ShowErrorEvent(errorStatus.message))
                         }
                     }
                 }

@@ -66,30 +66,33 @@ class FruitCreateViewModel @Inject constructor(
                 }
             }
             delay.await()
-            val result = fruitResult.await()
-            when (result) {
+            when (val result = fruitResult.await()) {
                 is Result.Success -> {
                     _todayFruitList.update { result.data }
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
+                    when (val errorStatus = result.errorStatus) {
                         is FruitErrorStatus.LocalInsertError -> emitEvent(
                             CreateFruitDialogViewEvent.ShowErrorToastEvent(
-                                "결과가 저장되지 못했습니다.",
+                                errorStatus.message,
                             ),
+                        )
+
+                        is ErrorStatus.ServerMaintenance -> emitEvent(
+                            CreateFruitDialogViewEvent.OnServerMaintaining(errorStatus.message),
                         )
 
                         is ErrorStatus.NetworkError -> emitEvent(
                             CreateFruitDialogViewEvent.ShowErrorToastEvent(
-                                "네트워크 에러입니다.",
+                                errorStatus.message,
                             ),
                         )
 
                         else -> {
                             emitEvent(
                                 CreateFruitDialogViewEvent
-                                    .ShowErrorToastEvent("예기치 못한 에러가 발생했습니다."),
+                                    .ShowErrorToastEvent(errorStatus.message),
                             )
                         }
                     }
@@ -131,7 +134,11 @@ class FruitCreateViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> emitEvent(
+                            CreateFruitDialogViewEvent.OnServerMaintaining(errorStatus.message),
+                        )
+
                         is FruitErrorStatus.LocalInsertError -> emitEvent(
                             CreateFruitDialogViewEvent.ShowErrorToastEvent(
                                 "결과가 저장되지 못했습니다.",

@@ -89,8 +89,8 @@ class PasswordChangeViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        PassWordChangeErrorStatus.PasswordPatternMismatch -> {
+                    when (val errorStatus = result.errorStatus) {
+                        PassWordChangeErrorStatus.PasswordPatternMismatch() -> {
                             _uiState.update { currentState ->
                                 currentState.copy(
                                     currentPasswordDescription = R.string.password_mismatch_in_use,
@@ -98,8 +98,11 @@ class PasswordChangeViewModel @Inject constructor(
                             }
                         }
 
-                        ErrorStatus.NetworkError -> onShowToast("네트워크 오류입니다.")
-                        else -> onShowToast("알 수 없는 오류입니다.")
+                        ErrorStatus.ServerMaintenance() -> emitEvent(
+                            PasswordChangeEvent.OnServerMaintenance(errorStatus.message),
+                        )
+                        ErrorStatus.NetworkError() -> onShowToast(errorStatus.message)
+                        else -> onShowToast(errorStatus.message)
                     }
                 }
             }

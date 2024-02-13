@@ -78,8 +78,12 @@ class LeafSendViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        LeafErrorStatus.NoSendLeaf -> {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> emitEvent(
+                            LeafSendViewEvent.OnServerMaintaining(errorStatus.message),
+                        )
+
+                        LeafErrorStatus.NoSendLeaf() -> {
                             _uiState.update { LeafSendViewState.NoSendLeafSendViewState() }
                         }
 
@@ -96,6 +100,7 @@ class LeafSendViewModel @Inject constructor(
             _leafEventFlow.emit(event)
         }
     }
+
     fun onSendLeaf() {
         emitEvent(LeafSendViewEvent.SendLeaf)
     }
@@ -118,11 +123,19 @@ class LeafSendViewModel @Inject constructor(
                     manageUserStatusUseCase.updateUserStatus()
                     emitEvent(LeafSendViewEvent.ReadyToSend)
                 }
+
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        ErrorStatus.BadRequest -> {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            emitEvent(LeafSendViewEvent.OnServerMaintaining(errorStatus.message))
                         }
+
+                        is ErrorStatus.NetworkError -> {
+                            emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))
+                        }
+
                         else -> {
+                            emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))
                         }
                     }
                 }

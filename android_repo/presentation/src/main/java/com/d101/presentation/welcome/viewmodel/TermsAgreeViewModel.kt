@@ -3,6 +3,7 @@ package com.d101.presentation.welcome.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d101.domain.model.Result
+import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.usecase.usermanagement.GetTermsUseCase
 import com.d101.presentation.mapper.TermsMapper.toTermsItem
 import com.d101.presentation.model.TermsItem
@@ -45,7 +46,12 @@ class TermsAgreeViewModel @Inject constructor(
                     }
                 }
                 is Result.Failure -> {
-                    emitEvent(TermsAgreeEvent.OnShowToast("약관을 로드하지 못했습니다. 다시 시도하십시오."))
+                    when (val errorStatus = result.errorStatus) {
+                        ErrorStatus.ServerMaintenance() -> emitEvent(
+                            TermsAgreeEvent.OnServerMaintaining(errorStatus.message),
+                        )
+                        else -> emitEvent(TermsAgreeEvent.OnShowToast("약관을 로드하지 못했습니다. 다시 시도하십시오."))
+                    }
                 }
             }
         }

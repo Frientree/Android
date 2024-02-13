@@ -36,11 +36,14 @@ class SignInViewModel @Inject constructor(
                 is Result.Success -> onSignInSuccess()
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        ErrorStatus.NetworkError -> onSignInFailed("네트워크 연결 실패")
-                        SignInErrorStatus.UserNotFound -> onSignInFailed("존재하지 않는 사용자")
-                        SignInErrorStatus.WrongPassword -> onSignInFailed("잘못된 비밀번호")
-                        else -> onSignInFailed("알 수 없는 에러")
+                    when (val errorStatus = result.errorStatus) {
+                        ErrorStatus.ServerMaintenance() -> emitEvent(
+                            SignInViewEvent.OnServerMaintaining(errorStatus.message),
+                        )
+                        ErrorStatus.NetworkError() -> onSignInFailed(errorStatus.message)
+                        SignInErrorStatus.UserNotFound() -> onSignInFailed(errorStatus.message)
+                        SignInErrorStatus.WrongPassword() -> onSignInFailed(errorStatus.message)
+                        else -> onSignInFailed(errorStatus.message)
                     }
                 }
             }
@@ -91,7 +94,7 @@ class SignInViewModel @Inject constructor(
     private suspend fun getNaverUserId(accessToken: String) {
         when (val result = getNaverIdUseCase(accessToken)) {
             is Result.Success -> signInByNaver(result.data)
-            is Result.Failure -> onSignInFailed("네이버 로그인 실패")
+            is Result.Failure -> { onSignInFailed("네이버 로그인 실패") }
         }
     }
 
@@ -102,9 +105,12 @@ class SignInViewModel @Inject constructor(
             }
 
             is Result.Failure -> {
-                when (result.errorStatus) {
-                    ErrorStatus.NetworkError -> onSignInFailed("네트워크 연결 실패")
-                    else -> onSignInFailed("알 수 없는 에러")
+                when (val errorStatus = result.errorStatus) {
+                    ErrorStatus.ServerMaintenance() -> emitEvent(
+                        SignInViewEvent.OnServerMaintaining(errorStatus.message),
+                    )
+                    ErrorStatus.NetworkError() -> onSignInFailed(errorStatus.message)
+                    else -> onSignInFailed(errorStatus.message)
                 }
             }
         }

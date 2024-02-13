@@ -36,7 +36,7 @@ class TutorialEmotionalDumpingFragment : Fragment() {
                 binding.tapLottieAnimationView.playAnimation()
                 delay(binding.tapLottieAnimationView.duration - 300)
                 binding.dialogBackgroundConstraintLayout.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.bg_night)
+                    ContextCompat.getDrawable(requireActivity(), R.drawable.bg_night)
                 binding.titleTextView.setTextColor(resources.getColor(R.color.white, null))
                 binding.starsLottieAnimationView.playAnimation()
                 delay(1500)

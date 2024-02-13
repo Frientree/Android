@@ -54,7 +54,7 @@ class TodayFruitFragment : DialogFragment() {
                 binding.fruitDescriptionCardView.strokeColor =
                     backgroundColor.darkenColor()
 
-                Glide.with(requireContext())
+                Glide.with(requireActivity())
                     .asGif()
                     .load(fruitResources.fallingImage)
                     .into(binding.fruitDetailBackgroundImageView)
@@ -63,7 +63,7 @@ class TodayFruitFragment : DialogFragment() {
         FruitResources.entries.find { it.fruitEmotion == viewModel.todayFruit.fruitEmotion }?.let {
             binding.fruitDescriptionCardView.setCardBackgroundColor(
                 ContextCompat.getColor(
-                    requireContext(),
+                    requireActivity(),
                     it.color,
                 ),
             )

@@ -67,7 +67,11 @@ class MyPageViewModel @Inject constructor(
                     setDefaultState()
                 }
 
-                is Result.Failure -> when (result.errorStatus) {
+                is Result.Failure -> when (val errorStatus = result.errorStatus) {
+                    is ErrorStatus.ServerMaintenance -> {
+                        _eventFlow.emit(MyPageViewEvent.OnServerMaintaining(errorStatus.message))
+                    }
+
                     is ErrorStatus.BadRequest -> {
                         _eventFlow.emit(MyPageViewEvent.OnShowToast("닉네임은 1글자 이상 8글자 이하로 입력해주세요"))
                     }
@@ -104,17 +108,21 @@ class MyPageViewModel @Inject constructor(
         changeBackgroundMusic(musicName)
     }
 
-    fun onTapTermsButtonOccurred() {
-    }
-
-    fun onTapChangePasswordButtonOccurred() {
-    }
-
     fun onSignOutFrientreeUser() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (signOutUseCase()) {
+            when (val result = signOutUseCase()) {
                 is Result.Success -> logoutAfterSignOut()
-                is Result.Failure -> _eventFlow.emit(MyPageViewEvent.OnShowToast("탈퇴 실패"))
+                is Result.Failure -> {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> _eventFlow.emit(
+                            MyPageViewEvent.OnServerMaintaining(
+                                errorStatus.message,
+                            ),
+                        )
+
+                        else -> _eventFlow.emit(MyPageViewEvent.OnShowToast("탈퇴 실패"))
+                    }
+                }
             }
         }
     }
@@ -162,7 +170,19 @@ class MyPageViewModel @Inject constructor(
                         }
                     }
 
-                    is Result.Failure -> {}
+                    is Result.Failure -> {
+                        when (val errorStatus = result.errorStatus) {
+                            is ErrorStatus.ServerMaintenance -> {
+                                _eventFlow.emit(
+                                    MyPageViewEvent.OnServerMaintaining(errorStatus.message),
+                                )
+                            }
+
+                            else -> {
+                                _eventFlow.emit(MyPageViewEvent.OnShowToast(errorStatus.message))
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -216,6 +236,12 @@ class MyPageViewModel @Inject constructor(
 
                 is Result.Failure -> {
                     when (result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            emitEvent(
+                                MyPageViewEvent.OnServerMaintaining(result.errorStatus.message),
+                            )
+                        }
+
                         is ErrorStatus.BadRequest -> {
                             emitEvent(MyPageViewEvent.OnShowToast("알람 설정 실패"))
                         }
@@ -232,13 +258,21 @@ class MyPageViewModel @Inject constructor(
     private fun setBackgroundMusicStatus() {
         viewModelScope.launch {
             when (
-                setBackgroundMusicStatusUseCase(
+                val result = setBackgroundMusicStatusUseCase(
                     uiState.value.backgroundMusicStatus != BackgroundMusicStatus.ON,
                 )
             ) {
                 is Result.Success -> setDefaultState()
                 is Result.Failure -> {
-                    emitEvent(MyPageViewEvent.OnShowToast("배경음악 설정 실패"))
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            emitEvent(MyPageViewEvent.OnServerMaintaining(errorStatus.message))
+                        }
+
+                        else -> {
+                            emitEvent(MyPageViewEvent.OnShowToast("배경음악 설정에 실패했어요"))
+                        }
+                    }
                 }
             }
         }
@@ -246,10 +280,18 @@ class MyPageViewModel @Inject constructor(
 
     private fun changeBackgroundMusic(newBackgroundMusic: String) {
         viewModelScope.launch {
-            when (changeBackgroundMusicUseCase(newBackgroundMusic)) {
+            when (val result = changeBackgroundMusicUseCase(newBackgroundMusic)) {
                 is Result.Success -> setDefaultState()
                 is Result.Failure -> {
-                    emitEvent(MyPageViewEvent.OnShowToast("배경음악 변경 실패"))
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            emitEvent(MyPageViewEvent.OnServerMaintaining(errorStatus.message))
+                        }
+
+                        else -> {
+                            emitEvent(MyPageViewEvent.OnShowToast("배경음악 설정에 실패했어요"))
+                        }
+                    }
                 }
             }
         }

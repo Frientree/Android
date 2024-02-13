@@ -75,6 +75,8 @@ class CollectionActivity : AppCompatActivity() {
                     CollectionViewEvent.OnTapBackButton -> onBackPressedDispatcher.onBackPressed()
                     is CollectionViewEvent.OnTapCollectionItem ->
                         viewModel.onTapCollectionItemOccurred(event.juice)
+
+                    is CollectionViewEvent.OnServerMaintaining -> TODO()
                 }
             }
         }

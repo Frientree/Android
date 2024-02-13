@@ -13,7 +13,7 @@ class FruitLocalDataSourceImpl @Inject constructor(
         fruitDao.insertFruit(fruitEntity)
     }.fold(
         onSuccess = { Result.Success(true) },
-        onFailure = { Result.Failure(FruitErrorStatus.LocalInsertError) },
+        onFailure = { Result.Failure(FruitErrorStatus.LocalInsertError()) },
     )
 
     override suspend fun getTodayFruit(date: Long): FruitEntity? {

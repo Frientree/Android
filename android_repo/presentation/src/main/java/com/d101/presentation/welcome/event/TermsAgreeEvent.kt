@@ -8,4 +8,6 @@ sealed class TermsAgreeEvent {
     data object OnCheckAllAgree : TermsAgreeEvent()
     data object OnClickConfirmButton : TermsAgreeEvent()
     data class OnShowToast(val message: String) : TermsAgreeEvent()
+
+    data class OnServerMaintaining(val message: String) : TermsAgreeEvent()
 }
