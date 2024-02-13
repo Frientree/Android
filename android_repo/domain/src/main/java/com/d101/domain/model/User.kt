@@ -7,4 +7,5 @@ data class User(
     val isSocial: Boolean,
     val isBackgroundMusicEnabled: Boolean,
     val backgroundMusicName: String,
+    val notificationCheckNeverShow: Boolean,
 )

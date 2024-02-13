@@ -4,4 +4,6 @@ sealed class MainActivityEvent {
     data class ShowErrorEvent(
         val message: String,
     ) : MainActivityEvent()
+
+    data object ShowAlarmDialogEvent : MainActivityEvent()
 }

@@ -98,13 +98,16 @@ class MainActivity : AppCompatActivity() {
         receiveFCMToken()
         initEvent()
         setOnBackPressed()
-        checkNotificationPermission()
 
         repeatOnStarted {
             viewModel.eventFlow.collect { event ->
                 when (event) {
                     is MainActivityEvent.ShowErrorEvent -> {
                         showToast(event.message)
+                    }
+
+                    MainActivityEvent.ShowAlarmDialogEvent -> {
+                        checkNotificationPermission()
                     }
                 }
             }
@@ -161,9 +164,10 @@ class MainActivity : AppCompatActivity() {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             permissionCheckBottomSheetDialog = PermissionCheckBottomSheetDialog(
-                cancelDialog = {
+                cancelDialog = { neverAskAgain ->
                     Log.d("확인", "permissionConfirm: 거부 버튼 클릭")
                     viewModel.setUserAlarmStatus(false)
+                    viewModel.setNotificationNeverAsk(neverAskAgain)
                     permissionCheckBottomSheetDialog?.dismiss()
                 },
                 permissionConfirm = {
@@ -457,7 +461,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val CHANNEL_ID = "FRIENTREE_MESSAGING_CHANNEL"
-        const val POST_NOTIFICATION_PERMISSION_REQUEST_CODE = 0
         const val BACK_PRESS_INTERVAL = 2000L
         const val DURATION = 400L
         const val WRITE_UP = 0

@@ -6,7 +6,9 @@ import com.d101.domain.model.Result
 import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.model.status.GetUserStatusErrorStatus
 import com.d101.domain.usecase.mypage.SetAlarmStatusUseCase
+import com.d101.domain.usecase.usermanagement.GetUserInfoUseCase
 import com.d101.domain.usecase.usermanagement.ManageUserStatusUseCase
+import com.d101.domain.usecase.usermanagement.SetNotificationNeverAskUseCase
 import com.d101.domain.usecase.usermanagement.UpdateFcmTokenUseCase
 import com.d101.presentation.main.event.MainActivityEvent
 import com.d101.presentation.main.state.MainActivityViewState
@@ -14,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.MutableEventFlow
@@ -25,6 +28,8 @@ class MainActivityViewModel @Inject constructor(
     private val updateFcmTokenUseCase: UpdateFcmTokenUseCase,
     private val manageUserStatusUseCase: ManageUserStatusUseCase,
     private val setAlarmStatusUseCase: SetAlarmStatusUseCase,
+    private val setNotificationNeverAskUseCase: SetNotificationNeverAskUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
 ) : ViewModel() {
 
     private val _currentViewState: MutableStateFlow<MainActivityViewState> =
@@ -39,11 +44,21 @@ class MainActivityViewModel @Inject constructor(
 
     init {
         updateUserStatus()
+        viewModelScope.launch {
+            val userInfo = getUserInfoUseCase().first()
+            if (userInfo is Result.Success) {
+                if (userInfo.data.notificationCheckNeverShow.not()) {
+                    emitEvent(MainActivityEvent.ShowAlarmDialogEvent)
+                }
+            } else {
+                emitEvent(MainActivityEvent.ShowErrorEvent("사용자 정보를 가져오는 데 실패했습니다."))
+            }
+        }
     }
 
     private fun emitEvent(event: MainActivityEvent) {
         viewModelScope.launch {
-            emitEvent(event)
+            _eventFlow.emit(event)
         }
     }
 
@@ -80,7 +95,7 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    private fun updateUserStatus() {
+    fun updateUserStatus() {
         viewModelScope.launch {
             when (val result = manageUserStatusUseCase.updateUserStatus()) {
                 is Result.Success -> {}
@@ -105,6 +120,17 @@ class MainActivityViewModel @Inject constructor(
                         }
                     }
                 }
+            }
+        }
+    }
+
+    fun setNotificationNeverAsk(neverAskAgain: Boolean) {
+        viewModelScope.launch {
+            when (setNotificationNeverAskUseCase(neverAskAgain)) {
+                is Result.Success -> {}
+                is Result.Failure -> emitEvent(
+                    MainActivityEvent.ShowErrorEvent("알 수 없는 에러가 발생했습니다."),
+                )
             }
         }
     }

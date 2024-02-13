@@ -47,4 +47,6 @@ interface UserRepository {
     ): Result<Unit>
 
     suspend fun updateFcmToken(fcmToken: String): Result<Unit>
+
+    suspend fun setNotificationNeverAsk(status: Boolean): Result<Unit>
 }

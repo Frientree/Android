@@ -15,6 +15,7 @@ object UserMapper {
             isNotificationEnabled = this.isNotificationEnabled,
             isBackgroundMusicEnabled = this.isBackgroundMusicEnabled,
             backgroundMusicName = this.backgroundMusicName,
+            notificationCheckNeverShow = this.notificationCheckNeverShow,
         )
 
     fun UserStatusPreferences.toUserStatus(): UserStatus =
