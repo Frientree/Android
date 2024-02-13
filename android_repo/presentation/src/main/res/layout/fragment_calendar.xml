@@ -15,8 +15,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_white"
-        >
+        android:background="@color/background_white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,10 +30,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/emotion_calendar"
                     android:fontFamily="@font/nanum_barun_gothic_bold"
-                    android:textSize="18sp"
+                    android:text="@string/emotion_calendar"
                     android:textColor="@color/black"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -67,14 +66,14 @@
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_main_radius"
+                android:fontFamily="@font/nanum_barun_gothic_bold"
                 android:gravity="center"
                 android:maxLines="2"
                 android:minLines="2"
                 android:paddingHorizontal="48dp"
                 android:paddingVertical="8dp"
                 android:text="@string/today_fruit_statistics_example"
-                android:textColor="@color/black"
-                android:fontFamily="@font/nanum_barun_gothic_bold"/>
+                android:textColor="@color/black" />
 
             <View
                 android:layout_width="match_parent"
@@ -159,41 +158,47 @@
 
                 <ImageView
                     android:id="@+id/juice_image_image_view"
+                    imageUrl="@{viewModel.uiState.juice.juiceImageUrl}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="32dp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/bg_lightgray_stroke_20dp"
                     android:minHeight="140dp"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="16dp"
-                    imageUrl="@{viewModel.uiState.juice.juiceImageUrl}"
+                    app:layout_constraintBottom_toTopOf="@id/juice_condolence"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/juice_name_text_view"
                     app:layout_constraintWidth_percent="0.33" />
 
                 <TextView
                     android:id="@+id/juice_name_text_view"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:gravity="center"
+                    android:maxLines="1"
                     android:text="@{viewModel.uiState.juice.juiceName}"
                     android:textAppearance="@style/Base.FTR.Bold_20sp"
+                    app:layout_constraintBottom_toTopOf="@id/juice_image_image_view"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/juice_image_image_view"
-                    app:layout_constraintTop_toTopOf="@id/juice_image_image_view" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="신나는 레몬" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginHorizontal="24dp"
-                    android:layout_marginVertical="12dp"
-                    android:gravity="center_horizontal"
+                    android:gravity="center"
                     android:text="@{viewModel.uiState.juice.juiceDescription}"
-                    android:autoSizeTextType="uniform"
+                    android:textAppearance="@style/Base.FTR.Text"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/juice_image_image_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/juice_image_image_view"
-                    app:layout_constraintTop_toBottomOf="@id/juice_name_text_view" />
+                    app:layout_constraintTop_toTopOf="@+id/juice_image_image_view" />
 
                 <View
                     android:id="@+id/dash_divider_1_view"

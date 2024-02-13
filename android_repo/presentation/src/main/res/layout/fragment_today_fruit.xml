@@ -70,9 +70,7 @@
                     >
                     <TextView
                         android:id="@+id/fruit_description_text_view"
-                        style="@style/Base.FTR.Text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        style="@style/Base.FTR.TextView.FruitDescription"
                         android:gravity="center"
                         android:padding="16dp"
                         android:text="@{viewModel.todayFruit.description}"
