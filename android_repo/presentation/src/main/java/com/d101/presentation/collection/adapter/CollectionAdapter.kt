@@ -22,6 +22,7 @@ class CollectionAdapter(private val collectionClickListener: ((JuiceForCollectio
             Glide.with(itemView).load(juice.juiceImageUrl).into(binding.juiceImageImageView)
             if (juice.juiceOwn) {
                 binding.collectionItemLinearLayout.setOnClickListener { itemClickListener(juice) }
+                binding.juiceImageImageView.colorFilter = null
             } else {
                 binding.juiceImageImageView.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
             }
