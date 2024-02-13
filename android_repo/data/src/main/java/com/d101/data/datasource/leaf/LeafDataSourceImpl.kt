@@ -14,7 +14,7 @@ class LeafDataSourceImpl @Inject constructor(
     private val leafService: LeafService,
 ) : LeafDataSource {
 
-    override suspend fun sendLeaf(leafCategory: Int, leafContent: String): Result<Boolean> =
+    override suspend fun sendLeaf(leafCategory: Int, leafContent: String): Result<Int> =
         runCatching {
             leafService.sendLeaf(LeafCreationRequest(leafCategory, leafContent)).getOrThrow().data
         }.fold(
@@ -24,6 +24,7 @@ class LeafDataSourceImpl @Inject constructor(
             onFailure = { e ->
                 if (e is FrientreeHttpError) {
                     when (e.code) {
+                        400 -> Result.Failure(LeafErrorStatus.LeafCreationFailed)
                         404 -> Result.Failure(LeafErrorStatus.NoSendLeaf())
                         503 -> Result.Failure(ErrorStatus.ServerMaintenance())
                         else -> Result.Failure(ErrorStatus.UnknownError())
