@@ -120,5 +120,8 @@
     <string name="emotional_dumping">감정 토로하기</string>
     <string name="receive_tree_message">트리 메시지 받기</string>
     <string name="main_guide">메인 가이드</string>
+    <string name="never_show_again">다시 보지 않기</string>
+    <string name="notification_question">열매 생성 알림을 보내드릴까요?</string>
+    <string name="notification_question_description">매일 밤 10시에 보내드릴게요.</string>
 
 </resources>
