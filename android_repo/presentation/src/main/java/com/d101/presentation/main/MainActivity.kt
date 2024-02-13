@@ -1,5 +1,6 @@
 package com.d101.presentation.main
 
+import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.NotificationChannel
@@ -10,6 +11,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.TypedValue
@@ -21,6 +24,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -87,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         receiveFCMToken()
         initEvent()
         setOnBackPressed()
+        checkNotificationPermission()
 
         repeatOnStarted {
             viewModel.eventFlow.collect { event ->
@@ -138,6 +143,19 @@ class MainActivity : AppCompatActivity() {
                 binding.writeLeafButton.visibility = if (it) View.GONE else View.VISIBLE
                 binding.readLeafButton.visibility = if (it) View.GONE else View.VISIBLE
                 if (it) binding.blur.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun checkNotificationPermission() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                val permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS)
+                requestPermissions(permissions, 0)
             }
         }
     }
