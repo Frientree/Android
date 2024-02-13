@@ -15,6 +15,7 @@ import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentBeforeFruitCreateBaseBinding
 import com.d101.presentation.main.event.CreateFruitDialogViewEvent
 import com.d101.presentation.main.viewmodel.FruitCreateViewModel
+import com.d101.presentation.main.viewmodel.MainFragmentViewModel
 import com.navercorp.nid.NaverIdLoginSDK.getApplicationContext
 import dagger.hilt.android.AndroidEntryPoint
 import utils.CustomToast
@@ -22,6 +23,9 @@ import utils.repeatOnStarted
 
 @AndroidEntryPoint
 class BeforeFruitCreateBaseFragment : DialogFragment() {
+    private val mainFragmentViewModel: MainFragmentViewModel by viewModels({
+        requireParentFragment()
+    })
     private val viewModel: FruitCreateViewModel by viewModels()
     private var _binding: FragmentBeforeFruitCreateBaseBinding? = null
     private val binding get() = _binding!!
@@ -75,6 +79,7 @@ class BeforeFruitCreateBaseFragment : DialogFragment() {
                         } else {
                             showToast("열매가 저장되었습니다!")
                             dialog?.dismiss()
+                            mainFragmentViewModel.showFruitDialog()
                         }
                     }
 

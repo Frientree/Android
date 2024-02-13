@@ -6,6 +6,8 @@ sealed class TreeFragmentEvent {
 
     data object EmotionTrashEvent : TreeFragmentEvent()
 
+    data object CompleteCreationEvent : TreeFragmentEvent()
+
     data class ShowErrorEvent(
         val message: String,
     ) : TreeFragmentEvent()

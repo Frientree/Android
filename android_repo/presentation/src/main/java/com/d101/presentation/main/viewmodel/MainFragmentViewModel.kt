@@ -62,6 +62,10 @@ class MainFragmentViewModel @Inject constructor(
         _messageState.update { TreeMessageState.EnableMessage }
     }
 
+    fun showFruitDialog() {
+        emitEvent(TreeFragmentEvent.CompleteCreationEvent)
+    }
+
     fun onGetTreeMessage() {
         if (messageState.value is TreeMessageState.EnableMessage) {
             viewModelScope.launch {

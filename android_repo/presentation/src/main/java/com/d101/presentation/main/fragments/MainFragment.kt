@@ -174,6 +174,9 @@ class MainFragment : Fragment() {
                         dialog.show(childFragmentManager, "")
                     }
                     is TreeFragmentEvent.OnServerMaintaining -> blockApp(event.message)
+                    is TreeFragmentEvent.CompleteCreationEvent -> {
+                        binding.createFruitButton.performClick()
+                    }
                 }
             }
         }
