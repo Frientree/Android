@@ -18,12 +18,13 @@ class CollectionAdapter(private val collectionClickListener: ((JuiceForCollectio
         private val itemClickListener: (JuiceForCollection) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(juice: JuiceForCollection) {
-            binding.juiceNameTextView.text = juice.juiceName
             Glide.with(itemView).load(juice.juiceImageUrl).into(binding.juiceImageImageView)
             if (juice.juiceOwn) {
+                binding.juiceNameTextView.text = juice.juiceName
                 binding.collectionItemLinearLayout.setOnClickListener { itemClickListener(juice) }
                 binding.juiceImageImageView.colorFilter = null
             } else {
+                binding.juiceNameTextView.text = "???"
                 binding.juiceImageImageView.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
             }
         }
