@@ -11,11 +11,13 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.d101.domain.model.Fruit
 import com.d101.presentation.R
 import com.d101.presentation.calendar.adapter.LittleFruitImageUrl
+
+private const val IMAGE_SIZE = 80
 
 class JuiceGraph(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : View(
     context,
@@ -49,11 +51,14 @@ class JuiceGraph(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : Vi
     }
 
     private fun loadBitmapForFruit(imageUrl: String) {
-        Glide.with(context).asBitmap().load(imageUrl).override(80, 80)
-            .into(object : SimpleTarget<Bitmap>() {
+        Glide.with(context).asBitmap().load(imageUrl).override(IMAGE_SIZE, IMAGE_SIZE)
+            .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     fruitBitmaps[imageUrl] = resource
                     invalidate()
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
                 }
             })
     }
@@ -67,9 +72,22 @@ class JuiceGraph(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : Vi
         // Y축 그리기
         canvas.drawLine(150f, 150f, 150f, height - 150f, linePaint)
 
-        canvas.drawText("high", 50f, 150f, textPaint)
-        canvas.drawText("low", 50f, height - 150f, textPaint)
+        textPaint.textAlign = Paint.Align.RIGHT
+        canvas.drawText(
+            "(Feel)",
+            150f - (textPaint.textSize / 2),
+            150f - (textPaint.textSize / 2),
+            textPaint,
+        )
+        canvas.drawText(
+            "good",
+            150f - (textPaint.textSize / 2),
+            150f + textPaint.textSize,
+            textPaint,
+        )
+        canvas.drawText("bad", 150f - (textPaint.textSize / 2), height - 150f, textPaint)
 
+        textPaint.textAlign = Paint.Align.LEFT
         // 눈금 및 라벨 추가
         val xIntervalCount = fruitList.lastIndex
         val yIntervalCount = 21
@@ -93,19 +111,20 @@ class JuiceGraph(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : Vi
                 } else {
                     dateString
                 }
-            canvas.drawText((monthDay), x, height - 75f, textPaint)
+            canvas.drawText((monthDay), x, height - (IMAGE_SIZE - 5).toFloat(), textPaint)
             val imageX = 125 + (index + 1) * xInterval
             val imageY = height - 200f - (yInterval * fruitList[index].score)
 
             fruitBitmaps[fruitList[index].calendarImageUrl]?.let { bitmap ->
-                canvas.drawBitmap(bitmap, imageX - 40f, imageY, null)
+                canvas.drawBitmap(bitmap, imageX - (IMAGE_SIZE / 2).toFloat(), imageY, null)
             } ?: run {
-                canvas.drawBitmap(emptyBitmap, imageX - 40f, imageY, null)
+                canvas.drawBitmap(emptyBitmap, imageX - (IMAGE_SIZE / 2).toFloat(), imageY, null)
             }
         }
     }
+
     private fun drawableToBitmap(drawable: Drawable?): Bitmap {
-        val bitmap = Bitmap.createBitmap(70, 70, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(IMAGE_SIZE - 10, IMAGE_SIZE - 10, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         drawable?.setBounds(0, 0, canvas.width, canvas.height)
         drawable?.draw(canvas)
