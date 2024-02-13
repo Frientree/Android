@@ -54,10 +54,10 @@ class BackgroundMusicService : Service() {
         return binder
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        when (intent.action) {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
             PLAY -> {
-                var musicName = intent.getStringExtra(MUSIC_NAME)
+                var musicName = intent?.getStringExtra(MUSIC_NAME)
                 if (musicName.isNullOrEmpty()) {
                     musicName = musicList.first()
                 }

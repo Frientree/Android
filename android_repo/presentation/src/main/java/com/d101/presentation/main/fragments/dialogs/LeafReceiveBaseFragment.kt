@@ -63,11 +63,11 @@ class LeafReceiveBaseFragment : DialogFragment() {
                     }
 
                     is LeafReceiveEvent.ReportLeafComplete -> {
-                        Toast.makeText(activity, "성공적으로 신고되었습니다.", Toast.LENGTH_SHORT).show()
+                        showToast("성공적으로 신고되었습니다.")
                         LeafDialogInterface.dialog.dismiss()
                     }
                     is LeafReceiveEvent.ShowErrorToast -> {
-                        Toast.makeText(activity, event.message, Toast.LENGTH_SHORT).show()
+                        showToast(event.message)
                         LeafDialogInterface.dialog.dismiss()
                     }
 
