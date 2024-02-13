@@ -58,7 +58,7 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.mainViewModel = viewModel
 
-        binding.tutorialTextview.setOnClickListener {
+        binding.guideButtonImageView.setOnClickListener {
             viewModel.onTutorialButtonClicked()
         }
 

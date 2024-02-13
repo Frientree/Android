@@ -76,19 +76,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tree_speech_textview" />
 
-        <TextView
-            android:id="@+id/tutorial_textview"
-            style="@style/Base.FTR.Text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+        <ImageView
+            android:id="@+id/guide_button_image_view"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginBottom="12dp"
             android:padding="4dp"
-            android:text="@string/main_guide"
-            android:textSize="12sp"
+            android:src="@drawable/outline_info_24"
+            app:drawableLeftCompat="@drawable/outline_info_24"
             app:layout_constraintBottom_toTopOf="@id/tree_speech_textview"
-            app:layout_constraintEnd_toEndOf="@id/tree_speech_textview"
-            app:layout_constraintTop_toBottomOf="@id/tree_name_textview"
-            app:drawableLeftCompat="@drawable/outline_info_24" />
+            app:layout_constraintEnd_toEndOf="@id/tree_speech_textview" />
 
         <TextView
             android:id="@+id/fruit_status_textview"
