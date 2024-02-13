@@ -24,9 +24,7 @@ import com.d101.presentation.fruit.BeforeFruitCreateBaseFragment
 import com.d101.presentation.fruit.EmotionDumpingFragment
 import com.d101.presentation.fruit.FruitDialogInterface
 import com.d101.presentation.fruit.TodayFruitFragment
-import com.d101.presentation.main.state.TreeFragmentViewState
-import com.d101.presentation.main.state.TreeMessageState
-import com.d101.presentation.main.tutorial.TutorialAdapter
+import com.d101.presentation.tutorial.TutorialAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers

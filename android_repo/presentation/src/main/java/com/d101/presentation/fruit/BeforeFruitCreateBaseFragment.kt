@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentBeforeFruitCreateBaseBinding
-import com.d101.presentation.main.fragments.dialogs.SelectInputTypeFragment
 import com.d101.presentation.tree.TreeViewModel
 import com.navercorp.nid.NaverIdLoginSDK.getApplicationContext
 import dagger.hilt.android.AndroidEntryPoint

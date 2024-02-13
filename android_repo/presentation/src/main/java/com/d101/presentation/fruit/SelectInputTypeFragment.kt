@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.fruit
 
 import android.Manifest
 import android.content.Context
@@ -17,8 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentSelectInputTypeBinding
-import com.d101.presentation.fruit.FruitDialogInterface
-import com.d101.presentation.fruit.FruitViewModel
 import com.d101.presentation.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import utils.CustomToast

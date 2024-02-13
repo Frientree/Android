@@ -1,4 +1,4 @@
-package com.d101.presentation.main.tutorial
+package com.d101.presentation.tutorial
 
 import android.os.Bundle
 import android.view.LayoutInflater

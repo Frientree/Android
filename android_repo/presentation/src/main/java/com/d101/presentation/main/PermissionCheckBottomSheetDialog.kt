@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.main
 
 import android.os.Bundle
 import android.view.LayoutInflater

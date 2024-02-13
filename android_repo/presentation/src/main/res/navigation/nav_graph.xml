@@ -8,19 +8,16 @@
     <fragment
         android:id="@+id/treeFragment"
         android:name="com.d101.presentation.tree.TreeFragment"
-        android:label="fragment_tree"
         tools:layout="@layout/fragment_tree" >
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
-        android:name="com.d101.presentation.main.fragments.MyPageFragment"
-        android:label="fragment_my_page_tmp"
+        android:name="com.d101.presentation.mypage.MyPageFragment"
         tools:layout="@layout/fragment_mypage" >
     </fragment>
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.d101.presentation.main.fragments.CalendarFragment"
-        android:label="fragment_calendar_tmp"
+        android:name="com.d101.presentation.calendar.CalendarFragment"
         tools:layout="@layout/fragment_calendar" >
     </fragment>
 </navigation>

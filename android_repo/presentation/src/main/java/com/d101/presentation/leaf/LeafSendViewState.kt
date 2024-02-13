@@ -1,4 +1,4 @@
-package com.d101.presentation.main.state
+package com.d101.presentation.leaf
 
 sealed class LeafSendViewState {
     abstract val leafSendTitle: String

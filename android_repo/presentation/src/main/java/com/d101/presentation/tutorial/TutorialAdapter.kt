@@ -1,4 +1,4 @@
-package com.d101.presentation.main.tutorial
+package com.d101.presentation.tutorial
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

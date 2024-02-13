@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="320dp"
         android:layout_height="320dp"
-        tools:context=".main.fragments.dialogs.SelectInputTypeFragment">
+        tools:context=".fruit.SelectInputTypeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lottie_layout"

@@ -39,10 +39,6 @@ import com.d101.presentation.databinding.ActivityMainBinding
 import com.d101.presentation.leaf.LeafDialogInterface
 import com.d101.presentation.leaf.LeafMessageBaseFragment
 import com.d101.presentation.leaf.LeafReceiveBaseFragment
-import com.d101.presentation.main.event.MainActivityEvent
-import com.d101.presentation.main.fragments.dialogs.PermissionCheckBottomSheetDialog
-import com.d101.presentation.main.state.MainActivityViewState
-import com.d101.presentation.main.viewmodel.MainActivityViewModel
 import com.d101.presentation.music.BackgroundMusicService
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging

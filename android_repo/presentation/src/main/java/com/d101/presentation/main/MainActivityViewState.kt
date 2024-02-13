@@ -1,4 +1,4 @@
-package com.d101.presentation.main.state
+package com.d101.presentation.main
 
 sealed class MainActivityViewState {
     data object TreeView : MainActivityViewState()

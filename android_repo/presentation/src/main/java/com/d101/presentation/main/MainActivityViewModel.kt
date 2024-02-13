@@ -1,4 +1,4 @@
-package com.d101.presentation.main.viewmodel
+package com.d101.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,8 +10,6 @@ import com.d101.domain.usecase.usermanagement.GetUserInfoUseCase
 import com.d101.domain.usecase.usermanagement.ManageUserStatusUseCase
 import com.d101.domain.usecase.usermanagement.SetNotificationNeverAskUseCase
 import com.d101.domain.usecase.usermanagement.UpdateFcmTokenUseCase
-import com.d101.presentation.main.event.MainActivityEvent
-import com.d101.presentation.main.state.MainActivityViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

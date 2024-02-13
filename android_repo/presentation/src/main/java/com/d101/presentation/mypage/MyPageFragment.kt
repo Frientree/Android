@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments
+package com.d101.presentation.mypage
 
 import android.app.Dialog
 import android.content.Context
@@ -23,7 +23,6 @@ import com.d101.presentation.music.BackgroundMusicService
 import com.d101.presentation.music.BackgroundMusicService.Companion.MUSIC_NAME
 import com.d101.presentation.music.BackgroundMusicService.Companion.PLAY
 import com.d101.presentation.music.BackgroundMusicService.Companion.STOP
-import com.d101.presentation.mypage.PasswordChangeActivity
 import com.d101.presentation.mypage.event.MyPageViewEvent
 import com.d101.presentation.mypage.state.AlarmStatus
 import com.d101.presentation.mypage.state.BackgroundMusicStatus
