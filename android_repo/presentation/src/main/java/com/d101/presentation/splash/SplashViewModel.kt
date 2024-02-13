@@ -48,6 +48,11 @@ class SplashViewModel @Inject constructor(
                     ErrorStatus.ServerMaintenance() -> emitEvent(
                         SplashViewEvent.OnServerMaintaining(errorStatus.message),
                     )
+
+                    ErrorStatus.NetworkError() -> emitEvent(
+                        SplashViewEvent.OnShowToast(errorStatus.message),
+                    )
+
                     else -> emitEvent(SplashViewEvent.OnShowToast(errorStatus.message))
                 }
             }

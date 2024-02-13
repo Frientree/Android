@@ -46,6 +46,7 @@ class LeafReceiveViewModel @Inject constructor(
                     leaf = result.data
                     emitEvent(LeafReceiveEvent.ReadyToReceive)
                 }
+
                 is Result.Failure -> {
                     when (val errorStatus = result.errorStatus) {
                         is ErrorStatus.ServerMaintenance -> emitEvent(
@@ -55,6 +56,7 @@ class LeafReceiveViewModel @Inject constructor(
                         ErrorStatus.NetworkError() -> {
                             emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
+
                         else -> {
                             emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
@@ -70,14 +72,21 @@ class LeafReceiveViewModel @Inject constructor(
                 is Result.Success -> {
                     emitEvent(LeafReceiveEvent.ReportLeafComplete)
                 }
+
                 is Result.Failure -> {
                     when (val errorStatus = result.errorStatus) {
                         LeafErrorStatus.LeafNotFound() -> {
                             emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
+
                         LeafErrorStatus.ServerError() -> {
                             emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }
+
+                        is ErrorStatus.NetworkError -> emitEvent(
+                            LeafReceiveEvent.ShowErrorToast(errorStatus.message),
+                        )
+
                         else -> {
                             emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
                         }

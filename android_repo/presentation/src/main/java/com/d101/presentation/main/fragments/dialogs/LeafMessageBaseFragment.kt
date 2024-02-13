@@ -3,7 +3,6 @@ package com.d101.presentation.main.fragments.dialogs
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +58,6 @@ class LeafMessageBaseFragment : DialogFragment() {
                     )
 
                     is LeafSendViewEvent.ReadyToSend -> {
-                        Log.d("확인", "collectEvent: ReadyToSend")
                         dialog?.dismiss()
                         showToast("이파리를 보냈어요!")
                     }

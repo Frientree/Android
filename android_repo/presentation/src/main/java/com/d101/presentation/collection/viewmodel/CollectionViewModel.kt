@@ -45,6 +45,10 @@ class CollectionViewModel @Inject constructor(
                             )
                         }
 
+                        ErrorStatus.NetworkError() -> {
+                            _eventFlow.emit(CollectionViewEvent.OnShowToast(errorStatus.message))
+                        }
+
                         else -> {
                             _eventFlow.emit(
                                 CollectionViewEvent.OnShowToast(result.errorStatus.message),

@@ -24,7 +24,7 @@ class LeafDataSourceImpl @Inject constructor(
             onFailure = { e ->
                 if (e is FrientreeHttpError) {
                     when (e.code) {
-                        400 -> Result.Failure(LeafErrorStatus.LeafCreationFailed)
+                        400 -> Result.Failure(LeafErrorStatus.LeafCreationFailed())
                         404 -> Result.Failure(LeafErrorStatus.NoSendLeaf())
                         503 -> Result.Failure(ErrorStatus.ServerMaintenance())
                         else -> Result.Failure(ErrorStatus.UnknownError())
@@ -77,11 +77,17 @@ class LeafDataSourceImpl @Inject constructor(
             Result.Success(it)
         },
         onFailure = { e ->
-
-            if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError())
+            if (e is FrientreeHttpError) {
+                when (e.code) {
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
+                }
             } else {
-                Result.Failure(ErrorStatus.UnknownError())
+                if (e is IOException) {
+                    Result.Failure(ErrorStatus.NetworkError())
+                } else {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
 

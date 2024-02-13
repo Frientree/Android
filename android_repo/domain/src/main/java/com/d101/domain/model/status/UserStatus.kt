@@ -6,7 +6,8 @@ sealed class SignInErrorStatus : ErrorStatus {
 }
 
 sealed class GetUserErrorStatus : ErrorStatus {
-    data class UserNotFound(override val message: String = "") : GetUserErrorStatus()
+    data class UserNotFound(override val message: String = "유저 정보를 읽어오는데 실패했습니다.") :
+        GetUserErrorStatus()
 }
 
 sealed class AuthCodeCreationErrorStatus : ErrorStatus {
@@ -15,6 +16,9 @@ sealed class AuthCodeCreationErrorStatus : ErrorStatus {
 }
 
 sealed class GetUserStatusErrorStatus : ErrorStatus {
-    data class UserNotFound(override val message: String = "") : GetUserStatusErrorStatus()
-    data class Fail(override val message: String = "") : GetUserStatusErrorStatus()
+    data class UserNotFound(override val message: String = "사용자 정보를 찾을 수 없습니다.") :
+        GetUserStatusErrorStatus()
+
+    data class Fail(override val message: String = "사용자 정보를 업데이트 하는 데 실패했습니다.") :
+        GetUserStatusErrorStatus()
 }

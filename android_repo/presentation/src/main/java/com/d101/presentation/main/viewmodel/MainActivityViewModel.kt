@@ -44,6 +44,7 @@ class MainActivityViewModel @Inject constructor(
             emitEvent(event)
         }
     }
+
     fun changeViewState(state: MainActivityViewState) {
         _currentViewState.update { state }
     }
@@ -57,6 +58,7 @@ class MainActivityViewModel @Inject constructor(
             updateFcmTokenUseCase(token)
         }
     }
+
     private fun updateUserStatus() {
         viewModelScope.launch {
             when (val result = manageUserStatusUseCase.updateUserStatus()) {
@@ -69,20 +71,15 @@ class MainActivityViewModel @Inject constructor(
 
                         is GetUserStatusErrorStatus.Fail,
                         -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("사용자 정보를 업데이트 하는 데 실패했습니다."))
-                        }
-
-                        is GetUserStatusErrorStatus.UserNotFound,
-                        -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("사용자 정보를 찾을 수 없습니다."))
+                            emitEvent(MainActivityEvent.ShowErrorEvent(errorStatus.message))
                         }
 
                         is ErrorStatus.NetworkError -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("네트워크 에러가 발생했습니다."))
+                            emitEvent(MainActivityEvent.ShowErrorEvent(errorStatus.message))
                         }
 
                         else -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("알 수 없는 에러가 발생했습니다."))
+                            emitEvent(MainActivityEvent.ShowErrorEvent(errorStatus.message))
                         }
                     }
                 }

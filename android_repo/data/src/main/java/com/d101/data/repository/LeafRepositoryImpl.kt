@@ -16,7 +16,7 @@ class LeafRepositoryImpl @Inject constructor(
                 Result.Success(result.data)
             }
 
-            is Result.Failure -> Result.Failure(result.errorStatus)
+            is Result.Failure -> { Result.Failure(result.errorStatus) }
         }
     }
 
@@ -25,7 +25,9 @@ class LeafRepositoryImpl @Inject constructor(
             is Result.Success -> {
                 Result.Success(Unit)
             }
-            is Result.Failure -> Result.Failure(result.errorStatus)
+            is Result.Failure -> {
+                Result.Failure(result.errorStatus)
+            }
         }
     }
 
@@ -34,7 +36,9 @@ class LeafRepositoryImpl @Inject constructor(
             is Result.Success -> {
                 Result.Success(result.data.toLeaf())
             }
-            is Result.Failure -> Result.Failure(result.errorStatus)
+            is Result.Failure -> {
+                Result.Failure(result.errorStatus)
+            }
         }
     }
 
@@ -43,7 +47,9 @@ class LeafRepositoryImpl @Inject constructor(
             is Result.Success -> {
                 Result.Success(Unit)
             }
-            is Result.Failure -> Result.Failure(result.errorStatus)
+            is Result.Failure -> {
+                Result.Failure(result.errorStatus)
+            }
         }
     }
 }

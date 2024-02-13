@@ -12,7 +12,6 @@ import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -390,7 +389,6 @@ class MainActivity : AppCompatActivity() {
         Intent(this, BackgroundMusicService::class.java).also { intent ->
             this.bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
-        Log.d("확인", "메인시작")
     }
 
     override fun onStop() {

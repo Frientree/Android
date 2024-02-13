@@ -147,7 +147,7 @@ class FruitCreateViewModel @Inject constructor(
 
                         is ErrorStatus.NetworkError -> emitEvent(
                             CreateFruitDialogViewEvent.ShowErrorToastEvent(
-                                "네트워크 에러입니다.",
+                                errorStatus.message,
                             ),
                         )
 

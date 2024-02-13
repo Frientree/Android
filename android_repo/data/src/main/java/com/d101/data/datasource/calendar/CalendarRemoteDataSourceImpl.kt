@@ -23,10 +23,20 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
         }.fold(
             onSuccess = { Result.Success(it) },
             onFailure = { e ->
-                if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError())
+                if (e is FrientreeHttpError) {
+                    when (e.code) {
+                        404 -> Result.Failure(JuiceErrorStatus.JuiceNotFound())
+                        503 -> Result.Failure(
+                            ErrorStatus.ServerMaintenance(),
+                        )
+                        else -> Result.Failure(ErrorStatus.UnknownError())
+                    }
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError())
+                    if (e is IOException) {
+                        Result.Failure(ErrorStatus.NetworkError())
+                    } else {
+                        Result.Failure(ErrorStatus.UnknownError())
+                    }
                 }
             },
         )
@@ -36,10 +46,20 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
     }.fold(
         onSuccess = { Result.Success(it) },
         onFailure = { e ->
-            if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError())
+            if (e is FrientreeHttpError) {
+                when (e.code) {
+                    404 -> Result.Failure(JuiceErrorStatus.JuiceNotFound())
+                    503 -> Result.Failure(
+                        ErrorStatus.ServerMaintenance(),
+                    )
+                    else -> Result.Failure(ErrorStatus.UnknownError())
+                }
             } else {
-                Result.Failure(ErrorStatus.UnknownError())
+                if (e is IOException) {
+                    Result.Failure(ErrorStatus.NetworkError())
+                } else {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
     )
@@ -55,7 +75,7 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
                 when (e.code) {
                     404 -> Result.Failure(JuiceErrorStatus.JuiceNotFound())
                     503 -> Result.Failure(
-                        ErrorStatus.ServerMaintenance("서버 점검중입니다. 잠시 후 다시 시도해주세요"),
+                        ErrorStatus.ServerMaintenance(),
                     )
                     else -> Result.Failure(ErrorStatus.UnknownError())
                 }

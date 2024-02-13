@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d101.domain.model.LeafViews
 import com.d101.domain.model.Result
+import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.model.status.LeafErrorStatus
 import com.d101.domain.usecase.main.SendMyLeafUseCase
 import com.d101.domain.usecase.usermanagement.ManageUserStatusUseCase
@@ -85,24 +86,25 @@ class LeafSendViewModel @Inject constructor(
             }
 
             is Result.Failure -> {
-                when (result.errorStatus) {
-                    LeafErrorStatus.NoSendLeaf -> {
+                when (val errorStatus = result.errorStatus) {
+                    LeafErrorStatus.NoSendLeaf() -> {
                         _uiState.update {
                             LeafSendViewState.NoSendLeafSendViewState(
                                 leftLeavesCount = leftLeavesCount,
                             )
-                is Result.Failure -> {
-                    when (val errorStatus = result.errorStatus) {
-                        is ErrorStatus.ServerMaintenance -> emitEvent(
-                            LeafSendViewEvent.OnServerMaintaining(errorStatus.message),
-                        )
-
-                        LeafErrorStatus.NoSendLeaf() -> {
-                            _uiState.update { LeafSendViewState.NoSendLeafSendViewState() }
                         }
                     }
 
+                    ErrorStatus.ServerMaintenance() -> emitEvent(
+                        LeafSendViewEvent.OnServerMaintaining(errorStatus.message),
+                    )
+
+                    is ErrorStatus.NetworkError -> emitEvent(
+                        LeafSendViewEvent.ShowErrorToast(errorStatus.message),
+                    )
+
                     else -> {
+                        emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))
                     }
                 }
             }
@@ -132,22 +134,21 @@ class LeafSendViewModel @Inject constructor(
 
     fun onReadyToSend() {
         viewModelScope.launch {
-            when (sendLeafUseCase.sendLeaf(checkedChipId, inputText.value)) {
+            when (val result = sendLeafUseCase.sendLeaf(checkedChipId, inputText.value)) {
                 is Result.Success -> {
                     manageUserStatusUseCase.updateUserStatus()
                     emitEvent(LeafSendViewEvent.ReadyToSend)
                 }
 
                 is Result.Failure -> {
-                    emitEvent(LeafSendViewEvent.ShowErrorToast("이파리를 보내지 못했어요. 다시 시도해주세요."))
                     when (val errorStatus = result.errorStatus) {
                         is ErrorStatus.ServerMaintenance -> {
                             emitEvent(LeafSendViewEvent.OnServerMaintaining(errorStatus.message))
                         }
 
-                        is ErrorStatus.NetworkError -> {
-                            emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))
-                        }
+                        is ErrorStatus.NetworkError -> emitEvent(
+                            LeafSendViewEvent.ShowErrorToast(errorStatus.message),
+                        )
 
                         else -> {
                             emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))

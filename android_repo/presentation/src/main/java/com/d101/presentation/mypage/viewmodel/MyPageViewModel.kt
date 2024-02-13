@@ -76,6 +76,12 @@ class MyPageViewModel @Inject constructor(
                         _eventFlow.emit(MyPageViewEvent.OnShowToast("닉네임은 1글자 이상 8글자 이하로 입력해주세요"))
                     }
 
+                    is ErrorStatus.NetworkError -> emitEvent(
+                        MyPageViewEvent.OnShowToast(
+                            errorStatus.message,
+                        ),
+                    )
+
                     else -> {
                         _eventFlow.emit(MyPageViewEvent.OnShowToast("네트워크 에러"))
                     }
@@ -120,6 +126,12 @@ class MyPageViewModel @Inject constructor(
                             ),
                         )
 
+                        is ErrorStatus.NetworkError -> emitEvent(
+                            MyPageViewEvent.OnShowToast(
+                                errorStatus.message,
+                            ),
+                        )
+
                         else -> _eventFlow.emit(MyPageViewEvent.OnShowToast("탈퇴 실패"))
                     }
                 }
@@ -131,7 +143,9 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when (signOutWithNaver(naverClientId, naverSecret, accessToken)) {
                 is Result.Success -> onSignOutFrientreeUser()
-                is Result.Failure -> _eventFlow.emit(MyPageViewEvent.OnShowToast("탈퇴 실패"))
+                is Result.Failure -> {
+                    _eventFlow.emit(MyPageViewEvent.OnShowToast("탈퇴 실패"))
+                }
             }
         }
     }
@@ -177,6 +191,12 @@ class MyPageViewModel @Inject constructor(
                                     MyPageViewEvent.OnServerMaintaining(errorStatus.message),
                                 )
                             }
+
+                            is ErrorStatus.NetworkError -> emitEvent(
+                                MyPageViewEvent.OnShowToast(
+                                    errorStatus.message,
+                                ),
+                            )
 
                             else -> {
                                 _eventFlow.emit(MyPageViewEvent.OnShowToast(errorStatus.message))
@@ -235,7 +255,7 @@ class MyPageViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
+                    when (val errorStatus = result.errorStatus) {
                         is ErrorStatus.ServerMaintenance -> {
                             emitEvent(
                                 MyPageViewEvent.OnServerMaintaining(result.errorStatus.message),
@@ -245,6 +265,12 @@ class MyPageViewModel @Inject constructor(
                         is ErrorStatus.BadRequest -> {
                             emitEvent(MyPageViewEvent.OnShowToast("알람 설정 실패"))
                         }
+
+                        is ErrorStatus.NetworkError -> emitEvent(
+                            MyPageViewEvent.OnShowToast(
+                                errorStatus.message,
+                            ),
+                        )
 
                         else -> {
                             emitEvent(MyPageViewEvent.OnShowToast("네트워크 에러"))
@@ -269,6 +295,12 @@ class MyPageViewModel @Inject constructor(
                             emitEvent(MyPageViewEvent.OnServerMaintaining(errorStatus.message))
                         }
 
+                        is ErrorStatus.NetworkError -> emitEvent(
+                            MyPageViewEvent.OnShowToast(
+                                errorStatus.message,
+                            ),
+                        )
+
                         else -> {
                             emitEvent(MyPageViewEvent.OnShowToast("배경음악 설정에 실패했어요"))
                         }
@@ -287,6 +319,12 @@ class MyPageViewModel @Inject constructor(
                         is ErrorStatus.ServerMaintenance -> {
                             emitEvent(MyPageViewEvent.OnServerMaintaining(errorStatus.message))
                         }
+
+                        is ErrorStatus.NetworkError -> emitEvent(
+                            MyPageViewEvent.OnShowToast(
+                                errorStatus.message,
+                            ),
+                        )
 
                         else -> {
                             emitEvent(MyPageViewEvent.OnShowToast("배경음악 설정에 실패했어요"))

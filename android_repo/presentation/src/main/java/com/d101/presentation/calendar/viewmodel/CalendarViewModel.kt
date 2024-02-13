@@ -198,8 +198,12 @@ class CalendarViewModel @Inject constructor(
                             ),
                         )
 
+                        ErrorStatus.NetworkError() -> {
+                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
+                        }
+
                         else -> {
-                            _eventFlow.emit(CalendarViewEvent.OnShowToast("네트워크 연결 실패"))
+                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
                         }
                     }
                 }
@@ -220,6 +224,10 @@ class CalendarViewModel @Inject constructor(
                             _eventFlow.emit(
                                 CalendarViewEvent.OnServerMaintaining(errorStatus.message),
                             )
+                        }
+
+                        ErrorStatus.NetworkError() -> {
+                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
                         }
 
                         else -> {
@@ -260,6 +268,11 @@ class CalendarViewModel @Inject constructor(
                     is ErrorStatus.ServerMaintenance -> {
                         _eventFlow.emit(CalendarViewEvent.OnServerMaintaining(errorStatus.message))
                     }
+
+                    ErrorStatus.NetworkError() -> {
+                        _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
+                    }
+
                     else -> {}
                 }
             }
@@ -279,6 +292,10 @@ class CalendarViewModel @Inject constructor(
                             _eventFlow.emit(
                                 CalendarViewEvent.OnServerMaintaining(errorStatus.message),
                             )
+                        }
+
+                        ErrorStatus.NetworkError() -> {
+                            _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
                         }
 
                         else -> {
@@ -305,9 +322,12 @@ class CalendarViewModel @Inject constructor(
                                 CalendarViewEvent.OnServerMaintaining(errorStatus.message),
                             )
                         }
-                        else -> {
+
+                        ErrorStatus.NetworkError() -> {
                             _eventFlow.emit(CalendarViewEvent.OnShowToast(errorStatus.message))
                         }
+
+                        else -> {}
                     }
                 }
             }
