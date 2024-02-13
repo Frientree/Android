@@ -17,4 +17,6 @@ sealed class CreateFruitDialogViewEvent {
     data class AppleEvent(
         val isApple: Boolean,
     ) : CreateFruitDialogViewEvent()
+
+    data class OnServerMaintaining(val message: String) : CreateFruitDialogViewEvent()
 }

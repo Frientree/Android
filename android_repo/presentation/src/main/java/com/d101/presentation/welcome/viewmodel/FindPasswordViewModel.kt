@@ -48,10 +48,16 @@ class FindPasswordViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = findPasswordUseCase(email.value)) {
                 is Result.Success -> onReceivedTemporaryPassword()
-                is Result.Failure -> when (result.errorStatus) {
-                    PasswordFindErrorStatus.UserNotFound -> onShowToast("해당 이메일로 가입된 계정이 없습니다.")
-                    ErrorStatus.NetworkError -> onShowToast("네트워크 연결 오류")
-                    else -> onShowToast("알 수 없는 오류 발생.")
+                is Result.Failure -> when (val errorStatus = result.errorStatus) {
+                    ErrorStatus.ServerMaintenance() -> emitEvent(
+                        FindPasswordEvent.OnServerMaintaining(
+                            errorStatus.message,
+                        ),
+                    )
+
+                    PasswordFindErrorStatus.UserNotFound() -> onShowToast(errorStatus.message)
+                    ErrorStatus.NetworkError() -> onShowToast(errorStatus.message)
+                    else -> onShowToast(errorStatus.message)
                 }
             }
         }

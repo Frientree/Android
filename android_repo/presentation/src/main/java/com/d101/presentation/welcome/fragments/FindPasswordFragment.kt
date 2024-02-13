@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -64,15 +65,21 @@ class FindPasswordFragment : Fragment() {
 
                     FindPasswordEvent.OnFindPasswordAttempt -> viewModel.attemptFindPassword()
                     is FindPasswordEvent.OnShowToast -> showToast(event.message)
+                    is FindPasswordEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
     }
 
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
+    }
+
     private fun navigateToSignIn() = findNavController().navigateUp()
 
     private fun showToast(message: String) =
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
 
     override fun onDestroyView() {
         super.onDestroyView()

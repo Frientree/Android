@@ -1,8 +1,6 @@
 package com.d101.domain.model.status
 
 sealed class JuiceErrorStatus : ErrorStatus {
-    abstract val message: String
-
     data class JuiceNotFound(override val message: String = "주스가 존재하지 않습니다.") :
         JuiceErrorStatus()
 

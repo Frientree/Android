@@ -7,4 +7,6 @@ sealed class MainActivityEvent {
 
     data object ShowLeafSendDialog : MainActivityEvent()
     data object ShowLeafReceiveDialog : MainActivityEvent()
+
+    data class OnServerMaintaining(val message: String) : MainActivityEvent()
 }

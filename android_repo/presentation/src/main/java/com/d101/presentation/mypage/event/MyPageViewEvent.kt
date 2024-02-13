@@ -32,4 +32,6 @@ sealed class MyPageViewEvent {
     data object OnSignOut : MyPageViewEvent()
 
     data class OnShowToast(val message: String) : MyPageViewEvent()
+
+    data class OnServerMaintaining(val message: String) : MyPageViewEvent()
 }

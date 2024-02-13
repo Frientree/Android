@@ -38,11 +38,17 @@ class SplashActivity : AppCompatActivity() {
                     SplashViewEvent.AutoSignInFailure -> navigateToSignIn()
                     SplashViewEvent.AutoSignInSuccess -> navigateToMain()
                     is SplashViewEvent.CheckAppStatus -> checkAppStatus(event)
-                    SplashViewEvent.OnFailCheckAppStatus -> showToast("App Status check failed")
                     is SplashViewEvent.SetBackGroundMusic -> startMusicService(event.musicName)
+                    is SplashViewEvent.OnServerMaintaining -> blockApp(event.message)
+                    is SplashViewEvent.OnShowToast -> blockApp(event.message)
                 }
             }
         }
+    }
+
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(this)
     }
 
     private fun checkAppStatus(event: SplashViewEvent.CheckAppStatus) {

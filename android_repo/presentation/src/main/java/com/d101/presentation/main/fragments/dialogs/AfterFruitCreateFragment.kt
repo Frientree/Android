@@ -64,7 +64,7 @@ class AfterFruitCreateFragment : Fragment() {
 
                 binding.fruitDescriptionCardView.setCardBackgroundColor(
                     ContextCompat.getColor(
-                        requireContext(),
+                        requireActivity(),
                         fruitColorValue,
                     ),
                 )

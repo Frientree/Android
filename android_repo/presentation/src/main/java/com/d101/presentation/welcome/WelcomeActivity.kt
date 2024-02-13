@@ -27,4 +27,8 @@ class WelcomeActivity : AppCompatActivity() {
 
         return super.dispatchTouchEvent(ev)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -67,13 +68,20 @@ class LeafMessageBaseFragment : DialogFragment() {
                         dialog?.dismiss()
                         showToast(event.message)
                     }
+
+                    is LeafSendViewEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
     }
 
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
+    }
+
     private fun showToast(message: String) {
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
     }
 
     private fun navigateToTargetFragment(fragment: Fragment) {

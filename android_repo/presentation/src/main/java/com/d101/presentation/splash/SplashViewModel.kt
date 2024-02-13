@@ -3,6 +3,7 @@ package com.d101.presentation.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d101.domain.model.Result
+import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.usecase.appStatus.GetAppStatusUseCase
 import com.d101.domain.usecase.usermanagement.GetUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +43,19 @@ class SplashViewModel @Inject constructor(
                 ),
             )
 
-            is Result.Failure -> emitEvent(SplashViewEvent.OnFailCheckAppStatus)
+            is Result.Failure -> {
+                when (val errorStatus = result.errorStatus) {
+                    ErrorStatus.ServerMaintenance() -> emitEvent(
+                        SplashViewEvent.OnServerMaintaining(errorStatus.message),
+                    )
+
+                    ErrorStatus.NetworkError() -> emitEvent(
+                        SplashViewEvent.OnShowToast(errorStatus.message),
+                    )
+
+                    else -> emitEvent(SplashViewEvent.OnShowToast(errorStatus.message))
+                }
+            }
         }
     }
 

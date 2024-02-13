@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -41,13 +42,13 @@ class BeforeFruitCreateBaseFragment : DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         viewModel.onGoSelectInputTypeView()
 
-        val scale: Float = getApplicationContext().getResources().getDisplayMetrics().density
+        val scale: Float = getApplicationContext().resources.displayMetrics.density
         val distance: Float =
-            binding.fruitDialogCardView.getCameraDistance() * (scale + (scale / 3))
+            binding.fruitDialogCardView.cameraDistance * (scale + (scale / 3))
 
         viewLifecycleOwner.repeatOnStarted {
-            viewModel.eventFlow.collect {
-                when (it) {
+            viewModel.eventFlow.collect { event ->
+                when (event) {
                     is CreateFruitDialogViewEvent.SelectInputTypeViewEvent -> {
                         navigateToDestinationFragment(SelectInputTypeFragment())
                     }
@@ -69,7 +70,7 @@ class BeforeFruitCreateBaseFragment : DialogFragment() {
                     }
 
                     is CreateFruitDialogViewEvent.AppleEvent -> {
-                        if (it.isApple) {
+                        if (event.isApple) {
                             navigateToDestinationFragment(AppleFragment())
                         } else {
                             showToast("열매가 저장되었습니다!")
@@ -78,20 +79,27 @@ class BeforeFruitCreateBaseFragment : DialogFragment() {
                     }
 
                     is CreateFruitDialogViewEvent.ShowErrorToastEvent -> {
-                        showToast(it.message)
+                        showToast(event.message)
                         dialog?.dismiss()
                     }
 
                     is CreateFruitDialogViewEvent.CardFlipEvent -> {
-                        flipAnimation(it.color, flip, distance)
+                        flipAnimation(event.color, flip, distance)
                         flip = !flip
                     }
+
+                    is CreateFruitDialogViewEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
     }
+
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
+    }
     private fun flipAnimation(fruitColorValue: Int, flip: Boolean, distance: Float) {
-        binding.fruitDialogCardView.setCameraDistance(distance)
+        binding.fruitDialogCardView.cameraDistance = distance
         binding.fruitDialogCardView.animate().withLayer()
             .rotationY(90F)
             .setDuration(150)
@@ -99,7 +107,7 @@ class BeforeFruitCreateBaseFragment : DialogFragment() {
                 if (flip) {
                     binding.fruitDialogCardView.setCardBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(),
+                            requireActivity(),
                             fruitColorValue,
                         ),
                     )
@@ -108,7 +116,7 @@ class BeforeFruitCreateBaseFragment : DialogFragment() {
                     binding.fruitDialogCardView.setCardBackgroundColor(Color.WHITE)
                     viewModel.setAppleViewVisibility(flip)
                 }
-                binding.fruitDialogCardView.setRotationY(-90F)
+                binding.fruitDialogCardView.rotationY = -90F
                 binding.fruitDialogCardView.animate().withLayer()
                     .rotationY(0F)
                     .setDuration(250)
@@ -117,7 +125,7 @@ class BeforeFruitCreateBaseFragment : DialogFragment() {
     }
 
     private fun showToast(message: String) =
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
 
     private fun navigateToDestinationFragment(destination: Fragment) {
         childFragmentManager.beginTransaction()

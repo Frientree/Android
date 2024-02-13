@@ -69,7 +69,7 @@ class FruitCreationBySpeechFragment : Fragment() {
     private fun startRecording() {
         audioFile = createAudioFile()
         recorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            MediaRecorder(requireContext())
+            MediaRecorder(requireActivity())
         } else {
             MediaRecorder()
         }
@@ -110,7 +110,7 @@ class FruitCreationBySpeechFragment : Fragment() {
         val timeStamp: String =
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val audioFileName = "AUDIO_$timeStamp"
-        val cacheDir: File = requireContext().cacheDir
+        val cacheDir: File = requireActivity().cacheDir
         return File.createTempFile(audioFileName, ".m4a", cacheDir)
     }
 

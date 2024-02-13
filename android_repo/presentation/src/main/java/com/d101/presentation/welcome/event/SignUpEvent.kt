@@ -8,4 +8,6 @@ sealed class SignUpEvent {
     data object SignUpAttempt : SignUpEvent()
     data class SignUpFailure(val message: String) : SignUpEvent()
     data object SignUpSuccess : SignUpEvent()
+
+    data class OnServerMaintaining(val message: String) : SignUpEvent()
 }

@@ -25,15 +25,22 @@ class FruitRemoteDataSourceImpl @Inject constructor(
     }.fold(
         onSuccess = { Result.Success(it) },
         onFailure = { e ->
-            if (e is FrientreeHttpError) {
-                when (e.code) {
-                    503 -> Result.Failure(FruitErrorStatus.ApiError)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+            when (e) {
+                is FrientreeHttpError -> {
+                    when (e.code) {
+                        500 -> Result.Failure(FruitErrorStatus.ApiError())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
+                    }
                 }
-            } else if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
-            } else {
-                Result.Failure(ErrorStatus.UnknownError)
+
+                is IOException -> {
+                    Result.Failure(ErrorStatus.NetworkError())
+                }
+
+                else -> {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
     )
@@ -47,15 +54,22 @@ class FruitRemoteDataSourceImpl @Inject constructor(
     }.fold(
         onSuccess = { Result.Success(it) },
         onFailure = { e ->
-            if (e is FrientreeHttpError) {
-                when (e.code) {
-                    503 -> Result.Failure(FruitErrorStatus.ApiError)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+            when (e) {
+                is FrientreeHttpError -> {
+                    when (e.code) {
+                        500 -> Result.Failure(FruitErrorStatus.ApiError())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
+                    }
                 }
-            } else if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
-            } else {
-                Result.Failure(ErrorStatus.UnknownError)
+
+                is IOException -> {
+                    Result.Failure(ErrorStatus.NetworkError())
+                }
+
+                else -> {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
     )
@@ -65,16 +79,23 @@ class FruitRemoteDataSourceImpl @Inject constructor(
     }.fold(
         onSuccess = { Result.Success(it) },
         onFailure = { e ->
-            if (e is FrientreeHttpError) {
-                when (e.code) {
-                    404 -> Result.Failure(FruitErrorStatus.FruitNotFound)
-                    500 -> Result.Failure(FruitErrorStatus.UserModifyException)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+            when (e) {
+                is FrientreeHttpError -> {
+                    when (e.code) {
+                        404 -> Result.Failure(FruitErrorStatus.UserFruitNotFound())
+                        500 -> Result.Failure(FruitErrorStatus.UserModifyException())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
+                    }
                 }
-            } else if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
-            } else {
-                Result.Failure(ErrorStatus.UnknownError)
+
+                is IOException -> {
+                    Result.Failure(ErrorStatus.NetworkError())
+                }
+
+                else -> {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
     )
@@ -84,15 +105,19 @@ class FruitRemoteDataSourceImpl @Inject constructor(
     }.fold(
         onSuccess = { Result.Success(it) },
         onFailure = { e ->
-            if (e is FrientreeHttpError) {
-                when (e.code) {
-                    404 -> { Result.Failure(FruitErrorStatus.UserFruitNotFound) }
-                    else -> { Result.Failure(ErrorStatus.UnknownError) }
+            when (e) {
+                is FrientreeHttpError -> {
+                    when (e.code) {
+                        404 -> { Result.Failure(FruitErrorStatus.UserFruitNotFound()) }
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> {
+                            Result.Failure(ErrorStatus.UnknownError())
+                        }
+                    }
                 }
-            } else if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
-            } else {
-                Result.Failure(ErrorStatus.UnknownError)
+
+                is IOException -> { Result.Failure(ErrorStatus.NetworkError()) }
+                else -> { Result.Failure(ErrorStatus.UnknownError()) }
             }
         },
     )

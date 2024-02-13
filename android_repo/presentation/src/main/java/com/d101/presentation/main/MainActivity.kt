@@ -22,6 +22,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.DialogFragment
+import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -40,16 +41,13 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import utils.CustomToast
 import utils.repeatOnStarted
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var canLaunchMenu: Boolean = true
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+    private lateinit var binding: ActivityMainBinding
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var navController: NavController
     private lateinit var tokenReceiver: BroadcastReceiver
@@ -82,8 +80,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initNavigationView()
         initTokenReceiver()
 
@@ -97,6 +95,8 @@ class MainActivity : AppCompatActivity() {
                     is MainActivityEvent.ShowErrorEvent -> {
                         showToast(event.message)
                     }
+
+                    is MainActivityEvent.OnServerMaintaining -> blockApp(event.message)
                     is MainActivityEvent.ShowLeafSendDialog -> {
                         if (LeafDialogInterface.dialogShowState.not()) {
                             dialog = LeafMessageBaseFragment()
@@ -280,6 +280,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(this)
     }
 
     private fun controlLeafButton() {

@@ -13,7 +13,7 @@ interface LeafService {
     @POST("/leaf")
     suspend fun sendLeaf(
         @Body leafCreationRequest: LeafCreationRequest,
-    ): ApiResult<ApiResponse<Boolean>>
+    ): ApiResult<ApiResponse<Int>>
 
     @POST("/leaf/{leafId}")
     suspend fun reportLeaf(

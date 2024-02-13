@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -68,15 +69,21 @@ class SignInFragment : Fragment() {
                     is SignInViewEvent.SignInFailed -> showToast(event.message)
                     SignInViewEvent.SignInSuccess -> navigateToMainScreen()
                     SignInViewEvent.SignUpClicked -> navigateToTermsAgree()
+                    is SignInViewEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
     }
 
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
+    }
+
     private fun checkNaverId() {
         viewLifecycleOwner.lifecycleScope.launch {
             when (
-                val result = authenticateWithNaver(requireContext())
+                val result = authenticateWithNaver(requireActivity())
             ) {
                 is Result.Success -> {
                     viewModel.onNaverSignInCompleted(result)
@@ -135,7 +142,7 @@ class SignInFragment : Fragment() {
         findNavController().navigate(R.id.action_signInFragment_to_findPasswordFragment)
 
     private fun showToast(message: String) =
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
 
     override fun onDestroyView() {
         super.onDestroyView()

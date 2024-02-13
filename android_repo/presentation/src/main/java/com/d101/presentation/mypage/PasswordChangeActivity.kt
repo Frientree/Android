@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.TextWatcher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.d101.presentation.databinding.ActivityPasswordChangeBinding
 import com.d101.presentation.mypage.event.PasswordChangeEvent
 import com.d101.presentation.mypage.viewmodel.PasswordChangeViewModel
@@ -76,9 +77,15 @@ class PasswordChangeActivity : AppCompatActivity() {
                     PasswordChangeEvent.PasswordChangeAttempt -> viewModel.changePassword()
                     PasswordChangeEvent.LogOut -> navigateSignIn()
                     is PasswordChangeEvent.ShowToast -> showToast(event.message)
+                    is PasswordChangeEvent.OnServerMaintenance -> blockApp(event.message)
                 }
             }
         }
+    }
+
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(this)
     }
 
     private fun navigateSignIn() {

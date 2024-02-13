@@ -101,7 +101,7 @@ class LeafReceiveFragment : Fragment() {
             binding.leafReceiveProgressBar
 
         shakeSensor = ShakeSensorModule(
-            requireContext(),
+            requireActivity(),
             object : ShakeEventListener {
                 override fun onShakeSensed() {
                     if (progressBar.progress < progressBar.max) {

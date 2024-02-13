@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -67,16 +68,23 @@ class SignUpFragment : Fragment() {
                         showToast("회원 가입 성공")
                         navigateToSignIn()
                     }
+
+                    is SignUpEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
+    }
+
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
     }
 
     private fun navigateToSignIn() {
         findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
     }
 
-    private fun showToast(message: String) = CustomToast.createAndShow(requireContext(), message)
+    private fun showToast(message: String) = CustomToast.createAndShow(requireActivity(), message)
 
     override fun onDestroyView() {
         super.onDestroyView()

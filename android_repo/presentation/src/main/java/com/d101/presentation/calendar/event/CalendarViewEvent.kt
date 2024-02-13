@@ -26,4 +26,6 @@ sealed class CalendarViewEvent {
     data class OnShowToast(val message: String) : CalendarViewEvent()
 
     data class OnShowJuiceDetailDialog(val juice: Juice) : CalendarViewEvent()
+
+    data class OnServerMaintaining(val message: String) : CalendarViewEvent()
 }

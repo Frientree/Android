@@ -5,4 +5,6 @@ sealed class FindPasswordEvent {
     data object OnFindPasswordAttempt : FindPasswordEvent()
     data object OnReceivedTemporaryPassword : FindPasswordEvent()
     data class OnShowToast(val message: String) : FindPasswordEvent()
+
+    data class OnServerMaintaining(val message: String) : FindPasswordEvent()
 }

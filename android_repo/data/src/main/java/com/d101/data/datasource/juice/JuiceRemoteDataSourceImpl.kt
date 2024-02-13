@@ -26,13 +26,14 @@ class JuiceRemoteDataSourceImpl @Inject constructor(private val juiceService: Ju
                     401 -> Result.Failure(JuiceErrorStatus.UnAuthorized())
                     409 -> Result.Failure(JuiceErrorStatus.DateError())
                     422 -> Result.Failure(JuiceErrorStatus.NotEnoughFruits())
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },
@@ -47,13 +48,14 @@ class JuiceRemoteDataSourceImpl @Inject constructor(private val juiceService: Ju
                 if (e is FrientreeHttpError) {
                     when (e.code) {
                         401 -> Result.Failure(JuiceErrorStatus.UnAuthorized())
-                        else -> Result.Failure(ErrorStatus.UnknownError)
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
                     }
                 } else {
                     if (e is IOException) {
-                        Result.Failure(ErrorStatus.NetworkError)
+                        Result.Failure(ErrorStatus.NetworkError())
                     } else {
-                        Result.Failure(ErrorStatus.UnknownError)
+                        Result.Failure(ErrorStatus.UnknownError())
                     }
                 }
             },

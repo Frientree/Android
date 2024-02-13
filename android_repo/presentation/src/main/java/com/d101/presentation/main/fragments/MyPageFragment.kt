@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -106,7 +107,7 @@ class MyPageFragment : Fragment() {
                         viewModel.onBackgroundMusicChangedOccurred(event.musicName)
 
                     is MyPageViewEvent.OnTapChangePasswordButton -> {
-                        val intent = Intent(requireContext(), PasswordChangeActivity::class.java)
+                        val intent = Intent(requireActivity(), PasswordChangeActivity::class.java)
                         startActivity(intent)
                     }
 
@@ -124,7 +125,7 @@ class MyPageFragment : Fragment() {
                     MyPageViewEvent.OnLogOut -> {
                         requireActivity().startService(
                             Intent(
-                                requireContext(),
+                                requireActivity(),
                                 BackgroundMusicService::class.java,
                             ).apply {
                                 action = STOP
@@ -137,9 +138,16 @@ class MyPageFragment : Fragment() {
                     MyPageViewEvent.OnSignOut -> {
                         viewModel.onTapLogOutButtonOccurred()
                     }
+
+                    is MyPageViewEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }
+    }
+
+    private fun blockApp(message: String) {
+        showToast(message)
+        ActivityCompat.finishAffinity(requireActivity())
     }
 
     private fun showTerms() {
@@ -175,18 +183,18 @@ class MyPageFragment : Fragment() {
     }
 
     private fun showToast(message: String) {
-        CustomToast.createAndShow(requireContext(), message)
+        CustomToast.createAndShow(requireActivity(), message)
     }
 
     private fun navigateToWelcomeActivity() {
-        val intent = Intent(requireContext(), WelcomeActivity::class.java)
+        val intent = Intent(requireActivity(), WelcomeActivity::class.java)
         startActivity(intent)
         requireActivity().finish()
     }
 
     private fun subScribeViewState() {
         viewLifecycleOwner.repeatOnStarted {
-            inputMethodManager = requireContext().getSystemService(
+            inputMethodManager = requireActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE,
             ) as InputMethodManager
             viewModel.uiState.collect { state ->
@@ -247,7 +255,7 @@ class MyPageFragment : Fragment() {
                 binding.backgroundMusicOnOffButtonImageView.setImageResource(R.drawable.sound_on)
                 requireActivity().startService(
                     Intent(
-                        requireContext(),
+                        requireActivity(),
                         BackgroundMusicService::class.java,
                     ).apply {
                         action = PLAY
@@ -260,7 +268,7 @@ class MyPageFragment : Fragment() {
                 binding.backgroundMusicOnOffButtonImageView.setImageResource(R.drawable.sound_off)
                 requireActivity().startService(
                     Intent(
-                        requireContext(),
+                        requireActivity(),
                         BackgroundMusicService::class.java,
                     ).apply {
                         action = STOP
@@ -302,7 +310,7 @@ class MyPageFragment : Fragment() {
     }
 
     private fun createFullScreenDialog(): Dialog {
-        return Dialog(requireContext(), R.style.Base_FTR_FullScreenDialog).apply {
+        return Dialog(requireActivity(), R.style.Base_FTR_FullScreenDialog).apply {
             window?.setBackgroundDrawableResource(R.drawable.btn_white_green_36dp)
         }
     }
@@ -318,7 +326,7 @@ class MyPageFragment : Fragment() {
             value = musicList.indexOf(currentMusic)
             setOnValueChangedListener { _, _, selectedNow ->
                 requireActivity().startService(
-                    Intent(requireContext(), BackgroundMusicService::class.java).apply {
+                    Intent(requireActivity(), BackgroundMusicService::class.java).apply {
                         action = PLAY
                         putExtra(MUSIC_NAME, musicList[selectedNow])
                     },

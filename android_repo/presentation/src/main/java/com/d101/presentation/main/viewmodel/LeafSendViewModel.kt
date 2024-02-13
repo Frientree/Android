@@ -11,6 +11,7 @@ import com.d101.domain.usecase.usermanagement.ManageUserStatusUseCase
 import com.d101.presentation.main.event.LeafSendViewEvent
 import com.d101.presentation.main.state.LeafSendViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +31,7 @@ class LeafSendViewModel @Inject constructor(
     val inputText = MutableStateFlow("")
     var checkedChipId: Int = 0
     private val _uiState = MutableStateFlow<LeafSendViewState>(
-        LeafSendViewState.ZeroViewLeafSendViewState(),
+        LeafSendViewState.NoSendLeafSendViewState(),
     )
     val uiState: StateFlow<LeafSendViewState> = _uiState.asStateFlow()
 
@@ -40,12 +41,11 @@ class LeafSendViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             manageUserStatusUseCase.getUserStatus().collect {
-                setLeafTitle()
-                if (it.userLeafStatus.not()) {
+                setLeafViewState(it.userLeafStatus)
+                if (it.userLeafStatus == 0) {
                     _uiState.update { currentState ->
                         LeafSendViewState.AlreadySendState(
-                            currentState.leafSendTitle,
-                            currentState.leafSendTitle,
+                            leafSendTitle = currentState.leafSendTitle,
                         )
                     }
                 }
@@ -54,37 +54,57 @@ class LeafSendViewModel @Inject constructor(
         emitEvent(LeafSendViewEvent.FirstPage)
     }
 
-    private fun setLeafTitle() {
-        viewModelScope.launch {
-            when (val result = sendLeafUseCase.getMyLeafViews()) {
-                is Result.Success -> {
-                    when (result.data) {
-                        LeafViews.ZERO_VIEW.count -> {
-                            _uiState.update { LeafSendViewState.ZeroViewLeafSendViewState() }
+    private suspend fun setLeafViewState(leftLeavesCount: Int) {
+        when (val result = sendLeafUseCase.getMyLeafViews()) {
+            is Result.Success -> {
+                when (result.data) {
+                    LeafViews.ZERO_VIEW.count -> {
+                        _uiState.update {
+                            LeafSendViewState.ZeroViewLeafSendViewState(
+                                leftLeavesCount = leftLeavesCount,
+                            )
                         }
+                    }
 
-                        LeafViews.NO_SEND.count -> {
-                            _uiState.update { LeafSendViewState.NoSendLeafSendViewState() }
+                    LeafViews.NO_SEND.count -> {
+                        _uiState.update {
+                            LeafSendViewState.NoSendLeafSendViewState(
+                                leftLeavesCount = leftLeavesCount,
+                            )
                         }
+                    }
 
-                        else -> {
-                            _uiState.update {
-                                LeafSendViewState.SomeViewLeafSateSendView(
-                                    "당신의 이파리가 일주일간 ${result.data}명에게 힘이 되었어요!",
-                                )
-                            }
+                    else -> {
+                        _uiState.update {
+                            LeafSendViewState.SomeViewLeafSateSendView(
+                                "당신의 이파리가 일주일간 ${result.data}명에게 힘이 되었어요!",
+                                leftLeavesCount = leftLeavesCount,
+                            )
                         }
                     }
                 }
+            }
 
-                is Result.Failure -> {
-                    when (result.errorStatus) {
-                        LeafErrorStatus.NoSendLeaf -> {
-                            _uiState.update { LeafSendViewState.NoSendLeafSendViewState() }
+            is Result.Failure -> {
+                when (val errorStatus = result.errorStatus) {
+                    LeafErrorStatus.NoSendLeaf() -> {
+                        _uiState.update {
+                            LeafSendViewState.NoSendLeafSendViewState(
+                                leftLeavesCount = leftLeavesCount,
+                            )
                         }
+                    }
 
-                        else -> {
-                        }
+                    ErrorStatus.ServerMaintenance() -> emitEvent(
+                        LeafSendViewEvent.OnServerMaintaining(errorStatus.message),
+                    )
+
+                    is ErrorStatus.NetworkError -> emitEvent(
+                        LeafSendViewEvent.ShowErrorToast(errorStatus.message),
+                    )
+
+                    else -> {
+                        emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))
                     }
                 }
             }
@@ -96,6 +116,7 @@ class LeafSendViewModel @Inject constructor(
             _leafEventFlow.emit(event)
         }
     }
+
     fun onSendLeaf() {
         emitEvent(LeafSendViewEvent.SendLeaf)
     }
@@ -103,7 +124,7 @@ class LeafSendViewModel @Inject constructor(
     private val _blowing = MutableEventFlow<Int>(0)
     val blowing = _blowing.asEventFlow()
     fun onBlowing() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             for (i in 1..30) {
                 delay(50)
                 _blowing.emit(1)
@@ -118,11 +139,19 @@ class LeafSendViewModel @Inject constructor(
                     manageUserStatusUseCase.updateUserStatus()
                     emitEvent(LeafSendViewEvent.ReadyToSend)
                 }
+
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        ErrorStatus.BadRequest -> {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            emitEvent(LeafSendViewEvent.OnServerMaintaining(errorStatus.message))
                         }
+
+                        is ErrorStatus.NetworkError -> emitEvent(
+                            LeafSendViewEvent.ShowErrorToast(errorStatus.message),
+                        )
+
                         else -> {
+                            emitEvent(LeafSendViewEvent.ShowErrorToast(errorStatus.message))
                         }
                     }
                 }

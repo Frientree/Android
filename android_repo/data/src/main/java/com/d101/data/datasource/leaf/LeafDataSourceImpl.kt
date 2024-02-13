@@ -14,7 +14,7 @@ class LeafDataSourceImpl @Inject constructor(
     private val leafService: LeafService,
 ) : LeafDataSource {
 
-    override suspend fun sendLeaf(leafCategory: Int, leafContent: String): Result<Boolean> =
+    override suspend fun sendLeaf(leafCategory: Int, leafContent: String): Result<Int> =
         runCatching {
             leafService.sendLeaf(LeafCreationRequest(leafCategory, leafContent)).getOrThrow().data
         }.fold(
@@ -24,14 +24,16 @@ class LeafDataSourceImpl @Inject constructor(
             onFailure = { e ->
                 if (e is FrientreeHttpError) {
                     when (e.code) {
-                        404 -> Result.Failure(LeafErrorStatus.NoSendLeaf)
-                        else -> Result.Failure(ErrorStatus.UnknownError)
+                        400 -> Result.Failure(LeafErrorStatus.LeafCreationFailed())
+                        404 -> Result.Failure(LeafErrorStatus.NoSendLeaf())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> Result.Failure(ErrorStatus.UnknownError())
                     }
                 } else {
                     if (e is IOException) {
-                        Result.Failure(ErrorStatus.NetworkError)
+                        Result.Failure(ErrorStatus.NetworkError())
                     } else {
-                        Result.Failure(ErrorStatus.UnknownError)
+                        Result.Failure(ErrorStatus.UnknownError())
                     }
                 }
             },
@@ -44,16 +46,25 @@ class LeafDataSourceImpl @Inject constructor(
             Result.Success(it)
         },
         onFailure = { e ->
-            if (e is FrientreeHttpError) {
-                when (e.code) {
-                    404 -> Result.Failure(LeafErrorStatus.LeafNotFound)
-                    500 -> Result.Failure(LeafErrorStatus.ServerError)
-                    else -> { Result.Failure(ErrorStatus.UnknownError) }
+            when (e) {
+                is FrientreeHttpError -> {
+                    when (e.code) {
+                        404 -> Result.Failure(LeafErrorStatus.LeafNotFound())
+                        500 -> Result.Failure(LeafErrorStatus.ServerError())
+                        503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                        else -> {
+                            Result.Failure(ErrorStatus.UnknownError())
+                        }
+                    }
                 }
-            } else if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
-            } else {
-                Result.Failure(ErrorStatus.UnknownError)
+
+                is IOException -> {
+                    Result.Failure(ErrorStatus.NetworkError())
+                }
+
+                else -> {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
 
@@ -66,11 +77,17 @@ class LeafDataSourceImpl @Inject constructor(
             Result.Success(it)
         },
         onFailure = { e ->
-
-            if (e is IOException) {
-                Result.Failure(ErrorStatus.NetworkError)
+            if (e is FrientreeHttpError) {
+                when (e.code) {
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
+                }
             } else {
-                Result.Failure(ErrorStatus.UnknownError)
+                if (e is IOException) {
+                    Result.Failure(ErrorStatus.NetworkError())
+                } else {
+                    Result.Failure(ErrorStatus.UnknownError())
+                }
             }
         },
 
@@ -85,14 +102,15 @@ class LeafDataSourceImpl @Inject constructor(
         onFailure = { e ->
             if (e is FrientreeHttpError) {
                 when (e.code) {
-                    404 -> Result.Failure(LeafErrorStatus.NoSendLeaf)
-                    else -> Result.Failure(ErrorStatus.UnknownError)
+                    404 -> Result.Failure(LeafErrorStatus.NoSendLeaf())
+                    503 -> Result.Failure(ErrorStatus.ServerMaintenance())
+                    else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
                 if (e is IOException) {
-                    Result.Failure(ErrorStatus.NetworkError)
+                    Result.Failure(ErrorStatus.NetworkError())
                 } else {
-                    Result.Failure(ErrorStatus.UnknownError)
+                    Result.Failure(ErrorStatus.UnknownError())
                 }
             }
         },

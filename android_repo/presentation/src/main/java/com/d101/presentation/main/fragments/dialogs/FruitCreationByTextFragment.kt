@@ -52,7 +52,7 @@ class FruitCreationByTextFragment : Fragment() {
             }
     }
 
-    private fun showToast(message: String) = CustomToast.createAndShow(requireContext(), message)
+    private fun showToast(message: String) = CustomToast.createAndShow(requireActivity(), message)
 
     override fun onDestroyView() {
         super.onDestroyView()

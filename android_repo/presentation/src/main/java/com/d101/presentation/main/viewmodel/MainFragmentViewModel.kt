@@ -72,7 +72,7 @@ class MainFragmentViewModel @Inject constructor(
                     }
 
                     is Result.Failure -> {
-                        when (result.errorStatus) {
+                        when (val errorStatus = result.errorStatus) {
                             is TreeErrorStatus.MessageNotFound -> emitEvent(
                                 TreeFragmentEvent.ShowErrorEvent(
                                     "나무 메세지를 가져올 수 없습니다.",
@@ -81,12 +81,16 @@ class MainFragmentViewModel @Inject constructor(
 
                             is ErrorStatus.NetworkError -> emitEvent(
                                 TreeFragmentEvent.ShowErrorEvent(
-                                    "네트워크 에러입니다.",
+                                    errorStatus.message,
                                 ),
                             )
 
+                            ErrorStatus.ServerMaintenance() -> emitEvent(
+                                TreeFragmentEvent.OnServerMaintaining(errorStatus.message),
+                            )
+
                             else -> {
-                                emitEvent(TreeFragmentEvent.ShowErrorEvent("알 수 없는 에러가 발생했습니다."))
+                                emitEvent(TreeFragmentEvent.ShowErrorEvent(errorStatus.message))
                             }
                         }
                     }
@@ -105,13 +109,23 @@ class MainFragmentViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> emitEvent(
+                            TreeFragmentEvent.OnServerMaintaining(errorStatus.message),
+                        )
+
                         is FruitErrorStatus.LocalGetError -> {
-                            emitEvent(TreeFragmentEvent.ShowErrorEvent("열매를 불러오는 데 실패했습니다."))
+                            emitEvent(TreeFragmentEvent.ShowErrorEvent(errorStatus.message))
                         }
 
+                        is ErrorStatus.NetworkError -> emitEvent(
+                            TreeFragmentEvent.ShowErrorEvent(
+                                errorStatus.message,
+                            ),
+                        )
+
                         else -> {
-                            emitEvent(TreeFragmentEvent.ShowErrorEvent("예기치 못한 오류가 발생했습니다."))
+                            emitEvent(TreeFragmentEvent.ShowErrorEvent(errorStatus.message))
                         }
                     }
                 }

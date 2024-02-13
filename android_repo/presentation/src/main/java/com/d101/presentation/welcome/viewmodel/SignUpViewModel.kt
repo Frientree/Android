@@ -159,7 +159,7 @@ class SignUpViewModel @Inject constructor(
 
                 is Result.Failure -> {
                     when (result.errorStatus) {
-                        AuthCodeCreationErrorStatus.EmailDuplicate -> {
+                        AuthCodeCreationErrorStatus.EmailDuplicate() -> {
                             _uiState.update { signUpUiModel ->
                                 signUpUiModel.copy(
                                     idInputState = signUpUiModel.idInputState.copy(
@@ -181,6 +181,12 @@ class SignUpViewModel @Inject constructor(
                                 )
                             }
                         }
+
+                        ErrorStatus.ServerMaintenance() -> emitEvent(
+                            SignUpEvent.OnServerMaintaining(
+                                result.errorStatus.message,
+                            ),
+                        )
 
                         else -> SignUpEvent.SignUpFailure("네트워크 연결 실패")
                     }
@@ -209,8 +215,8 @@ class SignUpViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        ErrorStatus.BadRequest -> {
+                    when (val errorStatus = result.errorStatus) {
+                        ErrorStatus.BadRequest() -> {
                             _uiState.update { signInModel ->
                                 signInModel.copy(
                                     authCodeInputState = signInModel.authCodeInputState.copy(
@@ -223,8 +229,14 @@ class SignUpViewModel @Inject constructor(
                             }
                         }
 
-                        ErrorStatus.NetworkError -> onSignUpFailure("네트워크 에러")
-                        else -> onSignUpFailure("알 수 없는 에러")
+                        ErrorStatus.ServerMaintenance() -> emitEvent(
+                            SignUpEvent.OnServerMaintaining(
+                                result.errorStatus.message,
+                            ),
+                        )
+
+                        ErrorStatus.NetworkError() -> onSignUpFailure(errorStatus.message)
+                        else -> onSignUpFailure(errorStatus.message)
                     }
                 }
             }
@@ -329,10 +341,16 @@ class SignUpViewModel @Inject constructor(
             viewModelScope.launch {
                 when (val result = signUpUseCase(email.value, password.value, nickname.value)) {
                     is Result.Success -> onSignUpSuccess()
-                    is Result.Failure -> when (result.errorStatus) {
-                        ErrorStatus.BadRequest -> onSignUpFailure("입력 내용을 다시 확인해 주세요")
-                        ErrorStatus.NetworkError -> onSignUpFailure("네트워크 에러")
-                        else -> onSignUpFailure("알 수 없는 에러")
+                    is Result.Failure -> when (val errorStatus = result.errorStatus) {
+                        ErrorStatus.BadRequest() -> onSignUpFailure("입력 내용을 다시 확인해 주세요")
+                        ErrorStatus.NetworkError() -> onSignUpFailure(errorStatus.message)
+                        ErrorStatus.ServerMaintenance() -> emitEvent(
+                            SignUpEvent.OnServerMaintaining(
+                                errorStatus.message,
+                            ),
+                        )
+
+                        else -> onSignUpFailure(errorStatus.message)
                     }
                 }
             }

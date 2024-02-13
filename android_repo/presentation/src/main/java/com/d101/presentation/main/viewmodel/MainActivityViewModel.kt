@@ -72,23 +72,22 @@ class MainActivityViewModel @Inject constructor(
             when (val result = manageUserStatusUseCase.updateUserStatus()) {
                 is Result.Success -> {}
                 is Result.Failure -> {
-                    when (result.errorStatus) {
-                        is GetUserStatusErrorStatus.Fail,
-                        -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("사용자 정보를 업데이트 하는 데 실패했습니다."))
+                    when (val errorStatus = result.errorStatus) {
+                        is ErrorStatus.ServerMaintenance -> {
+                            emitEvent(MainActivityEvent.OnServerMaintaining(errorStatus.message))
                         }
 
-                        is GetUserStatusErrorStatus.UserNotFound,
+                        is GetUserStatusErrorStatus.Fail,
                         -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("사용자 정보를 찾을 수 없습니다."))
+                            emitEvent(MainActivityEvent.ShowErrorEvent(errorStatus.message))
                         }
 
                         is ErrorStatus.NetworkError -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("네트워크 에러가 발생했습니다."))
+                            emitEvent(MainActivityEvent.ShowErrorEvent(errorStatus.message))
                         }
 
                         else -> {
-                            emitEvent(MainActivityEvent.ShowErrorEvent("알 수 없는 에러가 발생했습니다."))
+                            emitEvent(MainActivityEvent.ShowErrorEvent(errorStatus.message))
                         }
                     }
                 }
