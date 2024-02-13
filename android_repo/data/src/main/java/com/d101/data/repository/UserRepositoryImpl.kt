@@ -51,6 +51,7 @@ class UserRepositoryImpl @Inject constructor(
                                 .setUserEmail(data.userEmail)
                                 .setUserNickname(data.userNickname)
                                 .setIsNotificationEnabled(data.userNotification)
+                                .setNotificationCheckNeverShow(false)
                                 .setIsBackgroundMusicEnabled(true)
                                 .setBackgroundMusicName("canopus_50mang")
                                 .build()
@@ -239,4 +240,16 @@ class UserRepositoryImpl @Inject constructor(
 
             is Result.Failure -> Result.Failure(result.errorStatus)
         }
+
+    override suspend fun setNotificationNeverAsk(status: Boolean): Result<Unit> =
+        runCatching {
+            userDataStore.updateData {
+                it.toBuilder()
+                    .setNotificationCheckNeverShow(status)
+                    .build()
+            }
+        }.fold(
+            onSuccess = { Result.Success(Unit) },
+            onFailure = { Result.Failure(ErrorStatus.UnknownError()) },
+        )
 }

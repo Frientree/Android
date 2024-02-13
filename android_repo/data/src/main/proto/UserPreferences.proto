@@ -11,4 +11,5 @@ message UserPreferences {
     bool isNotificationEnabled = 4;
     string backgroundMusicName = 5;
     bool isBackgroundMusicEnabled = 6;
+    bool notificationCheckNeverShow = 7;
 }

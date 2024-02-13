@@ -1,5 +1,6 @@
 package com.d101.presentation.main
 
+import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.NotificationChannel
@@ -10,14 +11,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.OvershootInterpolator
 import android.widget.Button
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -34,6 +41,7 @@ import com.d101.presentation.main.event.MainActivityEvent
 import com.d101.presentation.main.fragments.dialogs.LeafDialogInterface
 import com.d101.presentation.main.fragments.dialogs.LeafMessageBaseFragment
 import com.d101.presentation.main.fragments.dialogs.LeafReceiveBaseFragment
+import com.d101.presentation.main.fragments.dialogs.PermissionCheckBottomSheetDialog
 import com.d101.presentation.main.state.MainActivityViewState
 import com.d101.presentation.main.viewmodel.MainActivityViewModel
 import com.d101.presentation.music.BackgroundMusicService
@@ -41,6 +49,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import utils.CustomToast
 import utils.repeatOnStarted
 
@@ -51,6 +60,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var navController: NavController
     private lateinit var tokenReceiver: BroadcastReceiver
+
+    private var permissionCheckBottomSheetDialog: PermissionCheckBottomSheetDialog? = null
 
     private var lastBackPressedTime = 0L
     private lateinit var dialog: DialogFragment
@@ -94,6 +105,10 @@ class MainActivity : AppCompatActivity() {
                 when (event) {
                     is MainActivityEvent.ShowErrorEvent -> {
                         showToast(event.message)
+                    }
+
+                    MainActivityEvent.ShowAlarmDialogEvent -> {
+                        checkNotificationPermission()
                     }
 
                     is MainActivityEvent.OnServerMaintaining -> blockApp(event.message)
@@ -157,6 +172,53 @@ class MainActivity : AppCompatActivity() {
                 binding.writeLeafButton.visibility = if (it) View.GONE else View.VISIBLE
                 binding.readLeafButton.visibility = if (it) View.GONE else View.VISIBLE
                 if (it) binding.blur.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun checkNotificationPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS,
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionCheckBottomSheetDialog = PermissionCheckBottomSheetDialog(
+                cancelDialog = { neverAskAgain ->
+                    Log.d("확인", "permissionConfirm: 거부 버튼 클릭")
+                    viewModel.setUserAlarmStatus(false)
+                    viewModel.setNotificationNeverAsk(neverAskAgain)
+                    permissionCheckBottomSheetDialog?.dismiss()
+                },
+                permissionConfirm = {
+                    Log.d("확인", "permissionConfirm: 버튼클릭")
+                    requestNotificationPermission()
+                },
+            ).apply { show(supportFragmentManager, "permissionCheckBottomSheetDialog") }
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions(),
+    ) { permissions ->
+        permissions.entries.forEach { (permission, granted) ->
+            if (granted) {
+                permissionCheckBottomSheetDialog?.dismiss()
+                viewModel.setUserAlarmStatus(true)
+            } else {
+                if (shouldShowRequestPermissionRationale(permission)) {
+                    showToast("권한을 허용해야 알림 기능을 이용할 수 있습니다.")
+                } else {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", packageName, null)
+                    }
+                    startActivity(intent)
+                }
             }
         }
     }
