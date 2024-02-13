@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.d101.presentation.main.viewmodel.LeafReceiveViewModel" />
+            type="com.d101.presentation.leaf.LeafReceiveViewModel" />
     </data>
 
     <FrameLayout

@@ -1,4 +1,4 @@
-package com.d101.presentation.main.viewmodel
+package com.d101.presentation.leaf
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,6 @@ import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.model.status.LeafErrorStatus
 import com.d101.domain.usecase.main.SendMyLeafUseCase
 import com.d101.domain.usecase.usermanagement.ManageUserStatusUseCase
-import com.d101.presentation.main.event.LeafSendViewEvent
 import com.d101.presentation.main.state.LeafSendViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

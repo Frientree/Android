@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.fruit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.d101.presentation.R
-import com.d101.presentation.main.viewmodel.FruitCreateViewModel
 import utils.repeatOnStarted
 
 const val INPUT_TYPE = "INPUT_TYPE"
@@ -16,7 +15,7 @@ class FruitCreationLoadingFragment : Fragment() {
 
     private var inputType: String = ""
 
-    private val viewModel: FruitCreateViewModel by viewModels(
+    private val viewModel: FruitViewModel by viewModels(
         { requireParentFragment() },
     )
 

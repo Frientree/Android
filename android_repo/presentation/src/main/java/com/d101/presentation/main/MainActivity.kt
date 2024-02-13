@@ -36,10 +36,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.d101.presentation.R
 import com.d101.presentation.databinding.ActivityMainBinding
+import com.d101.presentation.leaf.LeafDialogInterface
+import com.d101.presentation.leaf.LeafMessageBaseFragment
+import com.d101.presentation.leaf.LeafReceiveBaseFragment
 import com.d101.presentation.main.event.MainActivityEvent
-import com.d101.presentation.main.fragments.dialogs.LeafDialogInterface
-import com.d101.presentation.main.fragments.dialogs.LeafMessageBaseFragment
-import com.d101.presentation.main.fragments.dialogs.LeafReceiveBaseFragment
 import com.d101.presentation.main.fragments.dialogs.PermissionCheckBottomSheetDialog
 import com.d101.presentation.main.state.MainActivityViewState
 import com.d101.presentation.main.viewmodel.MainActivityViewModel

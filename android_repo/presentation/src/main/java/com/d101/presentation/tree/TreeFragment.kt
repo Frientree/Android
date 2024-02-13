@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments
+package com.d101.presentation.tree
 
 import android.animation.ObjectAnimator
 import android.app.Dialog
@@ -19,16 +19,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.d101.presentation.R
 import com.d101.presentation.databinding.DialogTutorialBinding
-import com.d101.presentation.databinding.FragmentMainBinding
-import com.d101.presentation.main.event.TreeFragmentEvent
-import com.d101.presentation.main.fragments.dialogs.BeforeFruitCreateBaseFragment
-import com.d101.presentation.main.fragments.dialogs.EmotionDumpingFragment
-import com.d101.presentation.main.fragments.dialogs.FruitDialogInterface
-import com.d101.presentation.main.fragments.dialogs.TodayFruitFragment
+import com.d101.presentation.databinding.FragmentTreeBinding
+import com.d101.presentation.fruit.BeforeFruitCreateBaseFragment
+import com.d101.presentation.fruit.EmotionDumpingFragment
+import com.d101.presentation.fruit.FruitDialogInterface
+import com.d101.presentation.fruit.TodayFruitFragment
 import com.d101.presentation.main.state.TreeFragmentViewState
 import com.d101.presentation.main.state.TreeMessageState
 import com.d101.presentation.main.tutorial.TutorialAdapter
-import com.d101.presentation.main.viewmodel.MainFragmentViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -40,9 +38,9 @@ import utils.CustomToast
 import utils.repeatOnStarted
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
-    private val viewModel: MainFragmentViewModel by viewModels()
-    private var _binding: FragmentMainBinding? = null
+class TreeFragment : Fragment() {
+    private val viewModel: TreeViewModel by viewModels()
+    private var _binding: FragmentTreeBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var dialog: DialogFragment
@@ -54,7 +52,7 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tree, container, false)
 
         return binding.root
     }
@@ -148,13 +146,13 @@ class MainFragment : Fragment() {
         viewLifecycleOwner.repeatOnStarted {
             viewModel.eventFlow.collect { event ->
                 when (event) {
-                    is TreeFragmentEvent.MakeFruitEvent -> {
+                    is TreeViewEvent.MakeFruitEvent -> {
                         dialog = BeforeFruitCreateBaseFragment()
                         FruitDialogInterface.dialog = dialog
                         dialog.show(childFragmentManager, "")
                     }
 
-                    is TreeFragmentEvent.CheckTodayFruitEvent -> {
+                    is TreeViewEvent.CheckTodayFruitEvent -> {
                         dialog = TodayFruitFragment()
                         dialog.dialog?.window?.setBackgroundDrawable(
                             ColorDrawable(Color.TRANSPARENT),
@@ -162,17 +160,17 @@ class MainFragment : Fragment() {
                         dialog.show(childFragmentManager, "")
                     }
 
-                    is TreeFragmentEvent.ShowErrorEvent -> {
+                    is TreeViewEvent.ShowErrorEvent -> {
                         showToast(event.message)
                     }
 
-                    is TreeFragmentEvent.ChangeTreeMessage -> {
+                    is TreeViewEvent.ChangeTreeMessage -> {
                         typingAnimation(event.message)
                     }
 
-                    TreeFragmentEvent.ShowTutorialEvent -> showTutorialDialog()
+                    TreeViewEvent.ShowTutorialEvent -> showTutorialDialog()
 
-                    is TreeFragmentEvent.EmotionTrashEvent -> {
+                    is TreeViewEvent.EmotionTrashEvent -> {
                         dialog = EmotionDumpingFragment()
                         dialog.dialog?.window?.setBackgroundDrawable(
                             ColorDrawable(Color.TRANSPARENT),
@@ -180,8 +178,8 @@ class MainFragment : Fragment() {
                         dialog.show(childFragmentManager, "")
                     }
 
-                    is TreeFragmentEvent.OnServerMaintaining -> blockApp(event.message)
-                    is TreeFragmentEvent.CompleteCreationEvent -> {
+                    is TreeViewEvent.OnServerMaintaining -> blockApp(event.message)
+                    is TreeViewEvent.CompleteCreationEvent -> {
                         binding.createFruitButton.performClick()
                     }
                 }
@@ -240,6 +238,7 @@ class MainFragment : Fragment() {
             )
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         messageTypingJob?.cancel()

@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.fruit
 
 import android.content.Intent
 import android.media.MediaRecorder
@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentFruitCreationBySpeechBinding
-import com.d101.presentation.main.viewmodel.FruitCreateViewModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,7 +24,7 @@ class FruitCreationBySpeechFragment : Fragment() {
     private var _binding: FragmentFruitCreationBySpeechBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: FruitCreateViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: FruitViewModel by viewModels({ requireParentFragment() })
     private lateinit var audioFile: File
     private lateinit var secText: String
 

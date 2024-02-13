@@ -1,4 +1,4 @@
-package com.d101.presentation.main.viewmodel
+package com.d101.presentation.tree
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +10,6 @@ import com.d101.domain.model.status.TreeErrorStatus
 import com.d101.domain.usecase.main.GetMessageFromTreeUseCase
 import com.d101.domain.usecase.main.GetTodayFruitUseCase
 import com.d101.domain.usecase.usermanagement.ManageUserStatusUseCase
-import com.d101.presentation.main.event.TreeFragmentEvent
 import com.d101.presentation.main.state.TreeFragmentViewState
 import com.d101.presentation.main.state.TreeMessageState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +24,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class MainFragmentViewModel @Inject constructor(
+class TreeViewModel @Inject constructor(
     private val manageUserStatusUseCase: ManageUserStatusUseCase,
     private val getTodayFruitUseCase: GetTodayFruitUseCase,
     private val getMessageFromTreeUseCase: GetMessageFromTreeUseCase,
@@ -41,7 +40,7 @@ class MainFragmentViewModel @Inject constructor(
     )
     val messageState = _messageState.asStateFlow()
 
-    private val _eventFlow = MutableEventFlow<TreeFragmentEvent>()
+    private val _eventFlow = MutableEventFlow<TreeViewEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
     private val localDate: LocalDate = LocalDate.now()
@@ -52,7 +51,7 @@ class MainFragmentViewModel @Inject constructor(
         getUserStatus()
     }
 
-    private fun emitEvent(event: TreeFragmentEvent) {
+    private fun emitEvent(event: TreeViewEvent) {
         viewModelScope.launch {
             _eventFlow.emit(event)
         }
@@ -63,7 +62,7 @@ class MainFragmentViewModel @Inject constructor(
     }
 
     fun showFruitDialog() {
-        emitEvent(TreeFragmentEvent.CompleteCreationEvent)
+        emitEvent(TreeViewEvent.CompleteCreationEvent)
     }
 
     fun onGetTreeMessage() {
@@ -72,25 +71,25 @@ class MainFragmentViewModel @Inject constructor(
                 when (val result = getMessageFromTreeUseCase()) {
                     is Result.Success -> {
                         _messageState.update { TreeMessageState.NoAccessMessage }
-                        emitEvent(TreeFragmentEvent.ChangeTreeMessage(result.data))
+                        emitEvent(TreeViewEvent.ChangeTreeMessage(result.data))
                     }
 
                     is Result.Failure -> {
                         when (val errorStatus = result.errorStatus) {
                             is TreeErrorStatus.MessageNotFound -> emitEvent(
-                                TreeFragmentEvent.ShowErrorEvent(
+                                TreeViewEvent.ShowErrorEvent(
                                     "나무 메세지를 가져올 수 없습니다.",
                                 ),
                             )
 
                             is ErrorStatus.NetworkError -> emitEvent(
-                                TreeFragmentEvent.ShowErrorEvent(
+                                TreeViewEvent.ShowErrorEvent(
                                     errorStatus.message,
                                 ),
                             )
 
                             ErrorStatus.ServerMaintenance() -> emitEvent(
-                                TreeFragmentEvent.OnServerMaintaining(errorStatus.message),
+                                TreeViewEvent.OnServerMaintaining(errorStatus.message),
                             )
 
                             else -> {}
@@ -107,21 +106,21 @@ class MainFragmentViewModel @Inject constructor(
             when (val result = getTodayFruitUseCase(localDate.toString())) {
                 is Result.Success -> {
                     todayFruit = result.data
-                    emitEvent(TreeFragmentEvent.CheckTodayFruitEvent)
+                    emitEvent(TreeViewEvent.CheckTodayFruitEvent)
                 }
 
                 is Result.Failure -> {
                     when (val errorStatus = result.errorStatus) {
                         is ErrorStatus.ServerMaintenance -> emitEvent(
-                            TreeFragmentEvent.OnServerMaintaining(errorStatus.message),
+                            TreeViewEvent.OnServerMaintaining(errorStatus.message),
                         )
 
                         is FruitErrorStatus.LocalGetError -> {
-                            emitEvent(TreeFragmentEvent.ShowErrorEvent(errorStatus.message))
+                            emitEvent(TreeViewEvent.ShowErrorEvent(errorStatus.message))
                         }
 
                         is ErrorStatus.NetworkError -> emitEvent(
-                            TreeFragmentEvent.ShowErrorEvent(
+                            TreeViewEvent.ShowErrorEvent(
                                 errorStatus.message,
                             ),
                         )
@@ -188,16 +187,16 @@ class MainFragmentViewModel @Inject constructor(
             }
 
             is TreeFragmentViewState.FruitNotCreated -> {
-                emitEvent(TreeFragmentEvent.MakeFruitEvent)
+                emitEvent(TreeViewEvent.MakeFruitEvent)
             }
 
             is TreeFragmentViewState.EmotionTrashMode -> {
-                emitEvent(TreeFragmentEvent.EmotionTrashEvent)
+                emitEvent(TreeViewEvent.EmotionTrashEvent)
             }
         }
     }
 
     fun onTutorialButtonClicked() {
-        emitEvent(TreeFragmentEvent.ShowTutorialEvent)
+        emitEvent(TreeViewEvent.ShowTutorialEvent)
     }
 }

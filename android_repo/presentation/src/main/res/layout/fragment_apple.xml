@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.d101.presentation.main.viewmodel.FruitCreateViewModel" />
+            type="com.d101.presentation.fruit.FruitViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="360dp"
         android:layout_height="400dp"
-        tools:context=".main.fragments.dialogs.AppleFragment">
+        tools:context=".fruit.AppleFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/apple_layout"

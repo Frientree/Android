@@ -1,4 +1,4 @@
-package com.d101.presentation.main.event
+package com.d101.presentation.leaf
 
 sealed class LeafSendViewEvent {
     data object SendLeaf : LeafSendViewEvent()

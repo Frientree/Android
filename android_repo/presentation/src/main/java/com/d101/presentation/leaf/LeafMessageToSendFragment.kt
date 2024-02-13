@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.leaf
 
 import android.content.Context
 import android.os.Bundle
@@ -10,23 +10,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.d101.presentation.R
-import com.d101.presentation.databinding.FragmentLeafReceiveBinding
+import com.d101.presentation.databinding.FragmentLeafSendBinding
 import com.d101.presentation.main.MainActivity
-import com.d101.presentation.main.viewmodel.LeafReceiveViewModel
-import utils.ShakeEventListener
-import utils.ShakeSensorModule
+import com.d101.presentation.main.state.LeafSendViewState
+import dagger.hilt.android.AndroidEntryPoint
+import utils.CustomToast
+import utils.repeatOnStarted
 
-class LeafReceiveFragment : Fragment() {
+@AndroidEntryPoint
+class LeafMessageToSendFragment : Fragment() {
 
-    private var _binding: FragmentLeafReceiveBinding? = null
+    private var _binding: FragmentLeafSendBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: LeafReceiveViewModel by viewModels({ requireParentFragment() })
-
-    private lateinit var shakeSensor: ShakeSensorModule
+    private val viewModel: LeafSendViewModel by viewModels({ requireParentFragment() })
 
     private lateinit var activity: MainActivity
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity = context as MainActivity
@@ -37,21 +36,57 @@ class LeafReceiveFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_leaf_receive,
-            container,
-            false,
-        )
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_leaf_send, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        shakeTree()
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        setSendButton()
         changeChip()
+        collectUiState()
     }
+
+    private fun collectUiState() {
+        viewLifecycleOwner.repeatOnStarted {
+            viewModel.uiState.collect { state ->
+                when (state) {
+                    is LeafSendViewState.AlreadySendState -> setVisibility()
+                    else -> {
+                        binding.leftLeavesCountTextView.text = String.format(
+                            getString(R.string.number_of_leaves_left),
+                            state.leftLeavesCount,
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setVisibility() {
+        binding.leafCategoryChipGroup.visibility = View.GONE
+        binding.leafTextView.visibility = View.GONE
+        binding.leafSendButton.visibility = View.GONE
+        binding.leftLeavesCountTextView.visibility = View.GONE
+        binding.alreadySendTextView.visibility = View.VISIBLE
+        binding.leafLayout.setBackgroundResource(R.color.main_green)
+    }
+
+    private fun setSendButton() {
+        binding.leafSendButton.setOnClickListener {
+            if (binding.leafTextView.text.isNullOrEmpty()) {
+                showToast("이파리를 입력해주세요!")
+            } else {
+                viewModel.onSendLeaf()
+            }
+        }
+    }
+
+    private fun showToast(message: String) = CustomToast.createAndShow(activity, message)
     private fun changeChip() {
         var lastCheckedId = binding.leafCategoryChipGroup.checkedChipId
         binding.leafCategoryChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
@@ -94,35 +129,5 @@ class LeafReceiveFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun shakeTree() {
-        val progressBar =
-            binding.leafReceiveProgressBar
-
-        shakeSensor = ShakeSensorModule(
-            requireActivity(),
-            object : ShakeEventListener {
-                override fun onShakeSensed() {
-                    if (progressBar.progress < progressBar.max) {
-                        progressBar.progress += 3
-                    }
-
-                    if (progressBar.progress >= progressBar.max) {
-                        progressBar.progress = progressBar.max
-                        shakeSensor.stop()
-                        viewModel.onReadyToReceive()
-                    }
-                }
-            },
-        )
-
-        shakeSensor.start()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        shakeSensor.stop()
-        _binding = null
     }
 }

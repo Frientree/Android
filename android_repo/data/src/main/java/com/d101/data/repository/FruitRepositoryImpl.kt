@@ -8,7 +8,7 @@ import com.d101.data.mapper.FruitMapper.toFruitCreated
 import com.d101.data.roomdb.entity.FruitEntity
 import com.d101.domain.model.AppleData
 import com.d101.domain.model.Fruit
-import com.d101.domain.model.FruitCreated
+import com.d101.domain.model.FruitForChip
 import com.d101.domain.model.Result
 import com.d101.domain.repository.FruitRepository
 import com.d101.domain.utils.toLongDate
@@ -20,7 +20,7 @@ class FruitRepositoryImpl @Inject constructor(
     private val fruitRemoteDataSource: FruitRemoteDataSource,
 
 ) : FruitRepository {
-    override suspend fun sendText(text: String): Result<List<FruitCreated>> {
+    override suspend fun sendText(text: String): Result<List<FruitForChip>> {
         return when (val result = fruitRemoteDataSource.sendText(text)) {
             is Result.Success -> {
                 Result.Success(result.data.map { it.toFruitCreated() })
@@ -32,7 +32,7 @@ class FruitRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun sendFile(file: File): Result<List<FruitCreated>> {
+    override suspend fun sendFile(file: File): Result<List<FruitForChip>> {
         return when (val result = fruitRemoteDataSource.sendFile(file)) {
             is Result.Success -> {
                 Result.Success(result.data.map { it.toFruitCreated() })

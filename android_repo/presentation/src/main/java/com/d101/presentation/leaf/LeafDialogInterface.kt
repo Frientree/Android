@@ -1,9 +1,10 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.leaf
 
 import androidx.fragment.app.DialogFragment
 
-interface FruitDialogInterface {
+interface LeafDialogInterface {
     companion object {
         lateinit var dialog: DialogFragment
+        var dialogShowState = false
     }
 }

@@ -6,7 +6,7 @@ import com.d101.data.roomdb.entity.CalendarFruitEntity
 import com.d101.data.roomdb.entity.FruitEntity
 import com.d101.domain.model.AppleData
 import com.d101.domain.model.Fruit
-import com.d101.domain.model.FruitCreated
+import com.d101.domain.model.FruitForChip
 import com.d101.domain.model.FruitsOfMonth
 import com.d101.domain.utils.toFruitEmotion
 import com.d101.domain.utils.toYearMonthDayFormat
@@ -24,8 +24,8 @@ object FruitMapper {
         )
     }
 
-    fun FruitCreationResponse.toFruitCreated(): FruitCreated {
-        return FruitCreated(
+    fun FruitCreationResponse.toFruitCreated(): FruitForChip {
+        return FruitForChip(
             fruitNum = this.fruitNum,
             fruitDescription = this.fruitDescription,
             fruitName = this.fruitName,

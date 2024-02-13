@@ -2,7 +2,7 @@ package com.d101.domain.model
 
 import com.d101.domain.utils.FruitEmotion
 
-data class FruitCreated(
+data class FruitForChip(
     var fruitNum: Long = -1,
     var fruitName: String = "",
     val fruitDescription: String = "",

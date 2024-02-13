@@ -2,17 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".main.fragments.MainFragment">
+    tools:context=".tree.TreeFragment">
 
     <data>
 
         <variable
             name="treeFragment"
-            type="com.d101.presentation.main.fragments.MainFragment" />
+            type="com.d101.presentation.tree.TreeFragment" />
 
         <variable
             name="mainViewModel"
-            type="com.d101.presentation.main.viewmodel.MainFragmentViewModel" />
+            type="com.d101.presentation.tree.TreeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

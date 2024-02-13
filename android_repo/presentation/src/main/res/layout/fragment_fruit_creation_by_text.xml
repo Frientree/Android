@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.d101.presentation.main.viewmodel.FruitCreateViewModel" />
+            type="com.d101.presentation.fruit.FruitViewModel" />
     </data>
 
 
@@ -15,7 +15,7 @@
         android:layout_width="360dp"
         android:layout_height="500dp"
         android:background="@color/white"
-        tools:context=".main.fragments.dialogs.FruitCreationByTextFragment">
+        tools:context=".fruit.FruitCreationByTextFragment">
 
         <TextView
             android:id="@+id/title_text_view"

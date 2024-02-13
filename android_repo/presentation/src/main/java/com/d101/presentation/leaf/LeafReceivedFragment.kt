@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.leaf
 
 import android.app.AlertDialog
 import android.graphics.Color
@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentLeafReceivedBinding
-import com.d101.presentation.main.viewmodel.LeafReceiveViewModel
 
 class LeafReceivedFragment : Fragment() {
 

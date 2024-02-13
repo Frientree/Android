@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.fruit
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
@@ -18,7 +18,6 @@ import com.bumptech.glide.request.transition.Transition
 import com.d101.domain.model.FruitResources
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentAfterFruitCreateBinding
-import com.d101.presentation.main.viewmodel.FruitCreateViewModel
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import utils.repeatOnStarted
@@ -28,7 +27,7 @@ class AfterFruitCreateFragment : Fragment() {
 
     private var _binding: FragmentAfterFruitCreateBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: FruitCreateViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: FruitViewModel by viewModels({ requireParentFragment() })
 
     override fun onCreateView(
         inflater: LayoutInflater,

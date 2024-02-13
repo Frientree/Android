@@ -17,8 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentSelectInputTypeBinding
+import com.d101.presentation.fruit.FruitDialogInterface
+import com.d101.presentation.fruit.FruitViewModel
 import com.d101.presentation.main.MainActivity
-import com.d101.presentation.main.viewmodel.FruitCreateViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import utils.CustomToast
 
@@ -30,7 +31,7 @@ class SelectInputTypeFragment : Fragment() {
 
     private var isTextInput = true
 
-    private val viewModel: FruitCreateViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: FruitViewModel by viewModels({ requireParentFragment() })
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

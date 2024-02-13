@@ -1,4 +1,4 @@
-package com.d101.presentation.main.viewmodel
+package com.d101.presentation.leaf
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,6 @@ import com.d101.domain.model.status.ErrorStatus
 import com.d101.domain.model.status.LeafErrorStatus
 import com.d101.domain.usecase.main.GetRandomLeafUseCase
 import com.d101.domain.usecase.main.ReportLeafUseCase
-import com.d101.presentation.main.event.LeafReceiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import utils.MutableEventFlow
@@ -24,16 +23,16 @@ class LeafReceiveViewModel @Inject constructor(
     var checkedChipId: Int = 0
 
     lateinit var leaf: Leaf
-    private val _leafEventFlow = MutableEventFlow<LeafReceiveEvent>()
+    private val _leafEventFlow = MutableEventFlow<LeafReceiveViewEvent>()
     val leafEventFlow = _leafEventFlow.asEventFlow()
 
     init {
         viewModelScope.launch {
-            emitEvent(LeafReceiveEvent.ShakingLeafPage)
+            emitEvent(LeafReceiveViewEvent.ShakingViewLeafPage)
         }
     }
 
-    private fun emitEvent(event: LeafReceiveEvent) {
+    private fun emitEvent(event: LeafReceiveViewEvent) {
         viewModelScope.launch {
             _leafEventFlow.emit(event)
         }
@@ -44,17 +43,17 @@ class LeafReceiveViewModel @Inject constructor(
             when (val result = getRandomLeafUseCase(checkedChipId)) {
                 is Result.Success -> {
                     leaf = result.data
-                    emitEvent(LeafReceiveEvent.ReadyToReceive)
+                    emitEvent(LeafReceiveViewEvent.ReadyToReceiveView)
                 }
 
                 is Result.Failure -> {
                     when (val errorStatus = result.errorStatus) {
                         is ErrorStatus.ServerMaintenance -> emitEvent(
-                            LeafReceiveEvent.OnServerMaintaining(errorStatus.message),
+                            LeafReceiveViewEvent.OnServerMaintaining(errorStatus.message),
                         )
 
                         ErrorStatus.NetworkError() -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
+                            emitEvent(LeafReceiveViewEvent.ShowErrorToast(errorStatus.message))
                         }
 
                         else -> {}
@@ -68,21 +67,21 @@ class LeafReceiveViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = reportLeafUseCase(leaf.leafNum)) {
                 is Result.Success -> {
-                    emitEvent(LeafReceiveEvent.ReportLeafComplete)
+                    emitEvent(LeafReceiveViewEvent.ReportViewLeafComplete)
                 }
 
                 is Result.Failure -> {
                     when (val errorStatus = result.errorStatus) {
                         LeafErrorStatus.LeafNotFound() -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
+                            emitEvent(LeafReceiveViewEvent.ShowErrorToast(errorStatus.message))
                         }
 
                         LeafErrorStatus.ServerError() -> {
-                            emitEvent(LeafReceiveEvent.ShowErrorToast(errorStatus.message))
+                            emitEvent(LeafReceiveViewEvent.ShowErrorToast(errorStatus.message))
                         }
 
                         is ErrorStatus.NetworkError -> emitEvent(
-                            LeafReceiveEvent.ShowErrorToast(errorStatus.message),
+                            LeafReceiveViewEvent.ShowErrorToast(errorStatus.message),
                         )
 
                         else -> {}

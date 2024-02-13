@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.d101.presentation.main.viewmodel.FruitCreateViewModel" />
+            type="com.d101.presentation.fruit.FruitViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

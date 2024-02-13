@@ -7,7 +7,7 @@
         android:layout_width="360dp"
         android:layout_height="360dp"
         android:background="@color/white"
-        tools:context=".main.fragments.dialogs.FruitCreationBySpeechFragment">
+        tools:context=".fruit.FruitCreationBySpeechFragment">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/listening_lottie_view"

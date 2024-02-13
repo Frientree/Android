@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.fruit
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

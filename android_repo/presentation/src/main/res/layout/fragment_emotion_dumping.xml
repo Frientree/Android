@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="360dp"
         android:layout_height="400dp"
-        tools:context=".main.fragments.dialogs.EmotionDumpingFragment">
+        tools:context=".fruit.EmotionDumpingFragment">
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

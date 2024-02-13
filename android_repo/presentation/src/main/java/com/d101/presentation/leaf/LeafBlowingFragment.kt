@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.leaf
 
 import android.Manifest
 import android.content.Context
@@ -21,7 +21,6 @@ import androidx.fragment.app.viewModels
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentLeafBlowingBinding
 import com.d101.presentation.main.MainActivity
-import com.d101.presentation.main.viewmodel.LeafSendViewModel
 import utils.repeatOnStarted
 import kotlin.properties.Delegates
 

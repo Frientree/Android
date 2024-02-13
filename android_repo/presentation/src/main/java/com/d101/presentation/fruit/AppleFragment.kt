@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.fruit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.d101.domain.model.FruitResources
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentAppleBinding
-import com.d101.presentation.main.viewmodel.FruitCreateViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import utils.CustomToast
 import utils.darkenColor
@@ -28,7 +27,7 @@ class AppleFragment : Fragment() {
 
     var flip = true
 
-    private val viewModel: FruitCreateViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: FruitViewModel by viewModels({ requireParentFragment() })
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

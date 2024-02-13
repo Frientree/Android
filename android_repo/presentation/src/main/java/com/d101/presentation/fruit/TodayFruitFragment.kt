@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.fruit
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -14,12 +14,12 @@ import com.bumptech.glide.Glide
 import com.d101.domain.model.FruitResources
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentTodayFruitBinding
-import com.d101.presentation.main.viewmodel.MainFragmentViewModel
+import com.d101.presentation.tree.TreeViewModel
 import utils.darkenColor
 
 class TodayFruitFragment : DialogFragment() {
 
-    private val viewModel: MainFragmentViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: TreeViewModel by viewModels({ requireParentFragment() })
 
     private var _binding: FragmentTodayFruitBinding? = null
     private val binding get() = _binding!!

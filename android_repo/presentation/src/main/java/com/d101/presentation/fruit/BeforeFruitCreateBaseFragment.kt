@@ -1,4 +1,4 @@
-package com.d101.presentation.main.fragments.dialogs
+package com.d101.presentation.fruit
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -13,9 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentBeforeFruitCreateBaseBinding
-import com.d101.presentation.main.event.CreateFruitDialogViewEvent
-import com.d101.presentation.main.viewmodel.FruitCreateViewModel
-import com.d101.presentation.main.viewmodel.MainFragmentViewModel
+import com.d101.presentation.main.fragments.dialogs.SelectInputTypeFragment
+import com.d101.presentation.tree.TreeViewModel
 import com.navercorp.nid.NaverIdLoginSDK.getApplicationContext
 import dagger.hilt.android.AndroidEntryPoint
 import utils.CustomToast
@@ -23,10 +22,10 @@ import utils.repeatOnStarted
 
 @AndroidEntryPoint
 class BeforeFruitCreateBaseFragment : DialogFragment() {
-    private val mainFragmentViewModel: MainFragmentViewModel by viewModels({
+    private val treeViewModel: TreeViewModel by viewModels({
         requireParentFragment()
     })
-    private val viewModel: FruitCreateViewModel by viewModels()
+    private val viewModel: FruitViewModel by viewModels()
     private var _binding: FragmentBeforeFruitCreateBaseBinding? = null
     private val binding get() = _binding!!
 
@@ -53,47 +52,47 @@ class BeforeFruitCreateBaseFragment : DialogFragment() {
         viewLifecycleOwner.repeatOnStarted {
             viewModel.eventFlow.collect { event ->
                 when (event) {
-                    is CreateFruitDialogViewEvent.SelectInputTypeViewEvent -> {
+                    is FruitViewEvent.SelectInputTypeViewEvent -> {
                         navigateToDestinationFragment(SelectInputTypeFragment())
                     }
 
-                    is CreateFruitDialogViewEvent.FruitCreationBySpeechViewEvent -> {
+                    is FruitViewEvent.FruitCreationBySpeechViewEvent -> {
                         navigateToDestinationFragment(FruitCreationBySpeechFragment())
                     }
 
-                    is CreateFruitDialogViewEvent.FruitCreationByTextViewEvent -> {
+                    is FruitViewEvent.FruitCreationByTextViewEvent -> {
                         navigateToDestinationFragment(FruitCreationByTextFragment())
                     }
 
-                    is CreateFruitDialogViewEvent.FruitCreationLoadingViewEvent -> {
+                    is FruitViewEvent.FruitCreationLoadingViewEvent -> {
                         navigateToDestinationFragment(FruitCreationLoadingFragment())
                     }
 
-                    is CreateFruitDialogViewEvent.AfterFruitCreationViewEvent -> {
+                    is FruitViewEvent.AfterFruitCreationViewEvent -> {
                         navigateToDestinationFragment(AfterFruitCreateFragment())
                     }
 
-                    is CreateFruitDialogViewEvent.AppleEvent -> {
+                    is FruitViewEvent.AppleEvent -> {
                         if (event.isApple) {
                             navigateToDestinationFragment(AppleFragment())
                         } else {
                             showToast("열매가 저장되었습니다!")
                             dialog?.dismiss()
-                            mainFragmentViewModel.showFruitDialog()
+                            treeViewModel.showFruitDialog()
                         }
                     }
 
-                    is CreateFruitDialogViewEvent.ShowErrorToastEvent -> {
+                    is FruitViewEvent.ShowErrorToastEvent -> {
                         showToast(event.message)
                         dialog?.dismiss()
                     }
 
-                    is CreateFruitDialogViewEvent.CardFlipEvent -> {
+                    is FruitViewEvent.CardFlipEvent -> {
                         flipAnimation(event.color, flip, distance)
                         flip = !flip
                     }
 
-                    is CreateFruitDialogViewEvent.OnServerMaintaining -> blockApp(event.message)
+                    is FruitViewEvent.OnServerMaintaining -> blockApp(event.message)
                 }
             }
         }

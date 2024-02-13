@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.d101.presentation.main.viewmodel.LeafSendViewModel" />
+            type="com.d101.presentation.leaf.LeafSendViewModel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        tools:context=".main.fragments.dialogs.LeafMessageToSendFragment">
+        tools:context=".leaf.LeafMessageToSendFragment">
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
