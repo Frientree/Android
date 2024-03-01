@@ -13,15 +13,15 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.d101.domain.model.FruitResources
 import com.d101.presentation.R
-import com.d101.presentation.databinding.FragmentTodayFruitBinding
+import com.d101.presentation.databinding.FragmentFruitDetailBinding
 import com.d101.presentation.tree.TreeViewModel
 import utils.darkenColor
 
-class TodayFruitFragment : DialogFragment() {
+class FruitDetailDialog : DialogFragment() {
 
     private val viewModel: TreeViewModel by viewModels({ requireParentFragment() })
 
-    private var _binding: FragmentTodayFruitBinding? = null
+    private var _binding: FragmentFruitDetailBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -30,7 +30,7 @@ class TodayFruitFragment : DialogFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_today_fruit, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_fruit_detail, container, false)
 
         return binding.root
     }
