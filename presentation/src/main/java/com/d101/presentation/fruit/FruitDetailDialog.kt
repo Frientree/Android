@@ -2,28 +2,33 @@ package com.d101.presentation.fruit
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.d101.domain.model.FruitResources
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentFruitDetailBinding
-import com.d101.presentation.tree.TreeViewModel
+import com.d101.presentation.model.FruitUiModel
+import dagger.hilt.android.AndroidEntryPoint
 import utils.darkenColor
 
+@AndroidEntryPoint
 class FruitDetailDialog : DialogFragment() {
-
-    private val viewModel: TreeViewModel by viewModels({ requireParentFragment() })
 
     private var _binding: FragmentFruitDetailBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.Base_FTR_FullScreenDialog)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,11 +45,17 @@ class FruitDetailDialog : DialogFragment() {
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.viewModel = viewModel
+        binding.fruit = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(FRUIT_DATA, FruitUiModel::class.java)
+        } else {
+            arguments?.getParcelable(FRUIT_DATA) as? FruitUiModel
+        }
+
         binding.lifecycleOwner = viewLifecycleOwner
 
-        Glide.with(binding.root).load(viewModel.todayFruit.imageUrl).into(binding.fruitImageView)
-        FruitResources.entries.find { it.fruitEmotion == viewModel.todayFruit.fruitEmotion }
+        Log.d("과일", "onViewCreated: ${binding.fruit}")
+
+        FruitResources.entries.find { it.fruitEmotion == binding.fruit?.fruitEmotion }
             ?.let { fruitResources ->
                 val backgroundColor = resources.getColor(fruitResources.color, null)
                 binding.fruitDescriptionCardView.setCardBackgroundColor(
@@ -60,7 +71,7 @@ class FruitDetailDialog : DialogFragment() {
                     .into(binding.fruitDetailBackgroundImageView)
             }
 
-        FruitResources.entries.find { it.fruitEmotion == viewModel.todayFruit.fruitEmotion }?.let {
+        FruitResources.entries.find { it.fruitEmotion == binding.fruit?.fruitEmotion }?.let {
             binding.fruitDescriptionCardView.setCardBackgroundColor(
                 ContextCompat.getColor(
                     requireActivity(),
@@ -73,5 +84,16 @@ class FruitDetailDialog : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val FRUIT_DATA = "FRUIT_DATA"
+        fun newInstance(fruit: FruitUiModel): FruitDetailDialog {
+            return FruitDetailDialog().apply {
+                arguments = Bundle().apply {
+                    putParcelable(FRUIT_DATA, fruit)
+                }
+            }
+        }
     }
 }

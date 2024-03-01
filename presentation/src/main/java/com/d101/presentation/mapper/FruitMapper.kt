@@ -13,5 +13,4 @@ object FruitMapper {
         fruitEmotion = fruitEmotion,
         score = score,
     )
-
 }

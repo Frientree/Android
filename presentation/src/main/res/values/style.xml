@@ -40,6 +40,7 @@
     <style name="Base.FTR.Bold_20sp" parent="Base.FTR">
         <item name="fontFamily">@font/binggrae_bold</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 
