@@ -15,7 +15,7 @@ jobs:
       - name: Run reviewdog
         uses: ScaCap/action-ktlint@master
         with:
-            github_token: ${{ secrets.github_token }}
+            github_token: ${{ secrets.SECRET_GITHUB }}
             reporter: github-pr-review
 
       - name: Set up JDK 17
