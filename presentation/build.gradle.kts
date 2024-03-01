@@ -6,6 +6,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
+    id("kotlin-parcelize")
 }
 
 val properties = Properties().apply {
