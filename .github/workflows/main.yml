@@ -48,6 +48,10 @@ jobs:
         run: cat local.properties
         shell: bash
 
+      - name: Decode google-services.json
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+        shell: bash
+
       - name: Caching
         uses: actions/cache@v3
         with:
