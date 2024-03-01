@@ -26,6 +26,9 @@ class TermsAgreeFragment : Fragment() {
     private var _binding: FragmentTermsAgreeBinding? = null
     val binding get() = _binding!!
 
+
+
+
     private val viewModel: TermsAgreeViewModel by viewModels()
     private lateinit var adapter: TermsListAdapter
 
