@@ -44,6 +44,9 @@ class ShakeSensorModule(context: Context, private val listener: ShakeEventListen
                     ) {
                         listener.onShakeSensed()
                     }
+                    lastX = x
+                    lastY = y
+                    lastZ = z
                 }
             }
 
