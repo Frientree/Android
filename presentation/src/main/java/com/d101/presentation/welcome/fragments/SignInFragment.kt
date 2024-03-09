@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.d101.domain.model.Result
+import com.d101.domain.model.status.ErrorStatus
 import com.d101.presentation.R
 import com.d101.presentation.databinding.FragmentSignInBinding
 import com.d101.presentation.main.MainActivity
@@ -27,7 +28,6 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import utils.CustomToast
 import utils.repeatOnStarted
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
@@ -105,13 +105,11 @@ class SignInFragment : Fragment() {
                 }
 
                 override fun onFailure(httpStatus: Int, message: String) {
-                    continuation.resumeWithException(
-                        Exception("Authentication failed: $message (HTTP $httpStatus)"),
-                    )
+                    continuation.resume(Result.Failure(ErrorStatus.UnknownError(message)))
                 }
 
                 override fun onError(errorCode: Int, message: String) {
-                    onFailure(errorCode, message)
+                    continuation.resume(Result.Failure(ErrorStatus.UnknownError(message)))
                 }
             }
 
