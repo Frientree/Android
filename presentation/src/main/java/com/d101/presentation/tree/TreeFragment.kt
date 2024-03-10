@@ -22,8 +22,9 @@ import com.d101.presentation.databinding.DialogTutorialBinding
 import com.d101.presentation.databinding.FragmentTreeBinding
 import com.d101.presentation.fruit.BeforeFruitCreateBaseFragment
 import com.d101.presentation.fruit.EmotionDumpingFragment
+import com.d101.presentation.fruit.FruitDetailDialog
 import com.d101.presentation.fruit.FruitDialogInterface
-import com.d101.presentation.fruit.TodayFruitFragment
+import com.d101.presentation.mapper.FruitMapper.toFruitUiModel
 import com.d101.presentation.tutorial.TutorialAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -151,9 +152,8 @@ class TreeFragment : Fragment() {
                     }
 
                     is TreeViewEvent.CheckTodayFruitEvent -> {
-                        dialog = TodayFruitFragment()
-                        dialog.dialog?.window?.setBackgroundDrawable(
-                            ColorDrawable(Color.TRANSPARENT),
+                        dialog = FruitDetailDialog.newInstance(
+                            viewModel.todayFruit.toFruitUiModel(),
                         )
                         dialog.show(childFragmentManager, "")
                     }

@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.d101.domain.model.Fruit
-import com.d101.domain.model.FruitResources
 import com.d101.domain.model.Juice
 import com.d101.domain.utils.FruitEmotion
 import com.d101.presentation.R
@@ -27,16 +26,16 @@ import com.d101.presentation.calendar.state.JuiceCreatableStatus
 import com.d101.presentation.calendar.state.TodayFruitCreationStatus
 import com.d101.presentation.calendar.viewmodel.CalendarViewModel
 import com.d101.presentation.collection.CollectionActivity
-import com.d101.presentation.databinding.DialogFruitDetailBinding
 import com.d101.presentation.databinding.DialogJuiceDetailBinding
 import com.d101.presentation.databinding.DialogJuiceShakeBinding
 import com.d101.presentation.databinding.FragmentCalendarBinding
+import com.d101.presentation.fruit.FruitDetailDialog
 import com.d101.presentation.mapper.CalendarMapper.toFruitInCalendar
+import com.d101.presentation.mapper.FruitMapper.toFruitUiModel
 import dagger.hilt.android.AndroidEntryPoint
 import utils.CustomToast
 import utils.ShakeEventListener
 import utils.ShakeSensorModule
-import utils.darkenColor
 import utils.repeatOnStarted
 
 @AndroidEntryPoint
@@ -256,28 +255,7 @@ class CalendarFragment : Fragment() {
     }
 
     private fun showFruitDetailDialog(fruit: Fruit) {
-        createFullScreenDialog()
-        val dialogBinding = DialogFruitDetailBinding.inflate(layoutInflater)
-        Glide.with(dialogBinding.root).load(fruit.imageUrl).into(dialogBinding.fruitImageView)
-        dialogBinding.fruitNameTextView.text = fruit.name
-        dialogBinding.fruitDescriptionTextView.text = fruit.description
-        FruitResources.entries.find { it.fruitEmotion == fruit.fruitEmotion }
-            ?.let { fruitResources ->
-                val backgroundColor = resources.getColor(fruitResources.color, null)
-                dialogBinding.fruitDescriptionCardView.setCardBackgroundColor(
-                    backgroundColor,
-                )
-
-                dialogBinding.fruitDescriptionCardView.strokeColor =
-                    backgroundColor.darkenColor()
-
-                Glide.with(requireActivity())
-                    .asGif()
-                    .load(fruitResources.fallingImage)
-                    .into(dialogBinding.fruitDetailBackgroundImageView)
-            }
-        dialog.setContentView(dialogBinding.root)
-        dialog.show()
+        FruitDetailDialog.newInstance(fruit.toFruitUiModel()).show(childFragmentManager, null)
     }
 
     private fun showShakeJuiceDialog() {
