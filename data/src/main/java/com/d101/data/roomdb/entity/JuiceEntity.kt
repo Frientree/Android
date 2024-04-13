@@ -11,4 +11,5 @@ data class JuiceEntity(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "image_url") val imageUrl: String,
     @ColumnInfo(name = "condolenceMessage") val condolenceMessage: String,
+    @ColumnInfo(name = "juiceBackgroundImageUrl") val juiceBackgroundImageUrl: String,
 )

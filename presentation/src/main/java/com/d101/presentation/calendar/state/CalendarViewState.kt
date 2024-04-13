@@ -34,6 +34,7 @@ sealed class CalendarViewState {
             juiceDescription = "",
             condolenceMessage = "",
             fruitList = emptyList(),
+            juiceBackgroundImageUrl = "",
         ),
         override val fruitListForWeek: List<Fruit> = emptyList(),
         override val fruitListForMonth: List<FruitsOfMonth> = emptyList(),

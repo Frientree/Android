@@ -11,7 +11,7 @@ import com.d101.data.roomdb.entity.JuiceEntity
 
 @Database(
     entities = [FruitEntity::class, JuiceEntity::class, CalendarFruitEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {

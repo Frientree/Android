@@ -6,4 +6,5 @@ data class JuiceForCollection(
     val juiceImageUrl: String,
     val juiceOwn: Boolean,
     val juiceDescription: String,
+    val juiceBackgroundImageUrl: String,
 )

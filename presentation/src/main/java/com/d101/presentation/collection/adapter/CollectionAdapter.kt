@@ -5,6 +5,7 @@ import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -36,10 +37,14 @@ class CollectionAdapter(private val collectionClickListener: ((JuiceForCollectio
                 binding.juiceNameTextView.text = juice.juiceName
                 binding.juiceImageImageView.setOnClickListener { itemClickListener(juice) }
                 binding.juiceImageImageView.colorFilter = null
+                binding.collectionItemLinearLayout.background =
+                    ContextCompat.getDrawable(itemView.context, R.drawable.bg_trans_radius_30dp)
             } else {
                 binding.juiceNameTextView.text = "???"
                 binding.juiceImageImageView.setOnClickListener(null)
                 binding.juiceImageImageView.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
+                binding.collectionItemLinearLayout.background =
+                    ContextCompat.getDrawable(itemView.context, R.drawable.bg_white_radius_30dp)
             }
 
             if (juice.juiceNum == -1L) {
