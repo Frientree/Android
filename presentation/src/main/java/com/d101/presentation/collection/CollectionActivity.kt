@@ -89,7 +89,7 @@ class CollectionActivity : AppCompatActivity() {
             viewModel.uiState.collect { state ->
                 when (state) {
                     is CollectionViewState.Default -> {
-                        collectionAdapter.submitList(state.juiceList)
+                        collectionAdapter.updateList(state.juiceList)
                     }
                 }
             }
