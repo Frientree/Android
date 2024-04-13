@@ -11,6 +11,7 @@ object JuiceMapper {
             juiceImageUrl = this.imageUrl,
             juiceDescription = this.description,
             condolenceMessage = this.condolenceMessage,
+            juiceBackgroundImageUrl = this.juiceBackgroundImageUrl,
             fruitList = emptyList(),
         )
     }
