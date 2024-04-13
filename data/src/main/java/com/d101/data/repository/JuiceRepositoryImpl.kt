@@ -32,6 +32,7 @@ class JuiceRepositoryImpl @Inject constructor(
                     description = result.data.juiceData.juiceDescription,
                     imageUrl = result.data.juiceData.juiceImageUrl,
                     condolenceMessage = result.data.juiceData.condolenceMessage,
+                    juiceBackgroundImageUrl = result.data.juiceData.juiceBackgroundImageUrl,
                 )
 
                 val remoteFruitEntityList = result.data.fruitsGraphData.map {
@@ -75,6 +76,7 @@ class JuiceRepositoryImpl @Inject constructor(
                         juiceImageUrl = it.juiceImageUrl,
                         juiceDescription = it.juiceDescription,
                         juiceOwn = it.juiceOwn,
+                        juiceBackgroundImageUrl = it.juiceBackgroundImageUrl,
                     )
                 }
                 Result.Success(juiceForCollectionList)

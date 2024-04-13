@@ -23,7 +23,7 @@ object RoomDBModule {
             appContext,
             AppDatabase::class.java,
             "frientree_db",
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides

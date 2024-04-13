@@ -45,6 +45,8 @@ class CollectionActivity : AppCompatActivity() {
         dialog.setContentView(dialogBinding.root)
         Glide.with(dialogBinding.root).load(juice.juiceImageUrl)
             .into(dialogBinding.juiceImageImageView)
+        Glide.with(dialogBinding.root).load(juice.juiceBackgroundImageUrl)
+            .into(dialogBinding.juiceBackgroundImageView)
         dialogBinding.juiceNameTextView.text = juice.juiceName
         dialogBinding.juiceDescriptionTextView.text = juice.juiceDescription
         if (dialog.isShowing) dialog.dismiss()

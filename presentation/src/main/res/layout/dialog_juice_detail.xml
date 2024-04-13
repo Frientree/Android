@@ -4,9 +4,10 @@
     android:layout_width="340dp"
     android:layout_height="340dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/bg_trans_radius_30dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
@@ -14,40 +15,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <ImageView
+            android:id="@+id/juice_background_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <utils.OutlinedTextView
             android:id="@+id/juice_name_text_view"
             style="@style/Base.FTR.TextView.DialogMain"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
-            android:text="@string/juice_name_example" />
+            android:text="@string/juice_name_example"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:textStrokeColor="@color/white"
+            app:textStrokeWidth="10" />
 
         <ImageView
             android:id="@+id/juice_image_image_view"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="40dp"
-            android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:src="@drawable/juice" />
+            android:src="@drawable/juice"
+            app:layout_constraintBottom_toTopOf="@id/juice_description_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/juice_name_text_view"
+            app:layout_constraintVertical_weight="1" />
 
-        <TextView
+        <utils.OutlinedTextView
             android:id="@+id/juice_description_text_view"
             style="@style/Base.FTR.TextView.DialogText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="60dp"
             android:layout_marginBottom="24dp"
-            android:textSize="12sp"
             android:autoSizeTextType="uniform"
+            android:gravity="center"
             android:maxLines="5"
-            android:minLines="3" />
+            android:minLines="3"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/juice_image_image_view"
+            app:textStrokeColor="@color/white"
+            app:textStrokeWidth="10" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

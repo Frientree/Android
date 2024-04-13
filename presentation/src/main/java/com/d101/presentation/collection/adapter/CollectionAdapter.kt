@@ -4,11 +4,13 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.d101.domain.model.JuiceForCollection
+import com.d101.presentation.R
 import com.d101.presentation.databinding.ItemCollectionBinding
 
 class CollectionAdapter(private val collectionClickListener: ((JuiceForCollection) -> Unit)) :
@@ -21,12 +23,18 @@ class CollectionAdapter(private val collectionClickListener: ((JuiceForCollectio
             Glide.with(itemView).load(juice.juiceImageUrl).into(binding.juiceImageImageView)
             if (juice.juiceOwn) {
                 binding.juiceNameTextView.text = juice.juiceName
-                binding.collectionItemLinearLayout.setOnClickListener { itemClickListener(juice) }
+                binding.collectionItemLinearLayout.setOnClickListener {
+                    itemClickListener(juice)
+                }
                 binding.juiceImageImageView.colorFilter = null
+                binding.collectionItemLinearLayout.background =
+                    ContextCompat.getDrawable(itemView.context, R.drawable.bg_trans_radius_30dp)
             } else {
                 binding.juiceNameTextView.text = "???"
                 binding.collectionItemLinearLayout.setOnClickListener(null)
                 binding.juiceImageImageView.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
+                binding.collectionItemLinearLayout.background =
+                    ContextCompat.getDrawable(itemView.context, R.drawable.bg_white_radius_30dp)
             }
         }
     }

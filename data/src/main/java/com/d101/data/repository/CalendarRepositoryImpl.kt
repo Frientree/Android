@@ -161,6 +161,7 @@ class CalendarRepositoryImpl @Inject constructor(
                     description = result.data.juiceData.juiceDescription,
                     imageUrl = result.data.juiceData.juiceImageUrl,
                     condolenceMessage = result.data.juiceData.condolenceMessage,
+                    juiceBackgroundImageUrl = result.data.juiceData.juiceBackgroundImageUrl,
                 )
                 val remoteFruitEntityList = result.data.fruitGraphData.map {
                     FruitEntity(

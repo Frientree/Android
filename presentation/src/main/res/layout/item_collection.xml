@@ -20,7 +20,7 @@
         android:background="@drawable/bg_white_radius_30dp"
         >
 
-        <TextView
+        <utils.OutlinedTextView
             android:id="@+id/juice_name_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,10 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/binggrae_bold"
             android:text="@string/juice_name_example"
-            android:textAppearance="@style/Base.FTR.Text.Small" />
+            android:textAppearance="@style/Base.FTR.Text.Small"
+            app:textStrokeColor="@color/white"
+            app:textStrokeWidth="10"
+            />
 
         <ImageView
             android:id="@+id/juice_image_image_view"
