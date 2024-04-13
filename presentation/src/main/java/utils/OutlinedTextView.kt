@@ -8,12 +8,13 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import com.d101.presentation.R
 
-class OutlinedTextView @JvmOverloads constructor(
+class OutlinedTextView
+@JvmOverloads
+constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : androidx.appcompat.widget.AppCompatTextView(context, attrs, defStyleAttr) {
-
     private var strokeColor: Int
     private var strokeWidthVal: Float
 
