@@ -2,6 +2,8 @@ package com.d101.frientree.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.d101.data.roomdb.AppDatabase
 import com.d101.data.roomdb.dao.CalendarFruitDao
 import com.d101.data.roomdb.dao.FruitDao
@@ -23,7 +25,7 @@ object RoomDBModule {
             appContext,
             AppDatabase::class.java,
             "frientree_db",
-        ).fallbackToDestructiveMigration().build()
+        ).addMigrations(migrationFrom1To2).build()
     }
 
     @Provides
@@ -39,5 +41,14 @@ object RoomDBModule {
     @Provides
     fun provideJuiceDao(database: AppDatabase): JuiceDao {
         return database.juiceDao()
+    }
+
+    private val migrationFrom1To2: Migration = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "ALTER TABLE JuiceEntity " +
+                    "ADD COLUMN juiceBackgroundImageUrl TEXT NOT NULL DEFAULT ''",
+            )
+        }
     }
 }
