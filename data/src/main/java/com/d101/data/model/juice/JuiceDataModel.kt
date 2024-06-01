@@ -5,5 +5,5 @@ data class JuiceDataModel(
     val juiceDescription: String,
     val juiceImageUrl: String,
     val juiceName: String,
-    val juiceBackgroundImageUrl: String,
+    val juiceBackgroundImageUrl: String = "",
 )
