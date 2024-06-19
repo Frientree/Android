@@ -29,6 +29,7 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
                         503 -> Result.Failure(
                             ErrorStatus.ServerMaintenance(),
                         )
+
                         else -> Result.Failure(ErrorStatus.UnknownError())
                     }
                 } else {
@@ -52,6 +53,7 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
                     503 -> Result.Failure(
                         ErrorStatus.ServerMaintenance(),
                     )
+
                     else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {
@@ -68,7 +70,10 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
         calendarService.getJuiceOfWeek(JuiceOfWeekRequest(startDate, endDate)).getOrThrow().data
     }.fold(
         onSuccess = {
-            Result.Success(it)
+            val juiceData = it.juiceData.copy(
+                juiceBackgroundImageUrl = it.juiceData.juiceBackgroundImageUrl?: ""
+            )
+            Result.Success(it.copy(juiceData = juiceData))
         },
         onFailure = { e ->
             if (e is FrientreeHttpError) {
@@ -77,6 +82,7 @@ class CalendarRemoteDataSourceImpl @Inject constructor(
                     503 -> Result.Failure(
                         ErrorStatus.ServerMaintenance(),
                     )
+
                     else -> Result.Failure(ErrorStatus.UnknownError())
                 }
             } else {

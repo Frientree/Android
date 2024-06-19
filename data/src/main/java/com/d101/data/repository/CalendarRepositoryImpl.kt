@@ -1,5 +1,6 @@
 package com.d101.data.repository
 
+import android.util.Log
 import com.d101.data.datasource.calendar.CalendarLocalDataSource
 import com.d101.data.datasource.calendar.CalendarRemoteDataSource
 import com.d101.data.datasource.juice.JuiceLocalDataSource
@@ -155,6 +156,7 @@ class CalendarRepositoryImpl @Inject constructor(
 
         return when (val result = calendarRemoteDataSource.getJuiceOfWeek(startDate, endDate)) {
             is Result.Success -> {
+                Log.d("확인", result.data.juiceData.juiceBackgroundImageUrl)
                 val juiceEntity = JuiceEntity(
                     weekDate = (startDate + endDate).toLongDate(),
                     name = result.data.juiceData.juiceName,
